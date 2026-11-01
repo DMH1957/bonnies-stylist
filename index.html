@@ -152,6 +152,17 @@ ul.clean{list-style:none;padding:0;margin:0;display:grid;gap:8px}
 ul.clean li{display:grid;gap:1px}
 ul.clean li b{font-weight:500}
 ul.clean li.row{display:flex}
+#out,.slot img,.bodyimg{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.modal{position:fixed;inset:0;z-index:60;background:rgba(20,10,14,.55);display:grid;place-items:center;padding:24px}
+.modal .box{background:var(--surface);color:var(--fg);border-radius:18px;padding:22px;max-width:340px;width:100%;display:grid;gap:16px;box-shadow:var(--shadow);text-align:center}
+.modal .box p{margin:0;font-family:var(--display);font-size:21px;line-height:1.25}
+.modal .box .row{justify-content:center}
+.modal .btn{min-width:120px;padding:13px 18px;font-size:15px}
+.cam{position:fixed;inset:0;z-index:70;background:#000;display:grid;grid-template-rows:1fr auto}
+.cam video{width:100%;height:100%;object-fit:contain;background:#000}
+.cam .bar{display:flex;justify-content:space-around;align-items:center;padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px))}
+.cam .bar button{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;padding:10px 14px;font-size:14px}
+.cam .bar .shutter{width:72px;height:72px;border-radius:50%;background:#fff;border:5px solid rgba(255,255,255,.4);padding:0;background-clip:padding-box}
 .stylegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px}
 .stb{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:4px;display:grid;gap:3px;font-size:11px;color:var(--muted);text-align:center;min-width:0;line-height:1.2}
 .stb .art{width:100%}
@@ -272,9 +283,12 @@ hr.soft{border:0;border-top:1px solid var(--line);margin:4px 0}
             <button class="compare" type="button" id="btnCompare" hidden data-t="holdCompare">Hold to compare</button>
             <div class="status" id="status" hidden></div>
           </div>
+          <p class="small" id="holdHint" data-t="holdHint" hidden style="margin:8px 0 0">Tip</p>
           <div class="row" id="photoActs" hidden style="margin-top:10px">
             <button class="btn sm" type="button" id="btnSave" data-t="saveLook">Save look</button>
-            <button class="btn ghost sm" type="button" id="btnNew" data-t="newPhoto">New photo</button>
+            <button class="btn ghost sm" type="button" id="btnNew" data-t="takeNew">Take new photo</button>
+            <button class="btn ghost sm" type="button" id="btnNewGal" data-t="fromGallery">From gallery</button>
+            <button class="btn ghost sm" type="button" id="btnDel" data-t="deletePhoto">Delete photo</button>
             <button class="btn ghost sm" type="button" id="btnClear" data-t="clearAll">Clear make-up</button>
             <button class="btn ghost sm" type="button" id="btn360">360°</button>
           </div>
@@ -428,7 +442,7 @@ kitEyebrow:"Your own collection",kitTitle:"My kit",products:"Products",looks:"Sa
 tStudio:"Studio",tAdvice:"Stylist",tHair:"Hair",tKit:"My kit",
 intensity:"Intensity",off:"Off",finish:"Finish",matte:"Matte",satin:"Satin",gloss:"Gloss",wing:"Winged",yourKit:"from your kit",
 reading:"Reading your face…",noFace:"No face found. Try a brighter photo taken straight on.",findingHair:"Finding your hair…",loadingModels:"Preparing the mirror. The first time takes a few seconds…",noHand:"No hand found. Lay the back of your hand flat, fingers apart.",modelFail:"The face reader could not start on this device. You can still browse the library and your kit.",
-saved:"Look saved",needPhoto:"Take a photo in the Studio first.",
+saved:"Look saved",deletePhoto:"Delete photo",confirmDelete:"Do you want to delete this picture?",confirmDeleteItem:"Do you want to delete this?",yesDelete:"Yes, delete",no:"No",fromGallery:"From gallery",takeNew:"Take new photo",holdHint:"Tip: press and hold a photo to delete it.",shoot:"Take photo",switchCam:"Switch camera",photoDeleted:"Photo deleted",needPhoto:"Take a photo in the Studio first.",
 cat_lip:"Lips",cat_liner:"Eyeliner",cat_shadow:"Eyeshadow",cat_mascara:"Mascara",cat_brow:"Brows",cat_blush:"Blush",cat_found:"Foundation",cat_contour:"Contour",cat_hl:"Highlighter",cat_hair:"Hair colour",cat_style:"Hairstyle",tryStyle:"Try on my photo",styleHint:"Tap a style. It is fitted to your face automatically. Works best with your own hair tied back.",cat_nails:"Nails",
 analysis:"Your features",faceShape:"Face shape",skinDepth:"Skin tone",undertone:"Undertone",eyeColour:"Eye colour",naturalHair:"Natural hair",estimated:"Estimated from your photo. Tap to correct.",
 warm:"Warm",cool:"Cool",neutral:"Neutral",
@@ -455,7 +469,7 @@ kitEyebrow:"Jūsų kolekcija",kitTitle:"Mano rinkinys",products:"Produktai",look
 tStudio:"Studija",tAdvice:"Stilistė",tHair:"Plaukai",tKit:"Rinkinys",
 intensity:"Intensyvumas",off:"Išjungta",finish:"Apdaila",matte:"Matinė",satin:"Satininė",gloss:"Blizgi",wing:"Su uodegyte",yourKit:"iš jūsų rinkinio",
 reading:"Atpažįstamas veidas…",noFace:"Veido nerasta. Pabandykite šviesesnę nuotrauką, darytą tiesiai iš priekio.",findingHair:"Ieškoma plaukų…",loadingModels:"Ruošiamas veidrodis. Pirmą kartą tai užtrunka kelias sekundes…",noHand:"Rankos nerasta. Padėkite plaštaką delnu žemyn, pirštus praskėskite.",modelFail:"Šiame įrenginyje nepavyko paleisti veido atpažinimo. Biblioteką ir rinkinį galite naudoti toliau.",
-saved:"Įvaizdis išsaugotas",needPhoto:"Pirmiausia nusifotografuokite Studijoje.",
+saved:"Įvaizdis išsaugotas",deletePhoto:"Ištrinti nuotrauką",confirmDelete:"Ar norite ištrinti šią nuotrauką?",confirmDeleteItem:"Ar norite tai ištrinti?",yesDelete:"Taip, ištrinti",no:"Ne",fromGallery:"Iš galerijos",takeNew:"Nauja nuotrauka",holdHint:"Patarimas: palaikykite nuotrauką, kad ją ištrintumėte.",shoot:"Fotografuoti",switchCam:"Perjungti kamerą",photoDeleted:"Nuotrauka ištrinta",needPhoto:"Pirmiausia nusifotografuokite Studijoje.",
 cat_lip:"Lūpos",cat_liner:"Akių kontūras",cat_shadow:"Akių šešėliai",cat_mascara:"Blakstienų tušas",cat_brow:"Antakiai",cat_blush:"Skaistalai",cat_found:"Makiažo pagrindas",cat_contour:"Kontūravimas",cat_hl:"Švytėjimas",cat_hair:"Plaukų spalva",cat_style:"Šukuosena",tryStyle:"Išbandyti savo nuotraukoje",styleHint:"Bakstelėkite stilių. Jis automatiškai pritaikomas prie jūsų veido. Geriausiai atrodo, kai savo plaukus susirišate.",cat_nails:"Nagai",
 analysis:"Jūsų bruožai",faceShape:"Veido forma",skinDepth:"Odos atspalvis",undertone:"Poatspalvis",eyeColour:"Akių spalva",naturalHair:"Natūrali plaukų spalva",estimated:"Įvertinta pagal nuotrauką. Bakstelėkite, jei norite pataisyti.",
 warm:"Šiltas",cool:"Šaltas",neutral:"Neutralus",
@@ -623,6 +637,7 @@ let toastTimer;function toast(msg){const x=$("toast");x.textContent=msg;x.hidden
 function setStatus(id,msg){const s=$(id);if(!msg){s.hidden=true;return}s.textContent=msg;s.hidden=false}
 
 async function fileToCanvas(file,max=1280){
+  if(file instanceof HTMLCanvasElement)return file;
   const url=URL.createObjectURL(file);
   try{const img=new Image();img.decoding="async";img.src=url;await img.decode();
     const sc=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
@@ -862,11 +877,34 @@ function drawStyle(ctx,P,img,cutFace){const W=ctx.canvas.width,Hh=ctx.canvas.hei
     c.beginPath();c.moveTo(j1[0],j1[1]);c.lineTo(j2[0],j2[1]);c.lineTo(ch[0]+nw+ux*Hh,ch[1]+uy*Hh);c.lineTo(ch[0]-nw+ux*Hh,ch[1]+uy*Hh);c.closePath();c.fill();c.restore()}
   ctx.save();ctx.globalAlpha=.97;ctx.drawImage(styleCv,0,0);ctx.restore()}
 
+/* ============ Foolproof helpers: confirm, long-press, in-app camera ============ */
+function confirmBox(msg,yes,no){return new Promise(res=>{const ov=el("div",{class:"modal",role:"dialog","aria-modal":"true"});
+  const done=v=>{ov.remove();res(v)};const y=el("button",{class:"btn rose",type:"button",onclick:()=>done(true)},yes||t("yesDelete")),n=el("button",{class:"btn ghost",type:"button",onclick:()=>done(false)},no||t("no"));
+  ov.append(el("div",{class:"box"},el("p",{text:msg}),el("div",{class:"row"},n,y)));ov.addEventListener("click",e=>{if(e.target===ov)done(false)});document.body.append(ov);n.focus()})}
+function longPress(node,fn){let tm=null,sx=0,sy=0;node._lp=false;
+  node.addEventListener("pointerdown",e=>{sx=e.clientX;sy=e.clientY;node._lp=false;clearTimeout(tm);tm=setTimeout(()=>{tm=null;node._lp=true;if(navigator.vibrate)try{navigator.vibrate(30)}catch(x){}fn()},650)});
+  const stop=()=>{clearTimeout(tm);tm=null};node.addEventListener("pointerup",stop);node.addEventListener("pointercancel",stop);node.addEventListener("pointerleave",stop);
+  node.addEventListener("pointermove",e=>{if(Math.hypot(e.clientX-sx,e.clientY-sy)>12)stop()});node.addEventListener("contextmenu",e=>e.preventDefault());
+  node.addEventListener("click",e=>{if(node._lp){e.preventDefault();e.stopImmediatePropagation();node._lp=false}},true)}
+function camera(facing){return new Promise(res=>{if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){res("nocam");return}
+  let stream=null,face=facing,closed=false;const v=document.createElement("video");v.setAttribute("playsinline","");v.muted=true;v.autoplay=true;
+  const ov=el("div",{class:"cam"});const stopAll=()=>{if(stream)stream.getTracks().forEach(x=>x.stop());stream=null};
+  const close=r=>{if(closed)return;closed=true;stopAll();ov.remove();res(r)};
+  const start=async()=>{stopAll();try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:face,width:{ideal:1920},height:{ideal:1920}},audio:false});v.srcObject=stream;v.style.transform=face==="user"?"scaleX(-1)":"none";await v.play()}catch(e){close("nocam")}};
+  const shoot=()=>{if(!v.videoWidth)return;const sc=Math.min(1,1280/Math.max(v.videoWidth,v.videoHeight));const c=document.createElement("canvas");c.width=Math.round(v.videoWidth*sc);c.height=Math.round(v.videoHeight*sc);c.getContext("2d").drawImage(v,0,0,c.width,c.height);close(c)};
+  ov.append(v,el("div",{class:"bar"},el("button",{type:"button",onclick:()=>close(null)},t("cancel")),el("button",{type:"button",class:"shutter","aria-label":t("shoot"),onclick:shoot}),el("button",{type:"button",onclick:()=>{face=face==="user"?"environment":"user";start()}},t("switchCam"))),
+    el("div",{style:"position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center"},el("button",{type:"button",style:"background:rgba(0,0,0,.45);color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:8px 14px;font-size:14px",onclick:()=>close("gallery")},t("fromGallery"))));
+  document.body.append(ov);start()})}
+async function pick(id,facing){const r=await camera(facing);if(r==="nocam"||r==="gallery"){$(id).click();return}if(r&&fileHandlers[id])fileHandlers[id](r)}
+async function deleteStudioPhoto(){const kind=studioMode==="hand"?"hand":"front";if(!photos[kind])return;if(!(await confirmBox(t("confirmDelete"))))return;
+  photos[kind]=null;await DB.del("photos",kind);if(kind==="front"){analysis=null;if(photos.hand)studioMode="hand"}else{studioMode="face"}syncStudioChrome();render();toast(t("photoDeleted"))}
+async function deleteSlotPhoto(k){if(!photos[k])return;if(!(await confirmBox(t("confirmDelete"))))return;photos[k]=null;await DB.del("photos",k);if(k==="front")analysis=null;buildSlots();renderTurnCache();syncStudioChrome();toast(t("photoDeleted"))}
+
 /* ============ Studio UI ============ */
 let curCat="lip",products=[],looks=[],comparing=false,rq=0;
 function curPhoto(){return studioMode==="hand"?photos.hand:photos.front}
 function render(){cancelAnimationFrame(rq);rq=requestAnimationFrame(()=>{const P=curPhoto();const out=$("out");if(!P){out.hidden=true;return}$("stage").style.aspectRatio=P.canvas.width+" / "+P.canvas.height;out.hidden=false;renderInto(out,P,look,{makeup:!comparing});if(turnOpen)renderTurnCache()})}
-function syncStudioChrome(){const has=!!(photos.front||photos.hand);$("studioEmpty").hidden=!!curPhoto();$("out").hidden=!curPhoto();$("btnCompare").hidden=!curPhoto();$("photoActs").hidden=!has;$("modeSw").hidden=!has;
+function syncStudioChrome(){const has=!!(photos.front||photos.hand);$("studioEmpty").hidden=!!curPhoto();$("out").hidden=!curPhoto();$("btnCompare").hidden=!curPhoto();$("photoActs").hidden=!has;$("holdHint").hidden=!curPhoto();$("modeSw").hidden=!has;
   $("modeFace").setAttribute("aria-pressed",studioMode==="face");$("modeHand").setAttribute("aria-pressed",studioMode==="hand");
   if(!curPhoto()){$("btnHand").hidden=studioMode==="hand"?false:false}}
 
@@ -880,7 +918,7 @@ function kitShadesFor(cat){return products.filter(p=>p.feature===cat&&p.hex).map
 function buildPanel(){const c=curCat,st=look[c];const box=$("catPanel");const kids=[];
   if(c==="style"){const ids=Object.keys(HSPEC);box.replaceChildren(el("p",{class:"small",style:"margin:0"},t("styleHint")),el("div",{class:"stylegrid"},el("button",{type:"button",class:"stb","aria-pressed":String(!st.c),onclick:()=>{st.c=null;buildCats();buildPanel();render()}},el("i",{class:"art off"}),t("off")),
     ids.map(id=>{const h=HAIR.find(x=>x.id===id);const b=el("button",{type:"button",class:"stb","aria-pressed":String(st.c===id),onclick:()=>{st.c=id;st.a=1;buildCats();buildPanel();render()}});const a=el("div",{class:"art"});a.innerHTML=hairSVG(id);b.append(a,h?L(h.n):id);return b})));return}
-  if(c==="nails"&&!photos.hand){kids.push(el("p",{class:"small",style:"margin:0"},t("handPhoto")+": "),el("div",{class:"row"},el("button",{class:"btn sm",type:"button",onclick:()=>$("inHand").click()},t("handPhoto"))))}
+  if(c==="nails"&&!photos.hand){kids.push(el("p",{class:"small",style:"margin:0"},t("handPhoto")+": "),el("div",{class:"row"},el("button",{class:"btn sm",type:"button",onclick:()=>pick("inHand","environment")},t("handPhoto"))))}
   const list=kitShadesFor(c).concat(SHADES[c]);
   kids.push(el("div",{class:"swatches"},el("button",{class:"sw",type:"button","aria-pressed":String(!st.c||!st.a),onclick:()=>{st.a=0;buildCats();buildPanel();render()}},el("i",{style:"background:repeating-linear-gradient(135deg,var(--sunk) 0 5px,var(--surface) 5px 10px)"}),t("off")),
     list.map(s=>el("button",{class:"sw"+(s.mine?" mine":""),type:"button",title:L(s.n),"aria-pressed":String(!!st.c&&st.a>0&&st.c.toUpperCase()===s.hex.toUpperCase()),onclick:()=>{st.c=s.hex;if(!st.a)st.a=DEFAULT_A[c];buildCats();buildPanel();render()}},el("i",{style:"background:"+s.hex}),L(s.n)))));
@@ -901,8 +939,8 @@ async function newHandPhoto(file){const c=await fileToCanvas(file);studioMode="h
 /* ============ 360° ============ */
 const SLOTS=["front","left","back","right"];// order around the turn
 let turnOpen=false,turnCache={},turnAngle=0,spinT=0,slotTarget=null;
-function buildSlots(){$("slots").replaceChildren(...["front","left","right","back"].map(k=>{const P=photos[k];const b=el("button",{class:"slot"+(P?" filled":""),type:"button",onclick:()=>{if(k==="front"){goView("studio");if(!photos.front)$("inSelfie").click();return}slotTarget=k;$("inSlot").click()}});
-  if(P)b.append(el("img",{src:thumbURL(P.canvas,320),alt:""}));b.append(el("span",{text:t(k)}));return b}))}
+function buildSlots(){$("slots").replaceChildren(...["front","left","right","back"].map(k=>{const P=photos[k];const b=el("button",{class:"slot"+(P?" filled":""),type:"button",onclick:()=>{if(k==="front"){goView("studio");if(!photos.front)pick("inSelfie","user");return}slotTarget=k;pick("inSlot","environment")}});
+  if(P){b.append(el("img",{src:thumbURL(P.canvas,320),alt:""}));longPress(b,()=>deleteSlotPhoto(k))}b.append(el("span",{text:t(k)}));return b}))}
 function renderTurnCache(){turnCache={};for(const k of SLOTS){const P=photos[k];if(!P)continue;const c=document.createElement("canvas");renderInto(c,P,look);turnCache[k]=c}drawTurn()}
 function drawTurn(){const cv=$("turnCanvas"),st=$("turnStage");const r=st.getBoundingClientRect();const dpr=Math.min(2,window.devicePixelRatio||1);const W=Math.max(10,Math.round(r.width*dpr)),Hh=Math.max(10,Math.round(r.height*dpr));if(cv.width!==W)cv.width=W;if(cv.height!==Hh)cv.height=Hh;
   const ctx=cv.getContext("2d");ctx.clearRect(0,0,W,Hh);const avail=SLOTS.filter(k=>turnCache[k]);
@@ -946,7 +984,7 @@ function kitMatches(){const r=recommended();const out=[];for(const p of products
 
 function pickRow(key,opts,label){return el("div",{class:"pick"},opts.map(o=>el("button",{type:"button","aria-pressed":String(get(key)===o),onclick:()=>{overrides[key]=o;saveOver();renderAdvice()}},label(o))))}
 function renderAdvice(){const box=$("adviceBody");
-  if(!photos.front){box.replaceChildren(el("div",{class:"empty-note"},el("p",{style:"margin:0"},t("noPhotoAdvice")),el("button",{class:"btn rose",type:"button",onclick:()=>{goView("studio");$("inSelfie").click()}},t("takeSelfie"))),aiCard());return}
+  if(!photos.front){box.replaceChildren(el("div",{class:"empty-note"},el("p",{style:"margin:0"},t("noPhotoAdvice")),el("button",{class:"btn rose",type:"button",onclick:()=>{goView("studio");pick("inSelfie","user")}},t("takeSelfie"))),aiCard());return}
   if(!analysis&&photos.front.lm)analysis=analyse();
   if(!photos.front.lm){box.replaceChildren(el("div",{class:"empty-note"},el("p",{style:"margin:0"},t("noFace"))),aiCard());return}
   const shape=get("shape"),tone=get("tone"),depth=get("depth"),eye=get("eye");const fi=FACE_INFO[shape];
@@ -1041,7 +1079,7 @@ function renderProducts(){const box=$("kitProd");if(editing){box.replaceChildren
       el("span",{class:"row",style:"gap:4px"},p.fav?el("span",{class:"tag",text:t("favourite")}):null,p.rec?el("span",{class:"tag fit",text:t("recommended")}):null),p.notes?el("span",{class:"small",text:p.notes}):null),
     el("div",{class:"acts"},p.feature&&p.hex?el("button",{class:"btn sm",type:"button",onclick:()=>{const f=p.feature;look[f].c=p.hex;if(!look[f].a)look[f].a=DEFAULT_A[f];curCat=f;buildCats();buildPanel();goView("studio");render();if(!photos.front)toast(t("needPhoto"))}},t("tryOn")):null,
       el("button",{class:"btn ghost sm",type:"button",onclick:()=>{editing=Object.assign({},p);renderKit()}},"✎"),
-      el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(pendingDel!==p.id){pendingDel=p.id;e.currentTarget.textContent=t("sure");return}products=products.filter(x=>x.id!==p.id);await DB.del("products",p.id);pendingDel=null;renderKit()}},t("del")))))))}
+      el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(!(await confirmBox(t("confirmDeleteItem"))))return;products=products.filter(x=>x.id!==p.id);await DB.del("products",p.id);pendingDel=null;renderKit()}},t("del")))))))}
 function productForm(){const p=editing;const pc=el("canvas",{});const pick=el("div",{class:"picker"},pc);let img=null;
   const drawPick=()=>{if(!img){pc.width=600;pc.height=300;const x=pc.getContext("2d");x.fillStyle=getComputedStyle(document.body).getPropertyValue("--sunk");x.fillRect(0,0,600,300);return}pc.width=img.width;pc.height=img.height;const x=pc.getContext("2d");x.drawImage(img,0,0);if(p.px){x.strokeStyle="#fff";x.lineWidth=Math.max(2,img.width/150);x.beginPath();x.arc(p.px[0],p.px[1],img.width/30,0,Math.PI*2);x.stroke();x.strokeStyle="#000";x.lineWidth/=2;x.stroke()}};
   if(p.photo){const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext("2d").drawImage(im,0,0);img=c;drawPick()};im.src=p.photo}
@@ -1049,7 +1087,7 @@ function productForm(){const p=editing;const pc=el("canvas",{});const pick=el("d
   const sw=el("span",{class:"shade"},el("i",{style:"background:"+(p.hex||"transparent")}),p.hex||"");
   const setHex=h=>{p.hex=h;sw.replaceChildren(el("i",{style:"background:"+h}),h)};
   pc.addEventListener("pointerdown",e=>{if(!img)return;const r=pc.getBoundingClientRect();const x=(e.clientX-r.left)/r.width*img.width,y=(e.clientY-r.top)/r.height*img.height;const R=Math.max(2,Math.round(img.width/80));const d=img.getContext("2d",{willReadFrequently:true}).getImageData(Math.max(0,Math.round(x-R)),Math.max(0,Math.round(y-R)),2*R,2*R).data;let rr=0,g=0,b=0,n=0;for(let i=0;i<d.length;i+=4){rr+=d[i];g+=d[i+1];b+=d[i+2];n++}p.px=[x,y];setHex(rgbToHex(rr/n,g/n,b/n));drawPick()});
-  const takeBtn=el("button",{class:"btn sm",type:"button",onclick:()=>{prodPhotoCb=async c=>{img=c;p.photo=c.toDataURL("image/jpeg",.82);drawPick()};$("inProd").click()}},t("takeProdPhoto"));
+  const takeBtn=el("button",{class:"btn sm",type:"button",onclick:()=>{prodPhotoCb=async c=>{img=c;p.photo=c.toDataURL("image/jpeg",.82);drawPick()};pick("inProd","environment")}},t("takeProdPhoto"));
   const f=(id,lab,input)=>el("div",{class:"field"},el("label",{for:id,text:lab}),input);
   const name=el("input",{id:"pName",value:p.name||"",autocomplete:"off"}),brand=el("input",{id:"pBrand",value:p.brand||"",autocomplete:"off"});
   const cat=el("select",{id:"pCat"},PCATS.map((c,i)=>el("option",{value:String(i),selected:i===p.cat},L(c[1]))));
@@ -1070,7 +1108,7 @@ let prodPhotoCb=null;
 function renderLooks(){const box=$("kitLooks");if(!looks.length){box.replaceChildren(el("div",{class:"empty-note"},el("p",{style:"margin:0"},t("looksEmpty"))));return}
   box.replaceChildren(el("div",{class:"looks"},looks.slice().sort((a,b)=>b.ts-a.ts).map(l=>el("article",{class:"look"},el("img",{src:l.thumb,alt:""}),el("div",{class:"meta"},el("b",{style:"font-weight:500",text:l.name}),el("span",{class:"small",text:new Date(l.ts).toLocaleDateString(LANG==="lt"?"lt-LT":"en-GB",{day:"numeric",month:"short",year:"numeric"})}),
     el("div",{class:"row",style:"gap:6px"},el("button",{class:"btn sm",type:"button",onclick:()=>{look=JSON.parse(JSON.stringify(l.look));buildCats();buildPanel();goView("studio");render()}},t("wear")),
-      el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(pendingDel!==l.id){pendingDel=l.id;e.currentTarget.textContent=t("sure");return}looks=looks.filter(x=>x.id!==l.id);await DB.del("looks",l.id);pendingDel=null;renderKit()}},t("del"))))))))}
+      el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(!(await confirmBox(t("confirmDeleteItem"))))return;looks=looks.filter(x=>x.id!==l.id);await DB.del("looks",l.id);pendingDel=null;renderKit()}},t("del"))))))))}
 
 /* ============ Backup ============ */
 async function backup(){const dl={save:async({filename,data})=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=filename;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}};
@@ -1168,8 +1206,8 @@ function renderWard(){const box=$("wardBody");if(!box)return;["outfits","clothes
   if(wardSub==="saved")return box.replaceChildren(savedOutfits());
   if(wardSub==="trends")return box.replaceChildren(el("div",{class:"card"},el("h3",{text:t("trendsTitle")}),el("p",{class:"small",style:"margin:0"},t("trendsNote")),el("ul",{class:"clean"},TRENDS.map(x=>el("li",{class:"small",style:"color:var(--fg)"},"· "+L(x))))));
   // outfits
-  const bodyCard=el("div",{class:"card"},el("div",{class:"row",style:"justify-content:space-between"},el("div",{class:"eyebrow",text:t("bodyPhoto")}),photos.body?el("button",{class:"btn ghost sm",type:"button",onclick:()=>$("inBody").click()},t("replaceBody")):null),
-    photos.body?el("img",{src:photos.body.thumb,alt:"",style:"max-height:220px;width:auto;border-radius:10px;justify-self:start"}):el("div",{style:"display:grid;gap:8px"},el("p",{class:"small",style:"margin:0"},t("bodyHint")),el("div",{},el("button",{class:"btn sm",type:"button",onclick:()=>$("inBody").click()},t("takeBody")))));
+  const bodyCard=el("div",{class:"card"},el("div",{class:"row",style:"justify-content:space-between"},el("div",{class:"eyebrow",text:t("bodyPhoto")}),photos.body?el("button",{class:"btn ghost sm",type:"button",onclick:()=>pick("inBody","environment")},t("replaceBody")):null),
+    photos.body?(()=>{const im=el("img",{src:photos.body.thumb,alt:"",class:"bodyimg",style:"max-height:220px;width:auto;border-radius:10px;justify-self:start"});longPress(im,async()=>{if(!(await confirmBox(t("confirmDelete"))))return;photos.body=null;await DB.del("photos","body");renderWard();toast(t("photoDeleted"))});return im})():el("div",{style:"display:grid;gap:8px"},el("p",{class:"small",style:"margin:0"},t("bodyHint")),el("div",{},el("button",{class:"btn sm",type:"button",onclick:()=>pick("inBody","environment")},t("takeBody")))));
   const ctrl=el("div",{class:"card"},el("div",{class:"eyebrow",text:t("occasion")}),chipRow(OCCS.map(o=>o[0]),occ,o=>t("occ_"+o),o=>{occ=o;saveWardPrefs();suggestions=generate();renderWard()}),
     el("div",{class:"eyebrow",text:t("weather")}),chipRow(["warm","mild","cool"],wx,o=>t("w"+o[0].toUpperCase()+o.slice(1)),o=>{wx=o;saveWardPrefs();suggestions=generate();renderWard()}),
     el("div",{class:"eyebrow",text:t("where")}),chipRow(["all"].concat(WHERES),whereF,o=>o==="all"?t("allWardrobes"):t("wh_"+o),o=>{whereF=o;saveWardPrefs();suggestions=generate();renderWard()}),
@@ -1182,7 +1220,7 @@ function savedOutfits(){if(!outfits.length)return el("div",{class:"empty-note"},
   return el("div",{style:"display:grid;gap:12px"},outfits.slice().sort((a,b)=>b.ts-a.ts).map(o=>{const items=o.items.map(id=>garments.find(g=>g.id===id)).filter(Boolean);
     return el("div",{class:"card"},el("div",{class:"row",style:"justify-content:space-between"},el("b",{style:"font-weight:500",text:o.name}),el("span",{class:"small",text:new Date(o.ts).toLocaleDateString(LANG==="lt"?"lt-LT":"en-GB",{day:"numeric",month:"short"})})),
       board(items,{onKeep:false}),o.note?el("p",{class:"small",style:"margin:0"},o.note):null,
-      el("div",{},el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(pendingDel!==o.id){pendingDel=o.id;e.currentTarget.textContent=t("sure");return}outfits=outfits.filter(x=>x.id!==o.id);await DB.del("outfits",o.id);pendingDel=null;renderWard()}},t("del"))))}))}
+      el("div",{},el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(!(await confirmBox(t("confirmDeleteItem"))))return;outfits=outfits.filter(x=>x.id!==o.id);await DB.del("outfits",o.id);pendingDel=null;renderWard()}},t("del"))))}))}
 function newGarment(){return{id:uid(),cat:"top",occ:[],weather:[],where:whereF==="all"?"pt":whereF,pattern:false}}
 function clothesList(){const add=el("button",{class:"btn rose",type:"button",onclick:()=>{gEditing=newGarment();renderWard()}},"+ "+t("addGarment"));
   if(!garments.length)return el("div",{class:"empty-note"},el("p",{style:"margin:0;max-width:44ch"},t("gEmpty")),add);
@@ -1192,7 +1230,7 @@ function clothesList(){const add=el("button",{class:"btn rose",type:"button",onc
       el("div",{class:"meta"},el("b",{text:L(GC[g.cat].n)}),g.hex?el("span",{class:"shade"},el("i",{style:"background:"+g.hex}),L(clothColourName(g.hex))+(g.pattern?" · "+t("gPattern"):"")):null,
         el("span",{class:"small",text:(g.occ&&g.occ.length?g.occ.map(o=>t("occ_"+o)).join(", "):"")}),g.notes?el("span",{class:"small",text:g.notes}):null),
       el("div",{class:"acts"},el("button",{class:"btn ghost sm",type:"button",onclick:()=>{gEditing=JSON.parse(JSON.stringify(g));renderWard()}},"✎"),
-        el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(pendingDel!==g.id){pendingDel=g.id;e.currentTarget.textContent=t("sure");return}garments=garments.filter(x=>x.id!==g.id);kept.delete(g.id);await DB.del("garments",g.id);pendingDel=null;suggestions=[];renderWard()}},t("del")))))))}
+        el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(!(await confirmBox(t("confirmDeleteItem"))))return;garments=garments.filter(x=>x.id!==g.id);kept.delete(g.id);await DB.del("garments",g.id);pendingDel=null;suggestions=[];renderWard()}},t("del")))))))}
 let gPhotoCb=null;
 function garmentForm(){const g=gEditing;const pc=el("canvas",{});let img=null;
   const draw=()=>{const x=pc.getContext("2d");if(!img){pc.width=600;pc.height=300;x.fillStyle=getComputedStyle(document.body).getPropertyValue("--sunk");x.fillRect(0,0,600,300);return}pc.width=img.width;pc.height=img.height;x.drawImage(img,0,0);if(g.px){x.strokeStyle="#fff";x.lineWidth=Math.max(2,img.width/150);x.beginPath();x.arc(g.px[0],g.px[1],img.width/30,0,Math.PI*2);x.stroke()}};
@@ -1200,7 +1238,7 @@ function garmentForm(){const g=gEditing;const pc=el("canvas",{});let img=null;
   const sampleAt=(x,y)=>{const R=Math.max(3,Math.round(img.width/40));const d=img.getContext("2d",{willReadFrequently:true}).getImageData(Math.max(0,Math.round(x-R)),Math.max(0,Math.round(y-R)),2*R,2*R).data;let r=0,gg=0,b=0,n=0;for(let i=0;i<d.length;i+=4){r+=d[i];gg+=d[i+1];b+=d[i+2];n++}g.px=[x,y];setHex(rgbToHex(r/n,gg/n,b/n));draw()};
   if(g.photo){const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext("2d").drawImage(im,0,0);img=c;draw()};im.src=g.photo}draw();
   pc.addEventListener("pointerdown",e=>{if(!img)return;const r=pc.getBoundingClientRect();sampleAt((e.clientX-r.left)/r.width*img.width,(e.clientY-r.top)/r.height*img.height)});
-  const take=el("button",{class:"btn sm",type:"button",onclick:()=>{gPhotoCb=c=>{img=c;g.photo=c.toDataURL("image/jpeg",.8);draw();if(!g.hex)sampleAt(c.width/2,c.height/2)};$("inGarment").click()}},t("takeProdPhoto"));
+  const take=el("button",{class:"btn sm",type:"button",onclick:()=>{gPhotoCb=c=>{img=c;g.photo=c.toDataURL("image/jpeg",.8);draw();if(!g.hex)sampleAt(c.width/2,c.height/2)};pick("inGarment","environment")}},t("takeProdPhoto"));
   const cat=el("select",{id:"gCat",onchange:e=>{g.cat=e.target.value;renderOccChips()}},GCATS.map(c=>el("option",{value:c[0],selected:g.cat===c[0]},L(GC[c[0]].n))));
   const where=el("select",{id:"gWhere"},WHERES.map(w=>el("option",{value:w,selected:g.where===w},t("wh_"+w))));
   const notes=el("input",{id:"gNotes",value:g.notes||"",autocomplete:"off"});const pat=el("input",{type:"checkbox",id:"gPat",checked:!!g.pattern});const fav=el("input",{type:"checkbox",id:"gFav",checked:!!g.fav});
@@ -1431,7 +1469,7 @@ function foodCard(sc){const slots=["breakfast","lunch","dinner","snack"];
       m.ai?el("p",{class:"small",style:"margin:0",text:m.ai}):null,
       el("div",{class:"row"},m.photo?el("button",{class:"btn ghost sm",type:"button",onclick:()=>aiMeal(m)},t("aiMeal")):null,el("button",{class:"btn ghost sm",type:"button",onclick:async()=>{hDay.meals.splice(i,1);await saveDay();renderHealth()}},t("remove")))))));
   return el("div",{class:"card"},el("h3",{text:t("food")}),sc.need?el("span",{class:"small",text:fmt("kcalToday",{a:sc.eat||0,b:sc.need})}):null,list,
-    el("div",{class:"row"},slots.map(s=>el("button",{class:"btn ghost sm",type:"button",onclick:()=>{mealPhotoCb=async c=>{hDay.meals.push({id:uid(),slot:s,size:"normal",tags:[],photo:c?thumbURL(c,640):null,ts:Date.now()});await saveDay();renderHealth()};$("inMeal").click()}},"+ "+t("m_"+s)))))}
+    el("div",{class:"row"},slots.map(s=>el("button",{class:"btn ghost sm",type:"button",onclick:()=>{mealPhotoCb=async c=>{hDay.meals.push({id:uid(),slot:s,size:"normal",tags:[],photo:c?thumbURL(c,640):null,ts:Date.now()});await saveDay();renderHealth()};pick("inMeal","environment")}},"+ "+t("m_"+s)))))}
 async function aiMeal(m){const s=await getSample();if(!s){toast(t("aiUnavailable"));return}m.ai=t("thinking");renderHealth();
   try{const b=await (await fetch(m.photo)).blob();const j=await s.json(`You are a friendly nutrition coach. Estimate this ${m.slot} from the photo for a woman aged ${hProfile.age||63}. Write the comment in ${langName()}. Return ONLY JSON: {"kcal":number,"tags":[any of "veg","fruit","protein","grain","sweet","fried","processed","alcohol"],"comment":"one warm, practical sentence"}`,{images:[b]});
     if(j.kcal)m.kcal=Math.round(j.kcal);if(Array.isArray(j.tags))m.tags=j.tags.filter(x=>FOODTAGS.some(f=>f[0]===x));m.ai=j.comment||""}catch(e){m.ai=aiErr(e)}await saveDay();renderHealth()}
@@ -1474,15 +1512,16 @@ function setLang(l){LANG=l;try{localStorage.setItem("bs-lang",l)}catch(e){}apply
 /* ============ Wiring ============ */
 $("langEn").onclick=()=>setLang("en");$("langLt").onclick=()=>setLang("lt");
 document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>goView(b.dataset.v));
-$("btnSelfie").onclick=()=>$("inSelfie").click();$("btnGallery").onclick=()=>$("inGallery").click();$("btnHand").onclick=()=>$("inHand").click();
-$("btnNew").onclick=()=>{if(studioMode==="hand")$("inHand").click();else $("inSelfie").click()};
-const onFile=(id,fn)=>$(id).addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];e.target.value="";if(f)fn(f)});
+$("btnSelfie").onclick=()=>pick("inSelfie","user");$("btnGallery").onclick=()=>$("inGallery").click();$("btnHand").onclick=()=>pick("inHand","environment");
+$("btnNew").onclick=()=>{if(studioMode==="hand")pick("inHand","environment");else pick("inSelfie","user")};
+const fileHandlers={};const onFile=(id,fn)=>{fileHandlers[id]=fn;$(id).addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];e.target.value="";if(f)fn(f)})};
 onFile("inSelfie",newFrontPhoto);onFile("inGallery",newFrontPhoto);onFile("inHand",newHandPhoto);
 onFile("inSlot",f=>{if(slotTarget)newSlotPhoto(slotTarget,f)});onFile("inProd",async f=>{const c=await fileToCanvas(f,900);if(prodPhotoCb)prodPhotoCb(c)});onFile("inRestore",restore);
-$("modeFace").onclick=()=>{if(photos.front)setMode("face");else $("inSelfie").click()};$("modeHand").onclick=()=>{if(photos.hand)setMode("hand");else $("inHand").click()};
+$("modeFace").onclick=()=>{if(photos.front)setMode("face");else pick("inSelfie","user")};$("modeHand").onclick=()=>{if(photos.hand)setMode("hand");else pick("inHand","environment")};
 $("btnClear").onclick=()=>{const h=look.hair,n=look.nails,st=look.style;look=emptyLook();look.style=st||look.style;if(studioMode==="hand")look.hair=h;document.querySelectorAll(".preset").forEach(b=>b.setAttribute("aria-pressed","false"));buildCats();buildPanel();render()};
 const cmp=$("btnCompare");const startC=e=>{e.preventDefault();comparing=true;render()},endC=()=>{if(comparing){comparing=false;render()}};
 cmp.addEventListener("pointerdown",startC);cmp.addEventListener("pointerup",endC);cmp.addEventListener("pointerleave",endC);cmp.addEventListener("pointercancel",endC);cmp.addEventListener("contextmenu",e=>e.preventDefault());
+$("btnDel").onclick=deleteStudioPhoto;$("btnNewGal").onclick=()=>{if(studioMode==="hand")$("inHand").click();else $("inGallery").click()};longPress($("out"),deleteStudioPhoto);
 $("btnSave").onclick=async()=>{const P=curPhoto();if(!P)return;const c=document.createElement("canvas");renderInto(c,P,look);const l={id:uid(),ts:Date.now(),name:t("lookName")+" "+(looks.length+1),look:JSON.parse(JSON.stringify(look)),thumb:thumbURL(c,600)};looks.push(l);await DB.put("looks",l.id,l);toast(t("saved"))};
 $("stProd").onclick=()=>{kitSub="prod";renderKit()};$("stLooks").onclick=()=>{kitSub="looks";renderKit()};
 $("hfAll").onclick=()=>{hairFilter="all";renderHair()};$("hfFit").onclick=()=>{hairFilter="fit";renderHair()};
