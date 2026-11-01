@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F8F3F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1417" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Bonnie's private stylist: make-up, hair, wardrobe and outfits.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}</style>
+<title>Bonnie's Stylist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: a fashion-magazine vanity. Photo is the hero, controls sit beneath on the cover screen and beside it when the Fold is open. */
+:root{
+  --bg:#F8F3F2;          /* rose-ivory powder */
+  --surface:#FFFFFF;
+  --sunk:#F1E8E8;
+  --fg:#2B2024;          /* plum-black ink */
+  --muted:#7E6C72;
+  --line:#E6D9DB;
+  --accent:#9E4F63;      /* deep rose */
+  --accent-ink:#FFFFFF;
+  --gold:#A8865A;        /* champagne gold */
+  --ok:#3F7A5A;
+  --warn:#A65A2A;
+  --display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+  --body:"Jost","Futura","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --r:14px;
+  --shadow:0 1px 2px rgba(60,30,40,.06),0 8px 24px rgba(60,30,40,.07);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1A1417;--surface:#251C20;--sunk:#2E2328;--fg:#F4EAED;--muted:#B49FA6;--line:#3A2D33;
+  --accent:#E296AA;--accent-ink:#2A1219;--gold:#D6B88C;--ok:#86C3A0;--warn:#E3A273;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1A1417;--surface:#251C20;--sunk:#2E2328;--fg:#F4EAED;--muted:#B49FA6;--line:#3A2D33;
+  --accent:#E296AA;--accent-ink:#2A1219;--gold:#D6B88C;--ok:#86C3A0;--warn:#E3A273;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.app{min-height:100%;display:flex;flex-direction:column}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px 8px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line)}
+.brand{font-family:var(--display);font-size:24px;line-height:1;letter-spacing:.01em;font-weight:500}
+.brand em{font-style:italic;color:var(--accent);font-weight:400}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:transparent;padding:5px 11px;font-size:12px;letter-spacing:.12em;font-weight:500;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+
+main{flex:1;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 96px;width:100%;max-width:1100px;margin:0 auto}
+section.view[hidden]{display:none!important}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
+  padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px));padding-bottom:env(safe-area-inset-bottom,0px);
+  display:grid;grid-template-columns:repeat(6,1fr)}
+nav.tabs button{border:0;background:none;padding:9px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;letter-spacing:.06em;color:var(--muted);min-width:0}
+nav.tabs button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5}
+nav.tabs button[aria-current="page"]{color:var(--accent)}
+nav.tabs span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+h2{font-family:var(--display);font-weight:500;font-size:28px;line-height:1.1;margin:0 0 4px;text-wrap:balance}
+h3{font-family:var(--display);font-weight:500;font-size:19px;margin:0 0 8px;text-wrap:balance}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.lede{color:var(--muted);margin:0 0 16px;max-width:60ch}
+.small{font-size:13px;color:var(--muted)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:11px 18px;border:1px solid var(--fg);background:var(--fg);color:var(--bg);font-weight:500;font-size:14px;letter-spacing:.02em}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.rose{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.sm{padding:7px 13px;font-size:13px}
+.btn[disabled]{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* Studio */
+.studio{display:grid;gap:16px}
+@media (min-width:640px){.studio{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:start}
+  .stage-wrap{position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px)}}
+.stage{position:relative;background:var(--sunk);border-radius:var(--r);overflow:hidden;aspect-ratio:3/4;max-width:100%;display:grid;place-items:center}
+.stage canvas{width:100%;height:100%;object-fit:contain;display:block;touch-action:none}
+.empty{padding:28px 22px;text-align:center;display:grid;gap:14px;justify-items:center}
+.empty .mirror{width:120px;height:150px;border-radius:60px 60px 54px 54px;border:1.5px solid var(--gold);display:grid;place-items:center;
+  background:radial-gradient(ellipse at 50% 35%,var(--surface),var(--sunk))}
+.empty .mirror svg{width:56px;height:56px;stroke:var(--gold);fill:none;stroke-width:1.2}
+.status{position:absolute;left:12px;right:12px;bottom:12px;background:color-mix(in oklab,var(--surface) 92%,transparent);border-radius:10px;padding:8px 12px;font-size:13px;box-shadow:var(--shadow)}
+.status[hidden]{display:none}
+.compare{position:absolute;top:10px;right:10px;border-radius:999px;border:0;background:color-mix(in oklab,var(--surface) 90%,transparent);padding:7px 12px;font-size:12px;box-shadow:var(--shadow);user-select:none;-webkit-user-select:none}
+.mode{position:absolute;top:10px;left:10px;display:flex;border-radius:999px;overflow:hidden;box-shadow:var(--shadow);background:color-mix(in oklab,var(--surface) 90%,transparent)}
+.mode button{border:0;background:transparent;padding:7px 12px;font-size:12px}
+.mode button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+
+.presets{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.presets::-webkit-scrollbar{display:none}
+.preset{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 12px 9px;display:grid;gap:5px;text-align:left;min-width:120px}
+.preset .dots{display:flex;gap:3px}
+.preset .dots i{width:12px;height:12px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.08)}
+.preset b{font-weight:500;font-size:13px}
+.preset[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+
+.cats{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.cats::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:transparent;border-radius:999px;padding:6px 12px;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip .on{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:12px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:10px}
+.sw{border:0;padding:0;background:none;display:grid;gap:4px;justify-items:center;font-size:10px;color:var(--muted);line-height:1.15;text-align:center}
+.sw i{width:38px;height:38px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.sw[aria-pressed="true"] i{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+.sw.mine i{outline:1.5px dashed var(--gold);outline-offset:2px}
+.slider{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-size:13px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:6px 12px;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--sunk);color:var(--accent);font-weight:500}
+
+/* 360 */
+.turn{display:grid;gap:14px}
+@media (min-width:640px){.turn{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:start}}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.slot{border:1px dashed var(--line);border-radius:12px;background:var(--surface);aspect-ratio:3/4;display:grid;place-items:center;padding:0;overflow:hidden;position:relative;max-width:100%}
+.slot img{width:100%;height:100%;object-fit:cover}
+.slot span{position:absolute;left:0;right:0;bottom:0;font-size:11px;padding:4px;background:color-mix(in oklab,var(--surface) 85%,transparent);text-align:center}
+.slot.filled{border-style:solid}
+.dial{display:flex;gap:6px;justify-content:center}
+.dial i{width:8px;height:8px;border-radius:50%;background:var(--line);display:block}
+.dial i.on{background:var(--accent)}
+
+/* Stylist */
+.cards{display:grid;gap:12px}
+@media (min-width:640px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.fact{display:grid;gap:2px;min-width:0}
+.fact b{font-family:var(--display);font-size:20px;font-weight:500;line-height:1.15}
+.fact .swatch{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:6px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.pick{display:flex;flex-wrap:wrap;gap:6px}
+.pick button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:4px 10px;font-size:12px}
+.pick button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+ul.clean{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+ul.clean li{display:grid;gap:1px}
+ul.clean li b{font-weight:500}
+.palette{display:flex;flex-wrap:wrap;gap:6px}
+.palette i{width:26px;height:26px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.ai{border-color:color-mix(in oklab,var(--accent) 40%,var(--line))}
+.ai-out{white-space:pre-wrap;font-size:14px;line-height:1.55}
+textarea{width:100%;min-height:72px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);resize:vertical}
+.tag{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid var(--gold);color:var(--gold);white-space:nowrap}
+.tag.fit{border-color:var(--ok);color:var(--ok)}
+
+/* Hair library */
+.lib{display:grid;gap:18px}
+.lib-group{display:grid;gap:10px}
+.lib-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))}
+.style{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;align-content:start;min-width:0}
+.style header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.style h4{margin:0;font-family:var(--display);font-weight:500;font-size:17px}
+.style p{margin:0;font-size:13.5px;color:var(--muted)}
+.style .hairsw{width:100%;height:10px;border-radius:999px}
+
+/* Kit */
+.subtabs{display:flex;gap:6px;margin-bottom:14px}
+.grid-prod{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr))}
+.prod{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:grid;align-content:start;min-width:0}
+.prod .ph{aspect-ratio:1;background:var(--sunk);display:grid;place-items:center;max-width:100%}
+.prod .ph img{width:100%;height:100%;object-fit:cover}
+.prod .meta{padding:10px 12px;display:grid;gap:4px;min-width:0}
+.prod .meta b{font-weight:500;overflow-wrap:anywhere}
+.prod .meta .small{overflow-wrap:anywhere}
+.shade{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.shade i{width:14px;height:14px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.prod .acts{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 12px}
+form.addp{display:grid;gap:12px}
+.field{display:grid;gap:4px}
+.field label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:var(--bg);width:100%}
+.two{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+.picker{position:relative;border-radius:12px;overflow:hidden;background:var(--sunk);max-width:100%}
+.picker canvas{width:100%;display:block;touch-action:none}
+.empty-note{border:1px dashed var(--line);border-radius:var(--r);padding:22px;text-align:center;color:var(--muted);display:grid;gap:12px;justify-items:center}
+.looks{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr))}
+.look{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:grid;min-width:0}
+.look img{width:100%;aspect-ratio:3/4;object-fit:cover;max-width:100%}
+.look .meta{padding:8px 10px;display:grid;gap:6px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13px;z-index:40;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.toast[hidden]{display:none}
+.ob{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,2fr);gap:8px;align-items:start}
+.ob:not(:has(.ob-body)){grid-template-columns:1fr}
+.ob-body img{width:100%;border-radius:10px;aspect-ratio:3/5;object-fit:cover;max-width:100%}
+.ob-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+.ob-it{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:4px;display:grid;gap:4px;font-size:11px;color:var(--muted);text-align:center;min-width:0}
+.ob-it img,.ob-it i{width:100%;aspect-ratio:1;object-fit:cover;border-radius:7px;display:block;max-width:100%}
+.ob-it.kept{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);color:var(--accent)}
+hr.soft{border:0;border-top:1px solid var(--line);margin:4px 0}
+@media (prefers-reduced-motion:no-preference){.fade{animation:fade .35s ease both}@keyframes fade{from{opacity:.4}to{opacity:1}}}
+</style>
+
+</head><body>
+<div class="app">
+  <header class="top">
+    <div class="brand">Bonnie's <em>Stylist</em></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="langEn" aria-pressed="true">EN</button>
+      <button type="button" id="langLt" aria-pressed="false">LT</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- STUDIO -->
+    <section class="view" id="v-studio">
+      <div class="studio">
+        <div class="stage-wrap">
+          <div class="stage" id="stage">
+            <div class="empty" id="studioEmpty">
+              <div class="mirror"><svg viewBox="0 0 48 48"><circle cx="24" cy="20" r="9"/><path d="M8 44c2-9 8.5-13 16-13s14 4 16 13"/></svg></div>
+              <div>
+                <h2 data-t="startTitle">Start with a photo</h2>
+                <p class="small" data-t="startHint" style="max-width:34ch;margin:6px auto 0">Face the light, with your hair away from your face if you can. Photos stay on this phone.</p>
+              </div>
+              <div class="row" style="justify-content:center">
+                <button class="btn rose" type="button" id="btnSelfie" data-t="takeSelfie">Take a selfie</button>
+                <button class="btn ghost" type="button" id="btnGallery" data-t="choosePhoto">Choose a photo</button>
+              </div>
+              <button class="btn ghost sm" type="button" id="btnHand" data-t="handPhoto">Hand photo for nails</button>
+            </div>
+            <canvas id="out" hidden></canvas>
+            <div class="mode" id="modeSw" hidden>
+              <button type="button" id="modeFace" aria-pressed="true" data-t="face">Face</button>
+              <button type="button" id="modeHand" aria-pressed="false" data-t="nails">Nails</button>
+            </div>
+            <button class="compare" type="button" id="btnCompare" hidden data-t="holdCompare">Hold to compare</button>
+            <div class="status" id="status" hidden></div>
+          </div>
+          <div class="row" id="photoActs" hidden style="margin-top:10px">
+            <button class="btn sm" type="button" id="btnSave" data-t="saveLook">Save look</button>
+            <button class="btn ghost sm" type="button" id="btnNew" data-t="newPhoto">New photo</button>
+            <button class="btn ghost sm" type="button" id="btnClear" data-t="clearAll">Clear make-up</button>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:14px;min-width:0">
+          <div style="display:grid;gap:8px">
+            <div class="eyebrow" data-t="readyLooks">Ready-made looks</div>
+            <div class="presets" id="presets"></div>
+          </div>
+          <div style="display:grid;gap:8px">
+            <div class="eyebrow" data-t="buildYourOwn">Build your own</div>
+            <div class="cats" id="cats" role="tablist"></div>
+          </div>
+          <div class="panel" id="catPanel"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 360 -->
+    <section class="view" id="v-turn" hidden>
+      <div style="display:grid;gap:4px;margin-bottom:14px">
+        <div class="eyebrow">360°</div>
+        <h2 data-t="turnTitle">See it from every side</h2>
+        <p class="lede" data-t="turnHint">Ask a friend to take four photos at the same distance. Drag the picture to turn. Your current look is applied to every side.</p>
+      </div>
+      <div class="turn">
+        <div style="display:grid;gap:10px">
+          <div class="stage" id="turnStage">
+            <canvas id="turnCanvas"></canvas>
+            <div class="status" id="turnStatus" hidden></div>
+          </div>
+          <input type="range" id="turnRange" min="0" max="359" value="0" aria-label="Turn">
+          <div class="row" style="justify-content:space-between">
+            <div class="dial" id="dial"><i class="on"></i><i></i><i></i><i></i></div>
+            <button class="btn ghost sm" type="button" id="btnSpin" data-t="autoTurn">Turn slowly</button>
+          </div>
+        </div>
+        <div style="display:grid;gap:10px">
+          <div class="slots" id="slots"></div>
+          <p class="small" data-t="slotHint">Tap a square to take or replace that photo. The front photo is the one from the Studio.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STYLIST -->
+    <section class="view" id="v-advice" hidden>
+      <div style="display:grid;gap:4px;margin-bottom:14px">
+        <div class="eyebrow" data-t="adviceEyebrow">Your personal consultation</div>
+        <h2 data-t="adviceTitle">What suits you</h2>
+        <p class="lede" data-t="adviceLede">Read from your photo the way a make-up artist would: face shape, skin tone, undertone and eyes. Tap any answer to correct it.</p>
+      </div>
+      <div id="adviceBody"></div>
+    </section>
+
+    <!-- HAIR -->
+    <section class="view" id="v-hair" hidden>
+      <div style="display:grid;gap:4px;margin-bottom:12px">
+        <div class="eyebrow" data-t="hairEyebrow">Hair library</div>
+        <h2 data-t="hairTitle">Cuts, lengths, textures and colours</h2>
+        <p class="lede" data-t="hairLede">Every style a good salon would talk you through. Colours can be tried on your photo now.</p>
+      </div>
+      <div class="row" style="margin-bottom:14px">
+        <div class="seg" role="group">
+          <button type="button" id="hfAll" aria-pressed="true" data-t="all">All</button>
+          <button type="button" id="hfFit" aria-pressed="false" data-t="suitsMe">Suits me</button>
+        </div>
+        <span class="small" id="hfNote"></span>
+      </div>
+      <div class="lib" id="lib"></div>
+    </section>
+
+    <!-- WARDROBE -->
+    <section class="view" id="v-ward" hidden>
+      <div style="display:grid;gap:4px;margin-bottom:12px">
+        <div class="eyebrow" data-t="wardEyebrow">Your wardrobe</div>
+        <h2 data-t="wardTitle">What shall I wear?</h2>
+        <p class="lede" data-t="wardLede">Photograph your clothes once.</p>
+      </div>
+      <div class="subtabs" style="flex-wrap:wrap">
+        <button class="chip" type="button" id="ws-outfits" aria-pressed="true" data-t="w_outfits">Outfits</button>
+        <button class="chip" type="button" id="ws-clothes" aria-pressed="false" data-t="w_clothes">Clothes</button>
+        <button class="chip" type="button" id="ws-saved" aria-pressed="false" data-t="w_saved">Saved</button>
+        <button class="chip" type="button" id="ws-trends" aria-pressed="false" data-t="w_trends">Trends</button>
+      </div>
+      <div id="wardBody"></div>
+    </section>
+
+    <!-- KIT -->
+    <section class="view" id="v-kit" hidden>
+      <div style="display:grid;gap:4px;margin-bottom:12px">
+        <div class="eyebrow" data-t="kitEyebrow">Your own collection</div>
+        <h2 data-t="kitTitle">My kit</h2>
+      </div>
+      <div class="subtabs">
+        <button class="chip" type="button" id="stProd" aria-pressed="true" data-t="products">Products</button>
+        <button class="chip" type="button" id="stLooks" aria-pressed="false" data-t="looks">Saved looks</button>
+      </div>
+      <div id="kitProd"></div>
+      <div id="kitLooks" hidden></div>
+      <hr class="soft" style="margin:22px 0 12px">
+      <div class="row">
+        <span class="small" data-t="localOnly">Saved on this phone only.</span>
+        <button class="btn ghost sm" type="button" id="btnBackup" data-t="backup">Back up</button>
+        <button class="btn ghost sm" type="button" id="btnRestore" data-t="restore">Restore</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs" id="tabs">
+    <button type="button" data-v="studio" aria-current="page"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="10" rx="6.5" ry="8"/><path d="M12 18v4M8 22h8"/></svg><span data-t="tStudio">Studio</span></button>
+    <button type="button" data-v="turn"><svg viewBox="0 0 24 24"><path d="M3 12a9 4 0 1 0 18 0a9 4 0 1 0-18 0"/><path d="M17 15.5l2 1.5-2 1.6"/><circle cx="12" cy="8" r="3"/></svg><span>360°</span></button>
+    <button type="button" data-v="advice"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"/><path d="M18 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg><span data-t="tAdvice">Stylist</span></button>
+    <button type="button" data-v="hair"><svg viewBox="0 0 24 24"><path d="M6 21c-2-6-1-15 6-17 7 2 8 11 6 17"/><path d="M9 21c-1-5 0-10 3-12 3 2 4 7 3 12"/></svg><span data-t="tHair">Hair</span></button>
+    <button type="button" data-v="ward"><svg viewBox="0 0 24 24"><path d="M12 5a2 2 0 1 1 2 2c-1 0-2 .6-2 1.5V9l9 6.5c.8.6.4 1.5-.5 1.5h-17c-.9 0-1.3-.9-.5-1.5L12 9"/></svg><span data-t="tWard">Wardrobe</span></button>
+    <button type="button" data-v="kit"><svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="12" rx="2"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/></svg><span data-t="tKit">My kit</span></button>
+  </nav>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<input type="file" id="inSelfie" accept="image/*" capture="user" hidden>
+<input type="file" id="inGallery" accept="image/*" hidden>
+<input type="file" id="inHand" accept="image/*" hidden>
+<input type="file" id="inSlot" accept="image/*" hidden>
+<input type="file" id="inProd" accept="image/*" hidden>
+<input type="file" id="inBody" accept="image/*" hidden>
+<input type="file" id="inGarment" accept="image/*" hidden>
+<input type="file" id="inInspo" accept="image/*" hidden>
+<input type="file" id="inRestore" accept="application/json,.json" hidden>
+
+<script>
+"use strict";
+/* ============ i18n ============ */
+const T = {
+en:{startTitle:"Start with a photo",startHint:"Face the light, with your hair away from your face if you can. Photos stay on this phone.",takeSelfie:"Take a selfie",choosePhoto:"Choose a photo",handPhoto:"Hand photo for nails",face:"Face",nails:"Nails",holdCompare:"Hold to compare",saveLook:"Save look",newPhoto:"New photo",clearAll:"Clear make-up",readyLooks:"Ready-made looks",buildYourOwn:"Build your own",
+turnTitle:"See it from every side",turnHint:"Ask a friend to take four photos at the same distance. Drag the picture to turn. Your current look is applied to every side.",autoTurn:"Turn slowly",stopTurn:"Stop",slotHint:"Tap a square to take or replace that photo. The front photo is the one from the Studio.",front:"Front",left:"Left side",right:"Right side",back:"Back",
+adviceEyebrow:"Your personal consultation",adviceTitle:"What suits you",adviceLede:"Read from your photo the way a make-up artist would: face shape, skin tone, undertone and eyes. Tap any answer to correct it.",
+hairEyebrow:"Hair library",hairTitle:"Cuts, lengths, textures and colours",hairLede:"Every style a good salon would talk you through. Colours can be tried on your photo now.",all:"All",suitsMe:"Suits me",
+kitEyebrow:"Your own collection",kitTitle:"My kit",products:"Products",looks:"Saved looks",localOnly:"Saved on this phone only.",backup:"Back up",restore:"Restore",
+tStudio:"Studio",tAdvice:"Stylist",tHair:"Hair",tKit:"My kit",
+intensity:"Intensity",off:"Off",finish:"Finish",matte:"Matte",satin:"Satin",gloss:"Gloss",wing:"Winged",yourKit:"from your kit",
+reading:"Reading your face…",noFace:"No face found. Try a brighter photo taken straight on.",findingHair:"Finding your hair…",loadingModels:"Preparing the mirror. The first time takes a few seconds…",noHand:"No hand found. Lay the back of your hand flat, fingers apart.",modelFail:"The face reader could not start on this device. You can still browse the library and your kit.",
+saved:"Look saved",needPhoto:"Take a photo in the Studio first.",
+cat_lip:"Lips",cat_liner:"Eyeliner",cat_shadow:"Eyeshadow",cat_mascara:"Mascara",cat_brow:"Brows",cat_blush:"Blush",cat_found:"Foundation",cat_contour:"Contour",cat_hl:"Highlighter",cat_hair:"Hair colour",cat_nails:"Nails",
+analysis:"Your features",faceShape:"Face shape",skinDepth:"Skin tone",undertone:"Undertone",eyeColour:"Eye colour",naturalHair:"Natural hair",estimated:"Estimated from your photo. Tap to correct.",
+warm:"Warm",cool:"Cool",neutral:"Neutral",
+undertoneTip:"Quick check: veins on the wrist look green → warm, blue or purple → cool, both → neutral. Gold jewellery flatters warm, silver flatters cool.",
+bestCuts:"Cuts that flatter you",avoid:"Better to avoid",yourColours:"Your colours",browAdvice:"Brows for your face",lipsL:"Lips",blushL:"Blush",eyesL:"Eyes",hairL:"Hair colour",
+wearRec:"Wear my recommended look",fromKit:"From your kit",noKitMatch:"Add products in My kit and the best matches appear here.",
+aiTitle:"Ask your AI make-up artist",aiLede:"She looks at your photos and gives you a professional consultation. Your photo is sent to the AI only when you tap.",aiFull:"Get my full consultation",aiAsk:"Ask",aiPlaceholder:"Ask anything: a look for a wedding, what goes with a green dress, how to do a soft smoky eye…",thinking:"Thinking…",aiUnavailable:"The AI stylist is being switched on. Everything else in the app already works.",aiDeclined:"Permission was not given, so the AI make-up artist is off for now.",aiBusy:"Too many questions at once. Wait a minute and ask again.",aiError:"The answer did not come through. Try again.",
+wearDay:"Wear the day look",wearEvening:"Wear the evening look",day:"Day",evening:"Evening",tips:"Tips",haircuts:"Haircuts",hairColours:"Hair colours",useFromKit:"From your kit",
+noPhotoAdvice:"Take a photo in the Studio and your consultation appears here.",
+trend:"2026 trend",fits:"Suits you",tryColour:"Try this colour",aiSoon:"Try this cut on your photo with AI: next step",
+g_length:"Lengths",g_cut:"Cuts",g_fringe:"Fringes",g_texture:"Texture and styling",g_updo:"Up-dos and occasion hair",g_colour:"Colours",g_tech:"Colour techniques",
+addProduct:"Add a product",prodEmpty:"Photograph the products you use today. They become your own library, and they appear as shades in the Studio.",looksEmpty:"Looks you save in the Studio appear here.",
+pPhoto:"Photo",pickHint:"Tap the photo where the colour is to pick the shade.",pName:"Name",pBrand:"Brand",pCat:"Category",pFinish:"Finish",pNotes:"Notes",pFav:"Favourite",pRec:"I recommend this",save:"Save",cancel:"Cancel",tryOn:"Try on",del:"Delete",sure:"Tap again to delete",wear:"Wear this",shade:"Shade",takeProdPhoto:"Take a photo",
+recommended:"Recommended",favourite:"Favourite",backupDone:"Backup saved",restoreDone:"Restored",restoreFail:"That file is not a Bonnie's Stylist backup.",backupNA:"Backup is not available in this view.",
+f_oval:"Oval",f_round:"Round",f_square:"Square",f_heart:"Heart",f_long:"Long",f_diamond:"Diamond",
+d_fair:"Fair",d_light:"Light",d_medium:"Medium",d_tan:"Tan",d_deep:"Deep",d_rich:"Rich",
+e_brown:"Brown",e_dark:"Dark brown",e_hazel:"Hazel",e_green:"Green",e_blue:"Blue",e_grey:"Grey",
+lookName:"Look"},
+lt:{startTitle:"Pradėkite nuo nuotraukos",startHint:"Atsisukite į šviesą, o plaukus, jei galite, atitraukite nuo veido. Nuotraukos lieka šiame telefone.",takeSelfie:"Fotografuotis",choosePhoto:"Pasirinkti nuotrauką",handPhoto:"Rankos nuotrauka nagams",face:"Veidas",nails:"Nagai",holdCompare:"Palaikykite ir palyginkite",saveLook:"Išsaugoti įvaizdį",newPhoto:"Nauja nuotrauka",clearAll:"Nuvalyti makiažą",readyLooks:"Paruošti įvaizdžiai",buildYourOwn:"Susikurkite patys",
+turnTitle:"Pažiūrėkite iš visų pusių",turnHint:"Paprašykite draugės padaryti keturias nuotraukas iš to paties atstumo. Tempkite nuotrauką, kad ją pasuktumėte. Dabartinis įvaizdis pritaikomas visoms pusėms.",autoTurn:"Sukti lėtai",stopTurn:"Sustabdyti",slotHint:"Bakstelėkite langelį, kad padarytumėte ar pakeistumėte nuotrauką. Nuotrauka iš priekio paimama iš Studijos.",front:"Iš priekio",left:"Kairė pusė",right:"Dešinė pusė",back:"Iš nugaros",
+adviceEyebrow:"Jūsų asmeninė konsultacija",adviceTitle:"Kas jums tinka",adviceLede:"Nuotrauka įvertinama taip, kaip tai darytų vizažistė: veido forma, odos atspalvis, poatspalvis ir akys. Bakstelėkite atsakymą, jei norite jį pataisyti.",
+hairEyebrow:"Plaukų biblioteka",hairTitle:"Kirpimai, ilgiai, tekstūros ir spalvos",hairLede:"Visi stiliai, apie kuriuos papasakotų geras salonas. Spalvas jau dabar galite išbandyti savo nuotraukoje.",all:"Visi",suitsMe:"Man tinka",
+kitEyebrow:"Jūsų kolekcija",kitTitle:"Mano rinkinys",products:"Produktai",looks:"Išsaugoti įvaizdžiai",localOnly:"Išsaugota tik šiame telefone.",backup:"Atsarginė kopija",restore:"Atkurti",
+tStudio:"Studija",tAdvice:"Stilistė",tHair:"Plaukai",tKit:"Rinkinys",
+intensity:"Intensyvumas",off:"Išjungta",finish:"Apdaila",matte:"Matinė",satin:"Satininė",gloss:"Blizgi",wing:"Su uodegyte",yourKit:"iš jūsų rinkinio",
+reading:"Atpažįstamas veidas…",noFace:"Veido nerasta. Pabandykite šviesesnę nuotrauką, darytą tiesiai iš priekio.",findingHair:"Ieškoma plaukų…",loadingModels:"Ruošiamas veidrodis. Pirmą kartą tai užtrunka kelias sekundes…",noHand:"Rankos nerasta. Padėkite plaštaką delnu žemyn, pirštus praskėskite.",modelFail:"Šiame įrenginyje nepavyko paleisti veido atpažinimo. Biblioteką ir rinkinį galite naudoti toliau.",
+saved:"Įvaizdis išsaugotas",needPhoto:"Pirmiausia nusifotografuokite Studijoje.",
+cat_lip:"Lūpos",cat_liner:"Akių kontūras",cat_shadow:"Akių šešėliai",cat_mascara:"Blakstienų tušas",cat_brow:"Antakiai",cat_blush:"Skaistalai",cat_found:"Makiažo pagrindas",cat_contour:"Kontūravimas",cat_hl:"Švytėjimas",cat_hair:"Plaukų spalva",cat_nails:"Nagai",
+analysis:"Jūsų bruožai",faceShape:"Veido forma",skinDepth:"Odos atspalvis",undertone:"Poatspalvis",eyeColour:"Akių spalva",naturalHair:"Natūrali plaukų spalva",estimated:"Įvertinta pagal nuotrauką. Bakstelėkite, jei norite pataisyti.",
+warm:"Šiltas",cool:"Šaltas",neutral:"Neutralus",
+undertoneTip:"Greitas patikrinimas: venos ant riešo žalsvos → šiltas, mėlynos ar violetinės → šaltas, abiejų spalvų → neutralus. Šiltam poatspalviui labiau tinka auksas, šaltam sidabras.",
+bestCuts:"Jums tinkantys kirpimai",avoid:"Geriau vengti",yourColours:"Jūsų spalvos",browAdvice:"Antakiai pagal veido formą",lipsL:"Lūpos",blushL:"Skaistalai",eyesL:"Akys",hairL:"Plaukų spalva",
+wearRec:"Išbandyti rekomenduojamą įvaizdį",fromKit:"Iš jūsų rinkinio",noKitMatch:"Pridėkite produktų skiltyje „Rinkinys“, ir geriausiai tinkantys atsiras čia.",
+aiTitle:"Paklauskite savo AI vizažistės",aiLede:"Ji pažiūri į jūsų nuotraukas ir pataria kaip profesionali vizažistė. Nuotrauka siunčiama AI tik tada, kai bakstelite.",aiFull:"Gauti visą konsultaciją",aiAsk:"Klausti",aiPlaceholder:"Klauskite bet ko: įvaizdis vestuvėms, kas tinka prie žalios suknelės, kaip padaryti švelnų dūminį makiažą…",thinking:"Galvoja…",aiUnavailable:"AI stilistė netrukus bus įjungta. Visa kita programėlėje jau veikia.",aiDeclined:"Leidimas nesuteiktas, todėl AI vizažistė kol kas išjungta.",aiBusy:"Per daug klausimų iš karto. Palaukite minutę ir paklauskite dar kartą.",aiError:"Atsakymas negautas. Pabandykite dar kartą.",
+wearDay:"Išbandyti dienos įvaizdį",wearEvening:"Išbandyti vakarinį įvaizdį",day:"Diena",evening:"Vakaras",tips:"Patarimai",haircuts:"Kirpimai",hairColours:"Plaukų spalvos",useFromKit:"Iš jūsų rinkinio",
+noPhotoAdvice:"Nusifotografuokite Studijoje, ir jūsų konsultacija atsiras čia.",
+trend:"2026 m. tendencija",fits:"Jums tinka",tryColour:"Išbandyti spalvą",aiSoon:"Šį kirpimą su AI išbandysite kitame etape",
+g_length:"Ilgiai",g_cut:"Kirpimai",g_fringe:"Kirpčiukai",g_texture:"Tekstūra ir formavimas",g_updo:"Šukuosenos progoms",g_colour:"Spalvos",g_tech:"Dažymo technikos",
+addProduct:"Pridėti produktą",prodEmpty:"Nufotografuokite produktus, kuriuos naudojate. Jie taps jūsų biblioteka ir atsiras Studijoje kaip atspalviai.",looksEmpty:"Studijoje išsaugoti įvaizdžiai atsiras čia.",
+pPhoto:"Nuotrauka",pickHint:"Bakstelėkite nuotraukoje ten, kur matyti spalva, kad parinktumėte atspalvį.",pName:"Pavadinimas",pBrand:"Prekės ženklas",pCat:"Kategorija",pFinish:"Apdaila",pNotes:"Pastabos",pFav:"Mėgstamiausias",pRec:"Rekomenduoju",save:"Išsaugoti",cancel:"Atšaukti",tryOn:"Išbandyti",del:"Ištrinti",sure:"Bakstelėkite dar kartą, kad ištrintumėte",wear:"Pritaikyti",shade:"Atspalvis",takeProdPhoto:"Fotografuoti",
+recommended:"Rekomenduojamas",favourite:"Mėgstamiausias",backupDone:"Atsarginė kopija išsaugota",restoreDone:"Atkurta",restoreFail:"Šis failas nėra Bonnie's Stylist atsarginė kopija.",backupNA:"Atsarginė kopija šiame rodinyje negalima.",
+f_oval:"Ovalus",f_round:"Apvalus",f_square:"Kvadratinis",f_heart:"Širdies formos",f_long:"Pailgas",f_diamond:"Deimanto formos",
+d_fair:"Labai šviesi",d_light:"Šviesi",d_medium:"Vidutinė",d_tan:"Įdegusi",d_deep:"Tamsi",d_rich:"Labai tamsi",
+e_brown:"Rudos",e_dark:"Tamsiai rudos",e_hazel:"Riešutinės",e_green:"Žalios",e_blue:"Mėlynos",e_grey:"Pilkos",
+lookName:"Įvaizdis"}
+};
+let LANG="en";
+try{const s=localStorage.getItem("bs-lang");if(s==="lt"||s==="en")LANG=s}catch(e){}
+const t=k=>(T[LANG]&&T[LANG][k])||T.en[k]||k;
+const L=o=>o?(o[LANG]||o.en):"";
+
+/* ============ Shades ============ */
+const S=(hex,en,lt,tone)=>({hex,n:{en,lt},tone});
+const SHADES={
+lip:[S("#B97A78","Nude rose","Rožinis nude","neutral"),S("#B5806A","Warm nude","Šiltas nude","warm"),S("#A86868","My lips but better","Kaip mano lūpos, tik geriau","neutral"),S("#C27C8A","Dusty pink","Pelenų rožė","cool"),S("#9C5B6E","Mauve","Alyvinė rožė","cool"),S("#E8977A","Peach","Persikinė","warm"),S("#E0705C","Coral","Koralinė","warm"),S("#A84F38","Terracotta","Terakota","warm"),S("#8E2F2A","Brick red","Plytų raudona","warm"),S("#B3122E","Classic red","Klasikinė raudona","neutral"),S("#9B0F35","Blue red","Šalta raudona","cool"),S("#9A0B23","Cherry","Vyšninė","neutral"),S("#C2185B","Fuchsia","Fuksijų","cool"),S("#7E1F45","Berry","Uogų","cool"),S("#5E1F3E","Plum","Slyvų","cool")],
+blush:[S("#F2A07B","Peach","Persikiniai","warm"),S("#E9906A","Apricot","Abrikosiniai","warm"),S("#C46A4F","Terracotta","Terakota","warm"),S("#B97A55","Bronze","Bronziniai","warm"),S("#F0A1AE","Soft pink","Švelniai rožiniai","cool"),S("#D9788A","Rose","Rožiniai","neutral"),S("#B77B8A","Mauve","Alyviniai","cool"),S("#B24C6A","Berry","Uogų","cool")],
+shadow:[S("#D9C3A1","Champagne","Šampano","neutral"),S("#C48A7C","Rose gold","Rožinio aukso","warm"),S("#B8913A","Gold","Auksiniai","warm"),S("#8C5A2B","Bronze","Bronziniai","warm"),S("#A8582F","Copper","Variniai","warm"),S("#8D7B6E","Taupe","Taupe","neutral"),S("#8E6276","Mauve","Alyviniai","cool"),S("#5B2B4A","Plum","Slyvų","cool"),S("#6B1F2E","Burgundy","Bordo","cool"),S("#263A5E","Navy","Tamsiai mėlyni","cool"),S("#2F4B3A","Forest","Miško žalios","warm"),S("#3A3536","Smoky charcoal","Dūminiai anglies","neutral")],
+liner:[S("#111111","Black","Juodas","neutral"),S("#3E2A20","Brown","Rudas","warm"),S("#1E2A4A","Navy","Tamsiai mėlynas","cool"),S("#3D1D33","Plum","Slyvų","cool"),S("#6B4423","Bronze","Bronzinis","warm"),S("#1F3A2C","Forest","Miško žalias","warm")],
+mascara:[S("#0E0C0C","Black","Juodas","neutral"),S("#2A1D17","Brown-black","Rudai juodas","warm"),S("#1A2440","Navy","Tamsiai mėlynas","cool")],
+brow:[S("#A08262","Blonde","Šviesūs","warm"),S("#7A5A42","Light brown","Šviesiai rudi","warm"),S("#6E5E52","Taupe","Taupe","cool"),S("#5A4031","Medium brown","Vidutiniškai rudi","neutral"),S("#3B2A20","Dark brown","Tamsiai rudi","neutral"),S("#6E3B2A","Auburn","Kaštoniniai rusvi","warm"),S("#2A2220","Soft black","Švelniai juodi","cool")],
+found:[S("#F3D7C6","Porcelain","Porcelianas","cool"),S("#EBC8B0","Fair","Labai šviesus","neutral"),S("#E0B595","Light","Šviesus","warm"),S("#D3A07D","Light medium","Šviesiai vidutinis","warm"),S("#C08A63","Medium","Vidutinis","warm"),S("#A86F48","Tan","Įdegęs","warm"),S("#7E4E31","Deep","Tamsus","neutral"),S("#5B3522","Rich","Labai tamsus","neutral")],
+contour:[S("#9C7B6A","Soft taupe","Švelnus taupe","neutral"),S("#8B6F64","Cool","Šaltas","cool"),S("#A06F52","Warm","Šiltas","warm"),S("#6E4A36","Deep","Tamsus","neutral")],
+hl:[S("#F7EDE6","Pearl","Perlinis","cool"),S("#F2D9B8","Champagne","Šampano","neutral"),S("#E7C27D","Gold","Auksinis","warm"),S("#F1C1BF","Rose","Rožinis","cool"),S("#D29A6A","Bronze glow","Bronzinis švytėjimas","warm")],
+hair:[S("#E8E0CF","Platinum","Platininė","cool"),S("#CBBFA6","Ash blonde","Pelenų blondinė","cool"),S("#E6CF9C","Buttercream blonde","Sviestinė blondinė","warm"),S("#C99A55","Honey blonde","Medaus blondinė","warm"),S("#D08A5E","Strawberry blonde","Braškinė blondinė","warm"),S("#A9713E","Caramel","Karamelinė","warm"),S("#D19A8E","Rose gold","Rožinio aukso","cool"),S("#7C6A5C","Mushroom brown","Grybų ruda","cool"),S("#6F6358","Ash brown","Pelenų ruda","cool"),S("#6E3A22","Warm chestnut","Šilta kaštoninė","warm"),S("#B5552A","Copper","Varinė","warm"),S("#7E2E1C","Auburn","Rusvai raudona","warm"),S("#4A2C1E","Chocolate","Šokoladinė","neutral"),S("#5C1A2B","Burgundy","Bordo","cool"),S("#2C1C16","Espresso","Espreso","neutral"),S("#1C1716","Soft black","Švelniai juoda","cool"),S("#C9C9CC","Silver","Sidabrinė","cool")],
+nails:[S("#F2C9CC","Ballet pink","Baleto rožinė","cool"),S("#D9B3A0","Nude","Nude","neutral"),S("#F3EEE8","Milky white","Pieno balta","neutral"),S("#E3CFAE","Champagne","Šampano","warm"),S("#E46A57","Coral","Koralinė","warm"),S("#B3122E","Classic red","Klasikinė raudona","neutral"),S("#5E1328","Burgundy","Bordo","cool"),S("#A5728A","Mauve","Alyvinė","cool"),S("#C6B0D8","Lilac","Alyvų","cool"),S("#0F5A45","Emerald","Smaragdinė","warm"),S("#1F2B4D","Navy","Tamsiai mėlyna","cool"),S("#141214","Black","Juoda","neutral")]
+};
+const CATS=["lip","shadow","liner","mascara","brow","blush","found","contour","hl","hair","nails"];
+const DEFAULT_A={lip:.7,shadow:.6,liner:.8,mascara:.8,brow:.5,blush:.5,found:.4,contour:.45,hl:.5,hair:.65,nails:.9};
+const emptyLook=()=>{const o={};CATS.forEach(c=>o[c]={c:null,a:0});o.lip.finish="satin";o.liner.wing=true;return o};
+let look=emptyLook();
+
+const PRESETS=[
+ {id:"natural",n:{en:"Natural day",lt:"Natūralus dienos"},l:{lip:["#A86868",.5],blush:["#D9788A",.35],brow:["#5A4031",.4],mascara:["#2A1D17",.6],shadow:["#D9C3A1",.4],found:[null,0],hl:["#F2D9B8",.3]}},
+ {id:"softglam",n:{en:"Soft glam",lt:"Švelnus žavesys"},l:{lip:["#B97A78",.65],blush:["#F2A07B",.45],brow:["#5A4031",.5],mascara:["#0E0C0C",.85],shadow:["#C48A7C",.6],liner:["#3E2A20",.6],contour:["#9C7B6A",.4],hl:["#F2D9B8",.55]}},
+ {id:"evening",n:{en:"Evening",lt:"Vakarinis"},l:{lip:["#7E1F45",.75],blush:["#B77B8A",.45],brow:["#3B2A20",.55],mascara:["#0E0C0C",.95],shadow:["#5B2B4A",.6],liner:["#111111",.85],contour:["#8B6F64",.5],hl:["#F7EDE6",.5]}},
+ {id:"smoky",n:{en:"Smoky eyes",lt:"Dūminės akys"},l:{lip:["#B5806A",.5],blush:["#B77B8A",.3],brow:["#3B2A20",.55],mascara:["#0E0C0C",1],shadow:["#3A3536",.75],liner:["#111111",.95],contour:["#9C7B6A",.4]}},
+ {id:"red",n:{en:"Classic red",lt:"Klasikinė raudona"},l:{lip:["#B3122E",.85],blush:["#D9788A",.3],brow:["#3B2A20",.5],mascara:["#0E0C0C",.9],shadow:["#D9C3A1",.35],liner:["#111111",.9],hl:["#F2D9B8",.45]}},
+ {id:"bridal",n:{en:"Bridal",lt:"Vestuvinis"},l:{lip:["#C27C8A",.6],blush:["#F0A1AE",.45],brow:["#5A4031",.5],mascara:["#2A1D17",.85],shadow:["#D9C3A1",.55],liner:["#3E2A20",.55],hl:["#F7EDE6",.6],found:[null,.35]}},
+ {id:"summer",n:{en:"Summer glow",lt:"Vasaros švytėjimas"},l:{lip:["#E0705C",.6],blush:["#E9906A",.5],brow:["#7A5A42",.45],mascara:["#2A1D17",.75],shadow:["#8C5A2B",.5],contour:["#A06F52",.5],hl:["#E7C27D",.6]}},
+ {id:"berry",n:{en:"Berry editorial",lt:"Uogų tonų"},l:{lip:["#5E1F3E",.8],blush:["#B24C6A",.4],brow:["#3B2A20",.5],mascara:["#0E0C0C",.9],shadow:["#8E6276",.6],liner:["#3D1D33",.8],hl:["#F1C1BF",.45]}}
+];
+
+/* ============ Hair library ============ */
+const ALLF=["oval","round","square","heart","long","diamond"];
+const H=(id,g,en,lt,den,dlt,suits,extra)=>Object.assign({id,g,n:{en,lt},d:{en:den,lt:dlt},suits},extra||{});
+const HAIR=[
+H("pixie","length","Pixie","Pixie","Very short, close at the sides and neck, with texture on top. Shows off cheekbones and eyes.","Labai trumpas, prigludęs šonuose ir ties kaklu, su tekstūra viršuje. Išryškina skruostikaulius ir akis.",["oval","heart","diamond"]),
+H("bixie","length","Bixie","Bixie","Halfway between pixie and bob: shaggy, soft, about ear length. Easier to grow out than a pixie.","Tarp pixie ir bobo: minkštas, šiek tiek pasišiaušęs, maždaug iki ausų. Lengviau užsiauginti nei pixie.",["oval","heart","square","diamond"],{trend:true}),
+H("chin","length","Chin-length bob","Bobas iki smakro","Ends at the jaw. Crisp and chic; best when the jawline is a feature.","Baigiasi ties žandikauliu. Tvarkingas ir elegantiškas, ypač kai žandikaulis gražus.",["oval","heart","long","diamond"]),
+H("lob","length","Lob (long bob)","Ilgas bobas","Between chin and collarbone. The most universally flattering length.","Tarp smakro ir raktikaulio. Universaliausias ilgis, tinkantis beveik visiems.",ALLF),
+H("shoulder","length","Shoulder length","Iki pečių","Grazes the shoulders. Easy to wear up or down, flips out naturally.","Siekia pečius. Patogu nešioti palaidus ar susegtus, galai natūraliai atsiriečia.",ALLF),
+H("midback","length","Mid-back length","Iki nugaros vidurio","Long and feminine. Layers keep it from dragging the face down.","Ilgi ir moteriški. Sluoksniai neleidžia jiems „tempti“ veido žemyn.",["oval","round","square","heart","diamond"]),
+H("long","length","Very long","Labai ilgi","Waist length. Needs healthy ends and regular trims every 8 to 10 weeks.","Iki juosmens. Reikia sveikų galiukų ir kirpti kas 8–10 savaičių.",["oval","heart","diamond"]),
+H("frenchbob","cut","French bob","Prancūziškas bobas","Short, cheekbone to jaw, often with a fringe. Effortless and Parisian.","Trumpas, nuo skruostikaulių iki žandikaulio, dažnai su kirpčiukais. Nerūpestingas, paryžietiškas.",["oval","heart","long","diamond"]),
+H("italianbob","cut","Italian bob","Itališkas bobas","Chin to jaw with heavy, bouncy ends and lots of volume. Glamorous and full.","Iki smakro ar žandikaulio, su sunkiais, puriais galais ir daug apimties. Prabangus ir pilnas.",["oval","heart","long","diamond"],{trend:true}),
+H("blunt","cut","Blunt bob","Tiesus bobas","One length, razor-straight line. Makes fine hair look thicker.","Vienodo ilgio, tiesi linija. Ploni plaukai atrodo tankesni.",["oval","heart","long"]),
+H("contour","cut","Liquid contour bob","Skystas kontūro bobas","A glossy, softly curved bob that follows the jaw. One of the defining cuts of 2026.","Blizgus, švelniai išlenktas bobas, sekantis žandikaulio liniją. Vienas ryškiausių 2026 m. kirpimų.",["oval","round","square","heart"],{trend:true}),
+H("aline","cut","A-line bob","A formos bobas","Shorter at the back, longer at the front. Lengthens a round or square face.","Trumpesnis gale, ilgesnis priekyje. Apvalų ar kvadratinį veidą optiškai pailgina.",["round","square","oval","heart"]),
+H("shag","cut","Shag","Šegas","Choppy layers all over with lots of movement. Loves natural wave.","Daug netvarkingų sluoksnių ir judesio. Ypač tinka natūraliai banguotiems plaukams.",["oval","round","long","square","heart"]),
+H("wolf","cut","Wolf cut","Vilko kirpimas","Shag at the top, longer at the back. Bold, rock-chic.","Viršuje kaip šegas, gale ilgesnis. Drąsus, roko stiliaus.",["oval","long","heart","diamond"]),
+H("butterfly","cut","Butterfly cut","Drugelio kirpimas","Short face-framing layers over long length. Looks like a blow-dry every day.","Trumpi sluoksniai prie veido ir ilgi plaukai. Kasdien atrodo kaip ką tik iššukuoti.",["oval","round","square","heart","diamond"]),
+H("longlayers","cut","Long layers","Ilgi sluoksniai","Soft layers through the lengths for movement without losing length.","Švelnūs sluoksniai per visą ilgį: judesys, neprarandant ilgio.",["oval","round","square","heart","diamond"]),
+H("framing","cut","Face-framing layers","Veidą įrėminantys sluoksniai","The shortest pieces start at the cheekbones and open up the face.","Trumpiausios sruogos prasideda ties skruostikauliais ir atveria veidą.",ALLF),
+H("curtain","fringe","Curtain bangs","Užuolaidos kirpčiukai","Parted in the middle and swept to both sides. Soft and very forgiving.","Perskirti per vidurį ir nubraukti į abi puses. Švelnūs ir labai atlaidūs.",ALLF),
+H("wispy","fringe","Wispy fringe","Lengvi kirpčiukai","Light, see-through fringe. Softens a long or angular face.","Lengvi, pro juos matyti kakta. Sušvelnina pailgą ar kampuotą veidą.",["oval","long","heart","square"]),
+H("bluntfringe","fringe","Blunt fringe","Tiesūs kirpčiukai","Heavy, straight across the brows. Strong and graphic.","Tankūs, tiesiai per antakius. Ryškūs ir grafiški.",["oval","long","heart"]),
+H("sidesweep","fringe","Side-swept fringe","Į šoną sušukuoti kirpčiukai","Swept diagonally across the forehead. Adds angles to a round face.","Sušukuoti įstrižai per kaktą. Apvaliam veidui suteikia kampų.",["round","square","heart","oval","diamond"]),
+H("sleek","texture","Sleek and straight","Lygūs ir tiesūs","Glass-smooth, polished finish. Very elegant for evenings.","Veidrodiškai lygūs, blizgūs. Labai elegantiška vakarui.",["oval","heart","diamond","long"]),
+H("softwaves","texture","Soft waves","Švelnios bangos","Loose, brushed-out waves. Flatters almost everyone.","Laisvos, išbrauktos bangos. Tinka beveik visiems.",ALLF),
+H("beach","texture","Beach waves","Paplūdimio bangos","Undone, salty texture. Perfect for summer in Mallorca.","Nerūpestinga, „jūrinė“ tekstūra. Puikiai tinka vasarai Maljorkoje.",ALLF),
+H("hollywood","texture","Hollywood waves","Holivudo bangos","Glossy S-shaped waves to one side. Red-carpet glamour.","Blizgios S formos bangos į vieną pusę. Raudonojo kilimo žavesys.",["oval","heart","long","diamond","square"]),
+H("curls","texture","Defined curls","Ryškios garbanos","Spiral or loose curls with shape and shine.","Spiralinės ar laisvos garbanos su forma ir blizgesiu.",["oval","long","heart","square","diamond"]),
+H("blowout","texture","90s blowout","90-ųjų stiliaus apimtis","Big, bouncy volume, rounded ends flicked out.","Didelė, puri apimtis, atsiriečiantys galai.",["oval","long","heart","square","diamond"]),
+H("lowbun","updo","Sleek low bun","Lygus žemas kuodas","Smooth and minimal at the nape. Timeless and elegant.","Lygus ir minimalistinis prie sprando. Nesenstanti elegancija.",["oval","heart","diamond","long"]),
+H("ballerina","updo","Ballerina bun","Balerinos kuodas","High and neat on the crown. Lifts the face.","Aukštai ir tvarkingai ant viršugalvio. Optiškai pakelia veidą.",["oval","round","heart","square"]),
+H("chignon","updo","Chignon","Šinjonas","A soft, twisted knot low at the back. Classic wedding hair.","Švelnus susuktas mazgas žemai gale. Klasikinė vestuvinė šukuosena.",ALLF),
+H("frenchtwist","updo","French twist","Prancūziška susukta šukuosena","Hair rolled vertically up the back of the head. Very chic.","Plaukai susukami vertikaliai pakaušio linkme. Labai šikinga.",["oval","heart","long","diamond"]),
+H("ponytail","updo","Sleek high ponytail","Aukšta lygi uodega","Pulled tight and high. Instant face-lift effect.","Stipriai ir aukštai surišta. Akimirksniu „pakelia“ veidą.",["oval","heart","diamond"]),
+H("halfup","updo","Half-up, half-down","Pusiau susegti","Top section clipped back, lengths left loose. Romantic and easy.","Viršutinė dalis susegta, apačia palaida. Romantiška ir paprasta.",ALLF),
+H("crown","updo","Braided crown","Pinta karūna","A braid wrapped around the head like a halo.","Kasa, apjuosianti galvą tarsi aureolė.",["oval","heart","long","diamond"]),
+H("fishtail","updo","Fishtail braid","Žuvies uodegos kasa","Intricate two-strand braid, worn loose and soft.","Sudėtinga dviejų sruogų kasa, nešiojama laisvai ir švelniai.",ALLF),
+H("dutch","updo","Dutch braids","Olandiškos kasos","Inside-out braids that sit on top of the hair. Sporty and smart.","Atvirkštinės kasos, išsikiriančios ant plaukų paviršiaus. Sportiška ir tvarkinga.",["oval","heart","long","diamond"]),
+H("c-platinum","colour","Platinum","Platininė","Icy, almost white blonde. High maintenance, high impact.","Ledinė, beveik balta blondinė. Reikalauja daug priežiūros, bet labai įspūdinga.",ALLF,{hex:"#E8E0CF",tone:"cool"}),
+H("c-butter","colour","Buttercream blonde","Sviestinė blondinė","Soft, creamy golden blonde. A 2026 favourite.","Švelni, kreminė auksinė blondinė. 2026 m. mėgstamiausia.",ALLF,{hex:"#E6CF9C",tone:"warm",trend:true}),
+H("c-honey","colour","Honey blonde","Medaus blondinė","Warm golden blonde that glows in the sun.","Šilta auksinė blondinė, švytinti saulėje.",ALLF,{hex:"#C99A55",tone:"warm"}),
+H("c-ash","colour","Ash blonde","Pelenų blondinė","Cool, smoky blonde without brassiness.","Šalta, dūminė blondinė be gelsvumo.",ALLF,{hex:"#CBBFA6",tone:"cool"}),
+H("c-straw","colour","Strawberry blonde","Braškinė blondinė","Blonde with a soft copper-pink tint.","Blondinė su švelniu varinės rožės atspalviu.",ALLF,{hex:"#D08A5E",tone:"warm"}),
+H("c-caramel","colour","Caramel","Karamelinė","Golden light brown, rich and sunny.","Auksinė šviesiai ruda, sodri ir saulėta.",ALLF,{hex:"#A9713E",tone:"warm"}),
+H("c-rose","colour","Rose gold","Rožinio aukso","Blonde washed with pastel pink.","Blondinė su pasteliniu rožiniu atspalviu.",ALLF,{hex:"#D19A8E",tone:"cool"}),
+H("c-mushroom","colour","Mushroom brown","Grybų ruda","Cool, earthy beige-brown. Very modern.","Šalta, žemiška smėlio ruda. Labai moderni.",ALLF,{hex:"#7C6A5C",tone:"cool"}),
+H("c-chestnut","colour","Warm chestnut","Šilta kaštoninė","Glossy red-brown with depth. A 2026 favourite.","Blizgi rausvai ruda su gyliu. 2026 m. mėgstamiausia.",ALLF,{hex:"#6E3A22",tone:"warm",trend:true}),
+H("c-chocolate","colour","Chocolate brown","Šokoladinė","Deep, rich brown with natural shine.","Gili, sodri ruda su natūraliu blizgesiu.",ALLF,{hex:"#4A2C1E",tone:"neutral"}),
+H("c-espresso","colour","Espresso","Espreso","Near-black brown. Dramatic against fair skin.","Beveik juoda ruda. Dramatiška prie šviesios odos.",ALLF,{hex:"#2C1C16",tone:"neutral"}),
+H("c-black","colour","Soft black","Švelniai juoda","Black with a soft, blue-free finish.","Juoda su švelniu, ne mėlynu atspalviu.",ALLF,{hex:"#1C1716",tone:"cool"}),
+H("c-auburn","colour","Auburn","Rusvai raudona","Red-brown, autumnal and warm.","Rausvai ruda, rudeniška ir šilta.",ALLF,{hex:"#7E2E1C",tone:"warm"}),
+H("c-copper","colour","Copper","Varinė","Bright, true copper red. Turns heads.","Ryški, tikra varinė raudona. Neliks nepastebėta.",ALLF,{hex:"#B5552A",tone:"warm"}),
+H("c-burgundy","colour","Burgundy","Bordo","Wine red with violet depth.","Vyno raudonumo su violetiniu gyliu.",ALLF,{hex:"#5C1A2B",tone:"cool"}),
+H("c-silver","colour","Silver","Sidabrinė","Polished silver or grey blending. Striking and modern.","Blizgi sidabrinė arba žilų plaukų suliejimas. Įspūdinga ir moderni.",ALLF,{hex:"#C9C9CC",tone:"cool"}),
+H("t-balayage","tech","Balayage","Balajažas","Hand-painted lightness that grows out softly. Low maintenance.","Ranka tapytas šviesinimas, kuris švelniai atauga. Nereikalauja daug priežiūros.",ALLF),
+H("t-melt","tech","Colour melting","Spalvų suliejimas","Shades blended so seamlessly there are no visible lines. Defining technique of 2026.","Atspalviai suliejami taip, kad nesimato jokių ribų. Ryškiausia 2026 m. technika.",ALLF,{trend:true}),
+H("t-baby","tech","Babylights","Mikro sruogelės","Ultra-fine highlights, like a child's sun-kissed hair.","Itin plonos šviesios sruogelės, kaip saulės pabučiuoti vaiko plaukai.",ALLF),
+H("t-high","tech","Highlights and lowlights","Šviesinimas ir tamsinimas sruogomis","Lighter and darker strands woven in for dimension.","Šviesesnės ir tamsesnės sruogos suteikia gylio.",ALLF),
+H("t-ombre","tech","Ombré","Ombré","Darker roots fading to lighter ends.","Tamsesnės šaknys, pereinančios į šviesesnius galiukus.",ALLF),
+H("t-money","tech","Money piece","Šviesios sruogos prie veido","Two bright strands framing the face. Lifts the complexion.","Dvi šviesios sruogos, įrėminančios veidą. Pagyvina veido spalvą.",ALLF),
+H("t-root","tech","Root smudge","Šaknų suliejimas","Softened roots so regrowth is invisible for longer.","Suminkštintos šaknys, kad ataugos ilgiau nesimatytų.",ALLF),
+H("t-gloss","tech","Gloss","Blizgesio procedūra","A sheer tone-and-shine treatment between colours.","Lengvas tonavimas ir blizgesys tarp dažymų.",ALLF)
+];
+
+const FACE_INFO={
+ oval:{d:{en:"Balanced proportions, slightly longer than wide. Almost every cut works.",lt:"Proporcingas, šiek tiek ilgesnis nei platesnis. Tinka beveik visi kirpimai."},
+  avoid:{en:"Very heavy fringes that hide your balanced proportions.",lt:"Labai tankių kirpčiukų, kurie paslepia proporcingus bruožus."},
+  brow:{en:"A soft, gently angled arch.",lt:"Švelnus, šiek tiek kampuotas lankas."}},
+ round:{d:{en:"Width and length are similar, with soft cheeks and jaw.",lt:"Plotis ir ilgis panašūs, švelnūs skruostai ir žandikaulis."},
+  avoid:{en:"Chin-length blunt bobs and heavy volume at the cheeks.",lt:"Tiesių bobų iki smakro ir didelės apimties ties skruostais."},
+  brow:{en:"A higher arch to add length.",lt:"Aukštesnis lankas, kuris optiškai pailgina veidą."}},
+ square:{d:{en:"A strong, defined jaw with forehead and jaw of similar width.",lt:"Ryškus žandikaulis, kakta ir žandikaulis panašaus pločio."},
+  avoid:{en:"Blunt cuts that end exactly at the jaw.",lt:"Tiesių kirpimų, kurie baigiasi tiksliai ties žandikauliu."},
+  brow:{en:"Soft, rounded curves to balance the jaw.",lt:"Švelnūs, apvalūs lankai, atsveriantys žandikaulį."}},
+ heart:{d:{en:"Wider forehead and cheekbones, narrowing to a delicate chin.",lt:"Platesnė kakta ir skruostikauliai, siaurėjantys iki dailaus smakro."},
+  avoid:{en:"Lots of volume at the crown and very short sides.",lt:"Didelės apimties viršugalvyje ir labai trumpų šonų."},
+  brow:{en:"A rounded, low arch.",lt:"Apvalus, žemesnis lankas."}},
+ long:{d:{en:"Noticeably longer than wide, with a long cheek line.",lt:"Pastebimai ilgesnis nei platesnis, ilga skruostų linija."},
+  avoid:{en:"Very long, straight hair with no layers, and height on top.",lt:"Labai ilgų tiesių plaukų be sluoksnių ir apimties viršuje."},
+  brow:{en:"Straighter, flatter brows to shorten the face.",lt:"Tiesesni, plokštesni antakiai, optiškai trumpinantys veidą."}},
+ diamond:{d:{en:"Cheekbones are the widest point, with narrower forehead and chin.",lt:"Plačiausia vieta yra skruostikauliai, kakta ir smakras siauresni."},
+  avoid:{en:"Volume at the cheekbones and severe middle parts.",lt:"Apimties ties skruostikauliais ir griežtų sklastymų per vidurį."},
+  brow:{en:"A curved arch with a soft tail.",lt:"Išlenktas lankas su švelnia uodegyte."}}
+};
+
+/* Product categories → studio feature */
+const PCATS=[["found",{en:"Foundation",lt:"Makiažo pagrindas"}],["found",{en:"Concealer",lt:"Maskuoklis"}],["found",{en:"Powder",lt:"Pudra"}],["blush",{en:"Blush",lt:"Skaistalai"}],["contour",{en:"Bronzer or contour",lt:"Bronzantas ar kontūras"}],["hl",{en:"Highlighter",lt:"Švytėjimo priemonė"}],["shadow",{en:"Eyeshadow",lt:"Akių šešėliai"}],["liner",{en:"Eyeliner",lt:"Akių kontūras"}],["mascara",{en:"Mascara",lt:"Blakstienų tušas"}],["brow",{en:"Brows",lt:"Antakių priemonė"}],["lip",{en:"Lipstick",lt:"Lūpų dažai"}],["lip",{en:"Lip gloss",lt:"Lūpų blizgis"}],["lip",{en:"Lip liner",lt:"Lūpų pieštukas"}],["nails",{en:"Nail polish",lt:"Nagų lakas"}],["hair",{en:"Hair colour",lt:"Plaukų dažai"}],[null,{en:"Hair care",lt:"Plaukų priežiūra"}],[null,{en:"Skincare",lt:"Odos priežiūra"}],[null,{en:"Other",lt:"Kita"}]];
+
+/* ============ Storage (IndexedDB, this phone only) ============ */
+const DB={db:null,mem:{products:[],looks:[],photos:{}},
+ async open(){try{this.db=await new Promise((res,rej)=>{const r=indexedDB.open("bonnie-stylist",2);r.onupgradeneeded=()=>{const d=r.result;["products","looks","photos","kv","garments","outfits"].forEach(s=>{if(!d.objectStoreNames.contains(s))d.createObjectStore(s)})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}catch(e){this.db=null}},
+ async all(store){if(!this.db)return Object.values(this.mem[store]||{});try{return await new Promise((res,rej)=>{const out=[];const c=this.db.transaction(store).objectStore(store).openCursor();c.onsuccess=()=>{const cur=c.result;if(cur){out.push(cur.value);cur.continue()}else res(out)};c.onerror=()=>rej(c.error)})}catch(e){return[]}},
+ async get(store,key){if(!this.db)return (this.mem[store]||{})[key];try{return await new Promise((res,rej)=>{const r=this.db.transaction(store).objectStore(store).get(key);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}catch(e){return undefined}},
+ async put(store,key,val){if(!this.db){(this.mem[store]=this.mem[store]||{})[key]=val;return}try{await new Promise((res,rej)=>{const tx=this.db.transaction(store,"readwrite");tx.objectStore(store).put(val,key);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}catch(e){}},
+ async del(store,key){if(!this.db){delete (this.mem[store]||{})[key];return}try{await new Promise((res,rej)=>{const tx=this.db.transaction(store,"readwrite");tx.objectStore(store).delete(key);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}catch(e){}}
+};
+
+/* ============ Helpers ============ */
+const $=id=>document.getElementById(id);
+const el=(tag,attrs,...kids)=>{const e=document.createElement(tag);if(attrs)for(const k in attrs){const v=attrs[k];if(v==null||v===false)continue;if(k==="class")e.className=v;else if(k==="style")e.style.cssText=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else if(k==="text")e.textContent=v;else e.setAttribute(k,v===true?"":v)}for(const c of kids.flat()){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(c))}return e};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const hexToRgb=h=>{h=h.replace("#","");return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]};
+const rgbToHex=(r,g,b)=>"#"+[r,g,b].map(v=>clamp(Math.round(v),0,255).toString(16).padStart(2,"0")).join("").toUpperCase();
+function rgb2lab(r,g,b){r/=255;g/=255;b/=255;r=r>.04045?Math.pow((r+.055)/1.055,2.4):r/12.92;g=g>.04045?Math.pow((g+.055)/1.055,2.4):g/12.92;b=b>.04045?Math.pow((b+.055)/1.055,2.4):b/12.92;let x=(r*.4124+g*.3576+b*.1805)/.95047,y=r*.2126+g*.7152+b*.0722,z=(r*.0193+g*.1192+b*.9505)/1.08883;const f=v=>v>.008856?Math.cbrt(v):7.787*v+16/116;x=f(x);y=f(y);z=f(z);return[116*y-16,500*(x-y),200*(y-z)]}
+const labDist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
+let toastTimer;function toast(msg){const x=$("toast");x.textContent=msg;x.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>x.hidden=true,2600)}
+function setStatus(id,msg){const s=$(id);if(!msg){s.hidden=true;return}s.textContent=msg;s.hidden=false}
+
+async function fileToCanvas(file,max=1280){
+  const url=URL.createObjectURL(file);
+  try{const img=new Image();img.decoding="async";img.src=url;await img.decode();
+    const sc=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+    const c=document.createElement("canvas");c.width=Math.round(img.naturalWidth*sc);c.height=Math.round(img.naturalHeight*sc);
+    c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c}finally{URL.revokeObjectURL(url)}}
+const canvasToBlob=(c,q=.86)=>new Promise(r=>c.toBlob(r,"image/jpeg",q));
+async function blobToCanvas(b){return fileToCanvas(b,1280)}
+function thumbURL(c,max=520){const sc=Math.min(1,max/Math.max(c.width,c.height));const t=document.createElement("canvas");t.width=Math.round(c.width*sc);t.height=Math.round(c.height*sc);t.getContext("2d").drawImage(c,0,0,t.width,t.height);return t.toDataURL("image/jpeg",.82)}
+
+/* ============ MediaPipe loading (files published beside this page) ============ */
+const MP=new URL("mp/",location.href).href;
+const BIN=/\.(data|binarypb|tflite)$/;const loc=dir=>f=>MP+dir+"/"+f+(BIN.test(f)?".wasm":"");
+const scriptCache={};
+function loadScript(src){return scriptCache[src]||(scriptCache[src]=new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.crossOrigin="anonymous";s.onload=res;s.onerror=()=>rej(new Error("load "+src));document.head.append(s)}))}
+let fmP,ssP,hdP;
+function getFaceMesh(){return fmP||(fmP=(async()=>{await loadScript(MP+"face_mesh/face_mesh.js");const fm=new FaceMesh({locateFile:loc("face_mesh")});fm.setOptions({maxNumFaces:1,refineLandmarks:true,minDetectionConfidence:.5,minTrackingConfidence:.5});await fm.initialize();return fm})())}
+function getSeg(){return ssP||(ssP=(async()=>{await loadScript(MP+"selfie_segmentation/selfie_segmentation.js");const s=new SelfieSegmentation({locateFile:loc("selfie_segmentation")});s.setOptions({modelSelection:0});await s.initialize();return s})())}
+function getHands(){return hdP||(hdP=(async()=>{await loadScript(MP+"hands/hands.js");const h=new Hands({locateFile:loc("hands")});h.setOptions({maxNumHands:1,modelComplexity:1,minDetectionConfidence:.5});await h.initialize();return h})())}
+let mpQueue=Promise.resolve();
+function runModel(model,image){const job=mpQueue.then(()=>new Promise((res,rej)=>{let done=false;model.onResults(r=>{if(!done){done=true;res(r)}});try{model.reset&&model.reset()}catch(e){}model.send({image}).catch(e=>{if(!done){done=true;rej(e)}})}));mpQueue=job.catch(()=>{});return job}
+async function detectFace(c){const fm=await getFaceMesh();const r=await runModel(fm,c);return r.multiFaceLandmarks&&r.multiFaceLandmarks[0]?r.multiFaceLandmarks[0].map(p=>({x:p.x,y:p.y})):null}
+async function detectHand(c){const h=await getHands();const r=await runModel(h,c);return r.multiHandLandmarks&&r.multiHandLandmarks[0]?r.multiHandLandmarks[0].map(p=>({x:p.x,y:p.y})):null}
+async function segmentPerson(c,w,h){const s=await getSeg();const r=await runModel(s,c);const m=document.createElement("canvas");m.width=w;m.height=h;const x=m.getContext("2d",{willReadFrequently:true});x.drawImage(r.segmentationMask,0,0,w,h);const d=x.getImageData(0,0,w,h).data;
+  // choose the channel that actually carries the mask
+  let va=0,vr=0,ma=0,mr=0,n=0;for(let i=0;i<d.length;i+=40){ma+=d[i+3];mr+=d[i];n++}ma/=n;mr/=n;for(let i=0;i<d.length;i+=40){va+=(d[i+3]-ma)**2;vr+=(d[i]-mr)**2}
+  const ch=va>=vr?3:0;const out=new Float32Array(w*h);for(let i=0,j=0;j<out.length;i+=4,j++)out[j]=d[i+ch]/255;return out}
+
+/* ============ Landmark sets ============ */
+const IDX={oval:[10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109],
+lipsOut:[61,146,91,181,84,17,314,405,321,375,291,409,270,269,267,0,37,39,40,185],
+lipsIn:[78,95,88,178,87,14,317,402,318,324,308,415,310,311,312,13,82,81,80,191],
+rEye:[33,7,163,144,145,153,154,155,133,173,157,158,159,160,161,246],lEye:[263,249,390,373,374,380,381,382,362,398,384,385,386,387,388,466],
+rLid:[33,246,161,160,159,158,157,173,133],lLid:[263,466,388,387,386,385,384,398,362],
+rBrowUp:[70,63,105,66,107],rBrowLo:[46,53,52,65,55],lBrowUp:[300,293,334,296,336],lBrowLo:[276,283,282,295,285]};
+
+/* ============ Photo objects ============ */
+// {canvas, lm, hand, person(Float32Array mask@half res), mw, mh, hairMask(Uint8ClampedArray full res), hairLab, skinLab}
+const photos={front:null,left:null,right:null,back:null,hand:null};
+let studioMode="face";
+
+async function preparePhoto(canvas,{face=true,hand=false,statusId="status"}={}){
+  const P={canvas,lm:null,hand:null};
+  setStatus(statusId,t("loadingModels"));
+  try{
+    if(hand){P.hand=await detectHand(canvas);if(!P.hand)setStatus(statusId,t("noHand"));else setStatus(statusId,"")}
+    if(face){setStatus(statusId,t("reading"));P.lm=await detectFace(canvas);setStatus(statusId,P.lm?"":t("noFace"))}
+  }catch(e){console.error(e);setStatus(statusId,t("modelFail"));P.failed=true}
+  return P}
+
+async function ensureHair(P,statusId){
+  if(P.hairMask!==undefined||P.failed)return;
+  const W=P.canvas.width,Hh=P.canvas.height,mw=Math.round(W/2),mh=Math.round(Hh/2);
+  setStatus(statusId,t("findingHair"));
+  try{P.person=await segmentPerson(P.canvas,mw,mh)}catch(e){console.error(e);P.hairMask=null;setStatus(statusId,"");return}
+  P.mw=mw;P.mh=mh;
+  computeHairMask(P,null);
+  setStatus(statusId,P.lm||P===photos.back?"":(P.lm===null&&P!==photos.back?"":""));
+}
+
+function computeHairMask(P,refLab){
+  const W=P.canvas.width,Hh=P.canvas.height,mw=P.mw,mh=P.mh,person=P.person;
+  const sc=document.createElement("canvas");sc.width=mw;sc.height=mh;const sx=sc.getContext("2d",{willReadFrequently:true});sx.drawImage(P.canvas,0,0,mw,mh);const px=sx.getImageData(0,0,mw,mh).data;
+  // face mask
+  let face=null,lm=P.lm,fW=0,fH=0,chinY=mh;
+  if(lm){const fc=document.createElement("canvas");fc.width=mw;fc.height=mh;const fx=fc.getContext("2d",{willReadFrequently:true});
+    const cx=IDX.oval.reduce((s,i)=>s+lm[i].x,0)/IDX.oval.length,cy=IDX.oval.reduce((s,i)=>s+lm[i].y,0)/IDX.oval.length;
+    fx.beginPath();IDX.oval.forEach((i,k)=>{const x=(cx+(lm[i].x-cx)*1.03)*mw,y=(cy+(lm[i].y-cy)*1.02)*mh;k?fx.lineTo(x,y):fx.moveTo(x,y)});fx.closePath();fx.fill();
+    // neck below the chin
+    const j1=lm[172],j2=lm[397],ch=lm[152];fx.beginPath();fx.moveTo(j1.x*mw,j1.y*mh);fx.lineTo(ch.x*mw,ch.y*mh);fx.lineTo(j2.x*mw,j2.y*mh);fx.lineTo(j2.x*mw,mh);fx.lineTo(j1.x*mw,mh);fx.closePath();fx.fill();
+    face=fx.getImageData(0,0,mw,mh).data;
+    fW=Math.hypot((lm[454].x-lm[234].x)*mw,(lm[454].y-lm[234].y)*mh);fH=Math.hypot((lm[152].x-lm[10].x)*mw,(lm[152].y-lm[10].y)*mh);chinY=lm[152].y*mh}
+  const at=(x,y)=>{x=Math.round(x);y=Math.round(y);if(x<0||y<0||x>=mw||y>=mh)return -1;return y*mw+x};
+  // sample hair colour
+  const samples=[];
+  const take=(x,y)=>{const j=at(x,y);if(j<0)return;if(person[j]<.6)return;if(face&&face[j*4+3]>10)return;samples.push(rgb2lab(px[j*4],px[j*4+1],px[j*4+2]))};
+  if(lm){const tx=lm[10].x*mw,ty=lm[10].y*mh;for(let k=-.35;k<=.35;k+=.07)for(const dy of [.07,.12,.17,.22])take(tx+k*fW,ty-dy*fH);
+    for(const s of [[127,-1],[234,-1],[356,1],[454,1]]){const p=lm[s[0]];for(const dx of [.06,.1,.14])for(const dy of [-.1,0,.1])take(p.x*mw+s[1]*dx*fW,p.y*mh+dy*fH)}}
+  if(samples.length<6){// back view or no face: top of the silhouette
+    let minY=mh,maxY=0,minX=mw,maxX=0;for(let y=0;y<mh;y+=2)for(let x=0;x<mw;x+=2){if(person[y*mw+x]>.6){if(y<minY)minY=y;if(y>maxY)maxY=y;if(x<minX)minX=x;if(x>maxX)maxX=x}}
+    if(maxY>minY){const bh=maxY-minY,bw=maxX-minX;for(let y=minY+bh*.06;y<minY+bh*.32;y+=Math.max(2,bh/40))for(let x=minX+bw*.3;x<maxX-bw*.3;x+=Math.max(2,bw/30))take(x,y)}}
+  if(samples.length<4&&!refLab){P.hairMask=null;return}
+  const med=k=>{const a=samples.map(s=>s[k]).sort((p,q)=>p-q);return a[a.length>>1]};
+  const hair=samples.length>=4?[med(0),med(1),med(2)]:refLab;P.hairLab=hair;
+  // skin reference
+  let skin=null;if(lm){const ss=[];for(const i of [205,425,151,50,280]){const p=lm[i];for(let dx=-2;dx<=2;dx++)for(let dy=-2;dy<=2;dy++){const j=at(p.x*mw+dx,p.y*mh+dy);if(j>=0)ss.push(rgb2lab(px[j*4],px[j*4+1],px[j*4+2]))}}
+    const m=k=>{const a=ss.map(s=>s[k]).sort((p,q)=>p-q);return a[a.length>>1]};skin=[m(0),m(1),m(2)];P.skinLab=skin}
+  const maxY=lm?Math.min(mh,chinY+1.7*fH):mh;
+  const m=new Uint8ClampedArray(mw*mh*4);
+  for(let y=0;y<mh;y++){if(y>maxY)break;for(let x=0;x<mw;x++){const j=y*mw+x;const p=person[j];if(p<.3)continue;if(face&&face[j*4+3]>10)continue;
+    const lab=rgb2lab(px[j*4],px[j*4+1],px[j*4+2]);
+    const dC=Math.hypot(lab[1]-hair[1],lab[2]-hair[2]),dL=Math.abs(lab[0]-hair[0]);
+    const d=dC+.45*Math.max(0,dL-14);
+    let s=1-clamp((d-9)/20,0,1);
+    if(skin&&s>0){const ds=Math.hypot(lab[1]-skin[1],lab[2]-skin[2])+.3*Math.abs(lab[0]-skin[0]);if(ds<d)s*=.15}
+    m[j*4+3]=Math.round(255*s*clamp((p-.3)/.5,0,1))}}
+  const mc=document.createElement("canvas");mc.width=mw;mc.height=mh;mc.getContext("2d").putImageData(new ImageData(m,mw,mh),0,0);
+  // soften and upscale
+  const soft=document.createElement("canvas");soft.width=Math.round(mw/2);soft.height=Math.round(mh/2);const so=soft.getContext("2d");so.imageSmoothingQuality="high";so.drawImage(mc,0,0,soft.width,soft.height);
+  const full=document.createElement("canvas");full.width=W;full.height=Hh;const fx2=full.getContext("2d",{willReadFrequently:true});fx2.imageSmoothingQuality="high";fx2.drawImage(mc,0,0,W,Hh);fx2.globalAlpha=.6;fx2.drawImage(soft,0,0,W,Hh);
+  const fd=fx2.getImageData(0,0,W,Hh).data;const hm=new Uint8ClampedArray(W*Hh);for(let i=0,j=0;j<hm.length;i+=4,j++)hm[j]=fd[i+3];P.hairMask=hm;
+}
+
+/* ============ Rendering ============ */
+const work=document.createElement("canvas");
+function softLayer(out,W,Hh,soft,draw){// draws at reduced size and scales up for soft edges
+  const d=soft;const w=Math.max(1,Math.round(W/d)),h=Math.max(1,Math.round(Hh/d));
+  work.width=w;work.height=h;const c=work.getContext("2d");c.setTransform(1/d,0,0,1/d,0,0);c.clearRect(0,0,W,Hh);draw(c);c.setTransform(1,0,0,1,0,0);return work}
+function comp(out,layer,W,Hh,mode,alpha){out.save();out.globalCompositeOperation=mode;out.globalAlpha=clamp(alpha,0,1);out.imageSmoothingQuality="high";out.drawImage(layer,0,0,W,Hh);out.restore()}
+function poly(c,pts){c.beginPath();pts.forEach((p,k)=>k?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath()}
+function along(pts,tt){const n=pts.length-1;const f=clamp(tt,0,1)*n;const i=Math.min(n-1,Math.floor(f));const r=f-i;return[pts[i][0]+(pts[i+1][0]-pts[i][0])*r,pts[i][1]+(pts[i+1][1]-pts[i][1])*r]}
+const lerp=(a,b,r)=>[a[0]+(b[0]-a[0])*r,a[1]+(b[1]-a[1])*r];
+const norm=v=>{const l=Math.hypot(v[0],v[1])||1;return[v[0]/l,v[1]/l]};
+
+function recolorHair(P,ctx,W,Hh,hex,alpha){
+  const m=P.hairMask;if(!m)return;
+  const key=hex+"|"+alpha;if(P._hk===key&&P._hc){ctx.drawImage(P._hc,0,0);return}
+  const id=ctx.getImageData(0,0,W,Hh),d=id.data;const [tr,tg,tb]=hexToRgb(hex);
+  const tl=(Math.max(tr,tg,tb)+Math.min(tr,tg,tb))/510;
+  // target hue/sat
+  const hsl=(r,g,b)=>{r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0;const l=(mx+mn)/2;if(mx!==mn){const dd=mx-mn;s=l>.5?dd/(2-mx-mn):dd/(mx+mn);h=mx===r?(g-b)/dd+(g<b?6:0):mx===g?(b-r)/dd+2:(r-g)/dd+4;h/=6}return[h,s,l]};
+  const [th,ts]=hsl(tr,tg,tb);
+  const hl=P.hairLab?P.hairLab[0]/100:.3;
+  const h2r=(p,q,x)=>{if(x<0)x+=1;if(x>1)x-=1;if(x<1/6)return p+(q-p)*6*x;if(x<1/2)return q;if(x<2/3)return p+(q-p)*(2/3-x)*6;return p};
+  for(let j=0,i=0;j<m.length;j++,i+=4){const a=m[j];if(a<4)continue;const r=d[i],g=d[i+1],b=d[i+2];
+    const l=(Math.max(r,g,b)+Math.min(r,g,b))/510;
+    let nl=clamp(l+(tl-hl)*.85,0,1);nl=clamp(nl*.9+tl*.1,0,1);
+    const s=ts*(.75+.25*Math.min(1,l*2));
+    let nr,ng,nb;if(s===0){nr=ng=nb=nl}else{const q=nl<.5?nl*(1+s):nl+s-nl*s,p=2*nl-q;nr=h2r(p,q,th+1/3);ng=h2r(p,q,th);nb=h2r(p,q,th-1/3)}
+    const k=a/255*alpha;d[i]=r+(nr*255-r)*k;d[i+1]=g+(ng*255-g)*k;d[i+2]=b+(nb*255-b)*k}
+  ctx.putImageData(id,0,0);
+  const hc=document.createElement("canvas");hc.width=W;hc.height=Hh;hc.getContext("2d").drawImage(ctx.canvas,0,0);P._hk=key;P._hc=hc}
+
+function drawMakeup(ctx,P,L){
+  const lm=P.lm;if(!lm)return;const W=ctx.canvas.width,Hh=ctx.canvas.height;
+  const Pt=i=>[lm[i].x*W,lm[i].y*Hh];const pts=a=>a.map(Pt);
+  const faceW=Math.hypot(...[0,1].map(k=>Pt(454)[k]-Pt(234)[k])),eyeW=Math.hypot(...[0,1].map(k=>Pt(133)[k]-Pt(33)[k]));
+  const sBase=Math.max(1,faceW/90);
+  const on=c=>L[c]&&L[c].c&&L[c].a>0;
+  // foundation
+  if(on("found")){const lay=softLayer(ctx,W,Hh,Math.max(2,Math.round(sBase*3)),c=>{c.fillStyle=L.found.c;poly(c,pts(IDX.oval));c.fill();c.globalCompositeOperation="destination-out";[IDX.rEye,IDX.lEye,IDX.lipsOut].forEach(a=>{poly(c,pts(a));c.fill()});[[IDX.rBrowUp,IDX.rBrowLo],[IDX.lBrowUp,IDX.lBrowLo]].forEach(([u,l])=>{poly(c,pts(u).concat(pts(l).reverse()));c.fill()})});
+    comp(ctx,lay,W,Hh,"soft-light",L.found.a*.8);comp(ctx,lay,W,Hh,"source-over",L.found.a*.22)}
+  // contour
+  if(on("contour")){const lay=softLayer(ctx,W,Hh,Math.max(3,Math.round(sBase*5)),c=>{c.strokeStyle=L.contour.c;c.lineCap="round";c.lineWidth=faceW*.07;
+      [[234,61],[454,291]].forEach(([a,b])=>{const A=Pt(a),B=Pt(b);const s=lerp(A,B,.05),e=lerp(A,B,.45);const dn=faceW*.035;c.beginPath();c.moveTo(s[0],s[1]+dn);c.lineTo(e[0],e[1]+dn*1.6);c.stroke()});
+      c.lineWidth=faceW*.05;[[54,21],[284,251]].forEach(([a,b])=>{const A=Pt(a),B=Pt(b);c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke()})});
+    comp(ctx,lay,W,Hh,"multiply",L.contour.a*.55)}
+  // blush
+  if(on("blush")){const lay=softLayer(ctx,W,Hh,2,c=>{[[50,234],[280,454]].forEach(([a,b])=>{const C=lerp(Pt(a),Pt(b),.18);const r=faceW*.14;const g=c.createRadialGradient(C[0],C[1],0,C[0],C[1],r);g.addColorStop(0,L.blush.c);g.addColorStop(1,L.blush.c+"00");c.fillStyle=g;c.beginPath();c.ellipse(C[0],C[1],r*1.15,r*.9,0,0,Math.PI*2);c.fill()})});
+    comp(ctx,lay,W,Hh,"multiply",L.blush.a*.45);comp(ctx,lay,W,Hh,"soft-light",L.blush.a*.6)}
+  // highlighter
+  if(on("hl")){const lay=softLayer(ctx,W,Hh,Math.max(2,Math.round(sBase*3)),c=>{c.fillStyle=L.hl.c;[[116,123],[345,352]].forEach(([a,b])=>{const C=lerp(Pt(a),Pt(b),.3);c.beginPath();c.ellipse(C[0],C[1],faceW*.075,faceW*.035,Math.atan2(Pt(b)[1]-Pt(a)[1],Pt(b)[0]-Pt(a)[0]),0,Math.PI*2);c.fill()});
+      c.strokeStyle=L.hl.c;c.lineWidth=faceW*.03;c.lineCap="round";c.beginPath();const n1=Pt(6),n2=Pt(195);c.moveTo(n1[0],n1[1]);c.lineTo(n2[0],n2[1]);c.stroke();const cb=Pt(0);c.beginPath();c.arc(cb[0],cb[1]-faceW*.012,faceW*.012,0,Math.PI*2);c.fill()});
+    comp(ctx,lay,W,Hh,"screen",L.hl.a*.55)}
+  // eyeshadow
+  const sides=[{lid:IDX.rLid,lo:IDX.rBrowLo},{lid:IDX.lLid,lo:IDX.lBrowLo}];
+  if(on("shadow")){const lay=softLayer(ctx,W,Hh,Math.max(2,Math.round(sBase*2.2)),c=>{c.fillStyle=L.shadow.c;sides.forEach(s=>{const lid=pts(s.lid),brow=pts(s.lo);const top=lid.map((p,k)=>lerp(p,along(brow,k/(lid.length-1)),.55));poly(c,lid.concat(top.reverse()));c.fill()})});
+    comp(ctx,lay,W,Hh,"multiply",L.shadow.a*.65);comp(ctx,lay,W,Hh,"soft-light",L.shadow.a*.55)}
+  // brows
+  if(on("brow")){const lay=softLayer(ctx,W,Hh,Math.max(1,Math.round(sBase*1.2)),c=>{c.fillStyle=L.brow.c;[[IDX.rBrowUp,IDX.rBrowLo],[IDX.lBrowUp,IDX.lBrowLo]].forEach(([u,l])=>{const U=pts(u),Lo=pts(l);const mid=U.map((p,k)=>lerp(p,Lo[k],.5));const up=U.map((p,k)=>lerp(p,mid[k],.15)),lo=Lo.map((p,k)=>lerp(p,mid[k],.15));poly(c,up.concat(lo.reverse()));c.fill()})});
+    comp(ctx,lay,W,Hh,"multiply",L.brow.a*.75);comp(ctx,lay,W,Hh,"color",L.brow.a*.3)}
+  // eyeliner
+  if(on("liner")){const lay=softLayer(ctx,W,Hh,Math.max(1,Math.round(sBase*.6)),c=>{c.fillStyle=L.liner.c;sides.forEach(s=>{const lid=pts(s.lid),brow=pts(s.lo);const n=lid.length;
+      const up=lid.map((p,k)=>norm([along(brow,k/(n-1))[0]-p[0],along(brow,k/(n-1))[1]-p[1]]));
+      const th=k=>eyeW*(.018+.05*Math.pow(1-k/(n-1),1.6))*(.6+.6*L.liner.a);
+      const top=lid.map((p,k)=>[p[0]+up[k][0]*th(k),p[1]+up[k][1]*th(k)]);
+      poly(c,lid.concat(top.slice().reverse()));c.fill();
+      if(L.liner.wing){const o=lid[0],dir=norm([o[0]-lid[n-1][0],o[1]-lid[n-1][1]]);const tip=[o[0]+dir[0]*eyeW*.3+up[0][0]*eyeW*.16,o[1]+dir[1]*eyeW*.3+up[0][1]*eyeW*.16];
+        c.beginPath();c.moveTo(top[1][0],top[1][1]);c.lineTo(tip[0],tip[1]);c.lineTo(o[0],o[1]);c.lineTo(lid[1][0],lid[1][1]);c.closePath();c.fill()}})});
+    comp(ctx,lay,W,Hh,"source-over",clamp(.55+L.liner.a*.4,0,.95))}
+  // mascara
+  if(on("mascara")){const lay=softLayer(ctx,W,Hh,1,c=>{c.strokeStyle=L.mascara.c;c.lineCap="round";sides.forEach(s=>{const lid=pts(s.lid),brow=pts(s.lo);const n=lid.length;
+      c.lineWidth=eyeW*.03;c.beginPath();lid.forEach((p,k)=>k?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.stroke();
+      c.lineWidth=Math.max(1,eyeW*.012);
+      for(let k=0;k<=1.0001;k+=.06){const p=along(lid,k);const b=along(brow,k);const u=norm([b[0]-p[0],b[1]-p[1]]);const outw=norm([lid[0][0]-lid[n-1][0],lid[0][1]-lid[n-1][1]]);const outer=1-k;const dir=norm([u[0]+outw[0]*outer*.7,u[1]+outw[1]*outer*.7]);const len=eyeW*(.09+.08*outer)*(.6+.5*L.mascara.a);
+        c.beginPath();c.moveTo(p[0],p[1]);c.quadraticCurveTo(p[0]+dir[0]*len*.6+u[0]*len*.2,p[1]+dir[1]*len*.6+u[1]*len*.2,p[0]+dir[0]*len,p[1]+dir[1]*len);c.stroke()}})});
+    comp(ctx,lay,W,Hh,"source-over",.55+L.mascara.a*.4)}
+  // lips
+  if(on("lip")){const lay=softLayer(ctx,W,Hh,Math.max(1,Math.round(sBase*.7)),c=>{c.fillStyle=L.lip.c;c.beginPath();pts(IDX.lipsOut).forEach((p,k)=>k?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath();pts(IDX.lipsIn).forEach((p,k)=>k?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath();c.fill("evenodd")});
+    const lum=(()=>{const [r,g,b]=hexToRgb(L.lip.c);return(.3*r+.59*g+.11*b)/255})();
+    comp(ctx,lay,W,Hh,"multiply",L.lip.a*(.35+.5*(1-lum)));comp(ctx,lay,W,Hh,"color",L.lip.a*.75);
+    if(lum>.5)comp(ctx,lay,W,Hh,"soft-light",L.lip.a*.5);
+    const gl=L.lip.finish==="gloss"?.55:L.lip.finish==="satin"?.22:0;
+    if(gl){const g2=softLayer(ctx,W,Hh,Math.max(2,Math.round(sBase*1.5)),c=>{const a=Pt(14),b=Pt(17),m=lerp(a,b,.4);const lw=Math.hypot(Pt(291)[0]-Pt(61)[0],Pt(291)[1]-Pt(61)[1]);c.fillStyle="#FFFFFF";c.beginPath();c.ellipse(m[0],m[1],lw*.16,lw*.035,0,0,Math.PI*2);c.fill();const u=Pt(0),u2=Pt(13),um=lerp(u,u2,.5);c.beginPath();c.ellipse(um[0]-lw*.08,um[1],lw*.07,lw*.02,0,0,Math.PI*2);c.ellipse(um[0]+lw*.08,um[1],lw*.07,lw*.02,0,0,Math.PI*2);c.fill()});
+      comp(ctx,g2,W,Hh,"screen",gl*L.lip.a)}
+    if(L.lip.finish==="matte")comp(ctx,lay,W,Hh,"multiply",L.lip.a*.12)}
+}
+function drawNails(ctx,P,L){
+  const h=P.hand;if(!h||!L.nails.c||!L.nails.a)return;const W=ctx.canvas.width,Hh=ctx.canvas.height;
+  const lay=softLayer(ctx,W,Hh,1,c=>{[[4,3],[8,7],[12,11],[16,15],[20,19]].forEach(([tip,dip],k)=>{const T=[h[tip].x*W,h[tip].y*Hh],D=[h[dip].x*W,h[dip].y*Hh];const v=[T[0]-D[0],T[1]-D[1]],len=Math.hypot(v[0],v[1]);const ang=Math.atan2(v[1],v[0]);const C=[T[0]-v[0]*.3,T[1]-v[1]*.3];
+    c.fillStyle=L.nails.c;c.beginPath();c.ellipse(C[0],C[1],len*.36,len*(k===0?.27:.23),ang,0,Math.PI*2);c.fill()})});
+  comp(ctx,lay,W,Hh,"source-over",.88*L.nails.a);comp(ctx,lay,W,Hh,"multiply",.25*L.nails.a);
+  const g=softLayer(ctx,W,Hh,2,c=>{[[4,3],[8,7],[12,11],[16,15],[20,19]].forEach(([tip,dip])=>{const T=[h[tip].x*W,h[tip].y*Hh],D=[h[dip].x*W,h[dip].y*Hh];const v=[T[0]-D[0],T[1]-D[1]],len=Math.hypot(v[0],v[1]);const C=[T[0]-v[0]*.3,T[1]-v[1]*.3];c.fillStyle="#FFFFFF";c.beginPath();c.ellipse(C[0]-len*.06,C[1]-len*.04,len*.16,len*.05,Math.atan2(v[1],v[0]),0,Math.PI*2);c.fill()})});
+  comp(ctx,g,W,Hh,"screen",.45*L.nails.a)}
+
+function renderInto(canvas,P,L,{makeup=true}={}){
+  const W=P.canvas.width,Hh=P.canvas.height;if(canvas.width!==W)canvas.width=W;if(canvas.height!==Hh)canvas.height=Hh;
+  const ctx=canvas.getContext("2d",{willReadFrequently:true});ctx.globalCompositeOperation="source-over";ctx.globalAlpha=1;ctx.drawImage(P.canvas,0,0);
+  if(!makeup)return;
+  if(L.hair.c&&L.hair.a>0&&P.hairMask)recolorHair(P,ctx,W,Hh,L.hair.c,L.hair.a);
+  drawMakeup(ctx,P,L);if(P.hand)drawNails(ctx,P,L)}
+
+/* ============ Studio UI ============ */
+let curCat="lip",products=[],looks=[],comparing=false,rq=0;
+function curPhoto(){return studioMode==="hand"?photos.hand:photos.front}
+function render(){cancelAnimationFrame(rq);rq=requestAnimationFrame(()=>{const P=curPhoto();const out=$("out");if(!P){out.hidden=true;return}$("stage").style.aspectRatio=P.canvas.width+" / "+P.canvas.height;out.hidden=false;renderInto(out,P,look,{makeup:!comparing});if(turnOpen)renderTurnCache()})}
+function syncStudioChrome(){const has=!!(photos.front||photos.hand);$("studioEmpty").hidden=!!curPhoto();$("out").hidden=!curPhoto();$("btnCompare").hidden=!curPhoto();$("photoActs").hidden=!has;$("modeSw").hidden=!has;
+  $("modeFace").setAttribute("aria-pressed",studioMode==="face");$("modeHand").setAttribute("aria-pressed",studioMode==="hand");
+  if(!curPhoto()){$("btnHand").hidden=studioMode==="hand"?false:false}}
+
+function buildPresets(){const box=$("presets");box.replaceChildren(...PRESETS.map(p=>{const dots=["lip","blush","shadow","liner"].map(k=>p.l[k]&&p.l[k][0]?el("i",{style:"background:"+p.l[k][0]}):null);
+  return el("button",{class:"preset",type:"button","aria-pressed":"false","data-id":p.id,onclick:()=>applyPreset(p)},el("span",{class:"dots"},dots),el("b",{text:L(p.n)}))}))}
+function applyPreset(p){const keepHair=look.hair,keepNails=look.nails;look=emptyLook();look.hair=keepHair;look.nails=keepNails;for(const k in p.l){look[k].c=p.l[k][0]||(k==="found"?suggestFoundation():null);look[k].a=p.l[k][1]}
+  document.querySelectorAll(".preset").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===p.id));buildCats();buildPanel();render()}
+function suggestFoundation(){const sk=photos.front&&photos.front.skinLab;let best=SHADES.found[2].hex,bd=1e9;if(sk)for(const s of SHADES.found){const d=labDist(rgb2lab(...hexToRgb(s.hex)),sk);if(d<bd){bd=d;best=s.hex}}return best}
+function buildCats(){const box=$("cats");box.replaceChildren(...CATS.map(c=>el("button",{class:"chip",type:"button",role:"tab","aria-pressed":String(c===curCat),onclick:()=>{curCat=c;if(c==="nails"&&photos.hand&&studioMode!=="hand")setMode("hand");if(c!=="nails"&&studioMode==="hand"&&photos.front)setMode("face");buildCats();buildPanel()}},look[c].c&&look[c].a>0?el("span",{class:"on"}):null,t("cat_"+c))))}
+function kitShadesFor(cat){return products.filter(p=>p.feature===cat&&p.hex).map(p=>({hex:p.hex,n:{en:p.name||p.brand||"",lt:p.name||p.brand||""},mine:true}))}
+function buildPanel(){const c=curCat,st=look[c];const box=$("catPanel");const kids=[];
+  if(c==="nails"&&!photos.hand){kids.push(el("p",{class:"small",style:"margin:0"},t("handPhoto")+": "),el("div",{class:"row"},el("button",{class:"btn sm",type:"button",onclick:()=>$("inHand").click()},t("handPhoto"))))}
+  const list=kitShadesFor(c).concat(SHADES[c]);
+  kids.push(el("div",{class:"swatches"},el("button",{class:"sw",type:"button","aria-pressed":String(!st.c||!st.a),onclick:()=>{st.a=0;buildCats();buildPanel();render()}},el("i",{style:"background:repeating-linear-gradient(135deg,var(--sunk) 0 5px,var(--surface) 5px 10px)"}),t("off")),
+    list.map(s=>el("button",{class:"sw"+(s.mine?" mine":""),type:"button",title:L(s.n),"aria-pressed":String(!!st.c&&st.a>0&&st.c.toUpperCase()===s.hex.toUpperCase()),onclick:()=>{st.c=s.hex;if(!st.a)st.a=DEFAULT_A[c];buildCats();buildPanel();render()}},el("i",{style:"background:"+s.hex}),L(s.n)))));
+  const rng=el("input",{type:"range",id:"rng-"+c,min:"0",max:"100",value:String(Math.round((st.a||0)*100)),"aria-label":t("intensity"),oninput:e=>{st.a=e.target.value/100;if(!st.c)st.c=list[0].hex;render()},onchange:()=>buildCats()});
+  kids.push(el("div",{class:"slider"},el("span",{text:t("intensity")}),rng,el("span",{class:"small",text:""})));
+  if(c==="lip")kids.push(el("div",{class:"row"},el("span",{class:"small",text:t("finish")}),el("div",{class:"seg"},["matte","satin","gloss"].map(f=>el("button",{type:"button","aria-pressed":String(st.finish===f),onclick:()=>{st.finish=f;buildPanel();render()}},t(f))))));
+  if(c==="liner")kids.push(el("div",{class:"row"},el("div",{class:"seg"},[true,false].map(w=>el("button",{type:"button","aria-pressed":String(st.wing===w),onclick:()=>{st.wing=w;buildPanel();render()}},w?t("wing"):"Classic")))));
+  box.replaceChildren(...kids)}
+
+function setMode(m){studioMode=m;syncStudioChrome();render()}
+async function newFrontPhoto(file){
+  const c=await fileToCanvas(file);studioMode="face";photos.front={canvas:c,lm:null};syncStudioChrome();render();
+  const P=await preparePhoto(c,{face:true});photos.front=P;await ensureHair(P,"status");render();analysis=null;
+  DB.put("photos","front",await canvasToBlob(c));renderAdvice();if(photos.left||photos.right||photos.back)rematchBackHair()}
+async function newHandPhoto(file){const c=await fileToCanvas(file);studioMode="hand";photos.hand={canvas:c};syncStudioChrome();render();
+  const P=await preparePhoto(c,{face:false,hand:true});photos.hand=P;if(!look.nails.c){look.nails.c=SHADES.nails[0].hex;look.nails.a=DEFAULT_A.nails}curCat="nails";buildCats();buildPanel();render();DB.put("photos","hand",await canvasToBlob(c))}
+
+/* ============ 360° ============ */
+const SLOTS=["front","left","back","right"];// order around the turn
+let turnOpen=false,turnCache={},turnAngle=0,spinT=0,slotTarget=null;
+function buildSlots(){$("slots").replaceChildren(...["front","left","right","back"].map(k=>{const P=photos[k];const b=el("button",{class:"slot"+(P?" filled":""),type:"button",onclick:()=>{if(k==="front"){goView("studio");if(!photos.front)$("inSelfie").click();return}slotTarget=k;$("inSlot").click()}});
+  if(P)b.append(el("img",{src:thumbURL(P.canvas,320),alt:""}));b.append(el("span",{text:t(k)}));return b}))}
+function renderTurnCache(){turnCache={};for(const k of SLOTS){const P=photos[k];if(!P)continue;const c=document.createElement("canvas");renderInto(c,P,look);turnCache[k]=c}drawTurn()}
+function drawTurn(){const cv=$("turnCanvas"),st=$("turnStage");const r=st.getBoundingClientRect();const dpr=Math.min(2,window.devicePixelRatio||1);const W=Math.max(10,Math.round(r.width*dpr)),Hh=Math.max(10,Math.round(r.height*dpr));if(cv.width!==W)cv.width=W;if(cv.height!==Hh)cv.height=Hh;
+  const ctx=cv.getContext("2d");ctx.clearRect(0,0,W,Hh);const avail=SLOTS.filter(k=>turnCache[k]);
+  if(!avail.length){ctx.fillStyle=getComputedStyle(document.body).getPropertyValue("--muted");ctx.font=`${14*dpr}px Jost, sans-serif`;ctx.textAlign="center";ctx.fillText(t("needPhoto"),W/2,Hh/2);return}
+  const pos=SLOTS.map((k,i)=>({k,a:i*90})).filter(o=>turnCache[o.k]);const a=((turnAngle%360)+360)%360;
+  let prev=pos[pos.length-1],next=pos[0];for(let i=0;i<pos.length;i++){if(pos[i].a<=a)prev=pos[i];}const pi=pos.indexOf(prev);next=pos[(pi+1)%pos.length];
+  let span=(next.a-prev.a+360)%360||360,off=(a-prev.a+360)%360;let w=pos.length>1?clamp(off/span,0,1):0;
+  const ease=w<.5?2*w*w:1-Math.pow(-2*w+2,2)/2;
+  const draw=(c,alpha,shift)=>{const s=Math.min(W/c.width,Hh/c.height);const dw=c.width*s,dh=c.height*s;ctx.globalAlpha=alpha;ctx.drawImage(c,(W-dw)/2+shift*W,(Hh-dh)/2,dw,dh)};
+  draw(turnCache[prev.k],1-ease,-ease*.08);if(pos.length>1)draw(turnCache[next.k],ease,(1-ease)*.08);ctx.globalAlpha=1;
+  $("dial").querySelectorAll("i").forEach((d,i)=>d.classList.toggle("on",Math.round(a/90)%4===i))}
+function spin(){if(!spinT)return;turnAngle=(turnAngle+.6)%360;$("turnRange").value=Math.round(turnAngle);drawTurn();spinT=requestAnimationFrame(spin)}
+async function rematchBackHair(){for(const k of ["left","right","back"]){const P=photos[k];if(P&&P.person&&photos.front&&photos.front.hairLab){P._hk=null;computeHairMask(P,photos.front.hairLab)}}if(turnOpen)renderTurnCache()}
+async function newSlotPhoto(k,file){const c=await fileToCanvas(file);setStatus("turnStatus",t("loadingModels"));const P=await preparePhoto(c,{face:k!=="back",statusId:"turnStatus"});if(k!=="back"&&!P.lm)setStatus("turnStatus","");photos[k]=P;
+  await ensureHair(P,"turnStatus");if(!P.hairMask&&P.person&&photos.front&&photos.front.hairLab)computeHairMask(P,photos.front.hairLab);setStatus("turnStatus","");buildSlots();renderTurnCache();DB.put("photos",k,await canvasToBlob(c))}
+
+/* ============ Analysis ============ */
+let analysis=null;let overrides={};
+try{overrides=JSON.parse(localStorage.getItem("bs-over")||"{}")||{}}catch(e){}
+function saveOver(){try{localStorage.setItem("bs-over",JSON.stringify(overrides))}catch(e){}}
+function analyse(){const P=photos.front;if(!P||!P.lm)return null;const lm=P.lm,W=P.canvas.width,Hh=P.canvas.height;const Pt=i=>[lm[i].x*W,lm[i].y*Hh];const D=(a,b)=>Math.hypot(Pt(a)[0]-Pt(b)[0],Pt(a)[1]-Pt(b)[1]);
+  const len=D(10,152),cheek=D(234,454),fore=D(54,284),jaw=D(172,397),chin=D(148,377);const r=len/cheek,jr=jaw/cheek,fr=fore/cheek,cr=chin/cheek;
+  let shape="oval";if(r>=1.38)shape="long";else if(fr<.74&&jr<.8)shape="diamond";else if(fr-jr>.06&&cr<.36)shape="heart";else if(r<1.16&&jr<.86)shape="round";else if(jr>=.86&&r<1.28)shape="square";
+  const ctx=P.canvas.getContext("2d",{willReadFrequently:true});
+  const sample=(ids,rad)=>{const out=[];for(const i of ids){const p=Pt(i);const R=Math.max(2,Math.round(rad));const d=ctx.getImageData(Math.round(p[0]-R),Math.round(p[1]-R),2*R,2*R).data;for(let k=0;k<d.length;k+=16)out.push(rgb2lab(d[k],d[k+1],d[k+2]))}const m=k=>{const a=out.map(s=>s[k]).sort((p,q)=>p-q);return a[a.length>>1]};return[m(0),m(1),m(2)]};
+  const skin=sample([205,425,151,50,280],cheek*.03);const Ls=skin[0];
+  const depth=Ls>74?"fair":Ls>67?"light":Ls>58?"medium":Ls>49?"tan":Ls>38?"deep":"rich";
+  const hue=Math.atan2(skin[2],skin[1])*180/Math.PI;const tone=hue>62?"warm":hue<52?"cool":"neutral";
+  let eye="brown";if(lm.length>470){const ir=Math.hypot(Pt(469)[0]-Pt(468)[0],Pt(469)[1]-Pt(468)[1]);const ring=[];for(const c of [468,473]){const p=Pt(c);for(let a=0;a<Math.PI*2;a+=Math.PI/10)for(const f of [.45,.65,.8]){const x=Math.round(p[0]+Math.cos(a)*ir*f),y=Math.round(p[1]+Math.sin(a)*ir*f);const d=ctx.getImageData(x,y,1,1).data;ring.push(d)}}
+    let R=0,G=0,B=0;ring.forEach(d=>{R+=d[0];G+=d[1];B+=d[2]});R/=ring.length;G/=ring.length;B/=ring.length;const lab=rgb2lab(R,G,B);const ch=Math.hypot(lab[1],lab[2]);const h=(Math.atan2(lab[2],lab[1])*180/Math.PI+360)%360;
+    if(lab[0]<32)eye="dark";else if(ch<7)eye=lab[0]>45?"grey":"dark";else if(h>180&&h<300)eye="blue";else if(h>95&&h<=180)eye="green";else if(h>70)eye="hazel";else eye="brown"}
+  let hairName=null;if(P.hairLab){let bd=1e9;for(const s of SHADES.hair){const d=labDist(rgb2lab(...hexToRgb(s.hex)),P.hairLab);if(d<bd){bd=d;hairName=s}}}
+  return{shape,depth,tone,eye,hairName,skinLab:skin,ratios:{r,jr,fr,cr}}}
+const get=k=>overrides[k]||(analysis&&analysis[k]);
+
+function recommended(){const tone=get("tone")||"neutral",eye=get("eye")||"brown";const pickT=arr=>arr.filter(s=>s.tone===tone||s.tone==="neutral");
+  const eyeShadows={brown:["#8C5A2B","#5B2B4A","#263A5E","#B8913A"],dark:["#8C5A2B","#5B2B4A","#263A5E","#B8913A"],blue:["#A8582F","#C48A7C","#8C5A2B","#8D7B6E"],green:["#5B2B4A","#6B1F2E","#8E6276","#A8582F"],hazel:["#2F4B3A","#B8913A","#5B2B4A","#8C5A2B"],grey:["#5B2B4A","#A8582F","#3A3536","#C48A7C"]}[eye];
+  return{lip:pickT(SHADES.lip).slice(0,6),blush:pickT(SHADES.blush).slice(0,4),shadow:eyeShadows.map(h=>SHADES.shadow.find(s=>s.hex===h)),hair:pickT(SHADES.hair).slice(0,6)}}
+function wearRecommended(){const r=recommended();look=Object.assign(emptyLook(),{hair:look.hair,nails:look.nails});look.lip={c:r.lip[0].hex,a:.6,finish:"satin"};look.blush={c:r.blush[0].hex,a:.45};look.shadow={c:r.shadow[0].hex,a:.55};look.liner={c:"#3E2A20",a:.6,wing:true};look.mascara={c:"#0E0C0C",a:.8};look.brow={c:SHADES.brow[3].hex,a:.45};look.hl={c:SHADES.hl[1].hex,a:.4};buildCats();buildPanel();goView("studio");render()}
+function kitMatches(){const r=recommended();const out=[];for(const p of products){if(!p.hex||!p.feature||!r[p.feature==="hl"?"x":p.feature])continue;const list=r[p.feature]||[];let bd=1e9;for(const s of list){const d=labDist(rgb2lab(...hexToRgb(s.hex)),rgb2lab(...hexToRgb(p.hex)));if(d<bd)bd=d}if(bd<22)out.push({p,d:bd})}return out.sort((a,b)=>a.d-b.d).slice(0,6)}
+
+function pickRow(key,opts,label){return el("div",{class:"pick"},opts.map(o=>el("button",{type:"button","aria-pressed":String(get(key)===o),onclick:()=>{overrides[key]=o;saveOver();renderAdvice()}},label(o))))}
+function renderAdvice(){const box=$("adviceBody");
+  if(!photos.front){box.replaceChildren(el("div",{class:"empty-note"},el("p",{style:"margin:0"},t("noPhotoAdvice")),el("button",{class:"btn rose",type:"button",onclick:()=>{goView("studio");$("inSelfie").click()}},t("takeSelfie"))),aiCard());return}
+  if(!analysis&&photos.front.lm)analysis=analyse();
+  if(!photos.front.lm){box.replaceChildren(el("div",{class:"empty-note"},el("p",{style:"margin:0"},t("noFace"))),aiCard());return}
+  const shape=get("shape"),tone=get("tone"),depth=get("depth"),eye=get("eye");const fi=FACE_INFO[shape];
+  const skinHex=analysis.skinLab?(()=>{const P=photos.front;return suggestFoundation()})():null;
+  const facts=el("div",{class:"card"},el("div",{class:"eyebrow",text:t("analysis")}),
+    el("div",{class:"facts"},
+      el("div",{class:"fact"},el("span",{class:"small",text:t("faceShape")}),el("b",{text:t("f_"+shape)})),
+      el("div",{class:"fact"},el("span",{class:"small",text:t("skinDepth")}),el("b",{},el("span",{class:"swatch",style:"background:"+skinHex}),t("d_"+depth))),
+      el("div",{class:"fact"},el("span",{class:"small",text:t("undertone")}),el("b",{text:t(tone)})),
+      el("div",{class:"fact"},el("span",{class:"small",text:t("eyeColour")}),el("b",{text:t("e_"+eye)})),
+      analysis.hairName?el("div",{class:"fact",style:"grid-column:1/-1"},el("span",{class:"small",text:t("naturalHair")}),el("b",{},el("span",{class:"swatch",style:"background:"+analysis.hairName.hex}),L(analysis.hairName.n))):null),
+    el("p",{class:"small",style:"margin:0"},fi?L(fi.d):""),
+    el("hr",{class:"soft"}),el("span",{class:"small",text:t("estimated")}),
+    pickRow("shape",ALLF,o=>t("f_"+o)),pickRow("tone",["warm","neutral","cool"],o=>t(o)),
+    el("p",{class:"small",style:"margin:0"},t("undertoneTip")),
+    pickRow("eye",["brown","dark","hazel","green","blue","grey"],o=>t("e_"+o)));
+  const cuts=HAIR.filter(h=>["cut","length","fringe"].includes(h.g)&&h.suits.includes(shape)&&h.suits.length<6).slice(0,7);
+  const hairCard=el("div",{class:"card"},el("h3",{text:t("bestCuts")}),el("ul",{class:"clean"},cuts.map(h=>el("li",{},el("b",{text:L(h.n)}),el("span",{class:"small",text:L(h.d)})))),
+    el("div",{class:"eyebrow",text:t("avoid")}),el("p",{class:"small",style:"margin:0"},L(fi.avoid)),
+    el("div",{class:"eyebrow",text:t("browAdvice")}),el("p",{class:"small",style:"margin:0"},L(fi.brow)));
+  const r=recommended();const pal=(lbl,list)=>el("div",{style:"display:grid;gap:6px"},el("span",{class:"small",text:lbl}),el("div",{class:"palette"},list.filter(Boolean).map(s=>el("i",{title:L(s.n),style:"background:"+s.hex}))));
+  const colCard=el("div",{class:"card"},el("h3",{text:t("yourColours")}),pal(t("lipsL"),r.lip),pal(t("blushL"),r.blush),pal(t("eyesL"),r.shadow),pal(t("hairL"),r.hair),
+    el("div",{class:"row"},el("button",{class:"btn rose",type:"button",onclick:wearRecommended},t("wearRec"))));
+  const km=kitMatches();const kitCard=el("div",{class:"card"},el("h3",{text:t("fromKit")}),km.length?el("ul",{class:"clean"},km.map(({p})=>el("li",{},el("span",{class:"shade"},el("i",{style:"background:"+p.hex}),el("b",{style:"color:var(--fg)",text:(p.brand?p.brand+" · ":"")+(p.name||"")})),el("span",{class:"small",text:pcatName(p.cat)})))):el("p",{class:"small",style:"margin:0"},t("noKitMatch")));
+  box.replaceChildren(el("div",{class:"cards fade"},facts,hairCard,colCard,kitCard),aiCard())}
+function pcatName(i){return PCATS[i]?L(PCATS[i][1]):""}
+
+/* ============ AI make-up artist (Claude, on tap) ============ */
+let sampleFn=null,sampleChecked=false,aiState={busy:false,out:null,json:null,err:null};
+const AI_CFG={endpoint:"",code:""};/* filled in when the AI service is switched on */
+const blobB64=b=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(String(f.result).split(",")[1]);f.readAsDataURL(b)});
+async function getSample(){if(sampleChecked)return sampleFn;sampleChecked=true;if(!AI_CFG.endpoint)return sampleFn=null;
+  const call=async(input,opts={})=>{const imgs=[];for(const b of [].concat(opts.images||[]))imgs.push({type:b.type||"image/jpeg",data:await blobB64(b)});
+    let r;try{r=await fetch(AI_CFG.endpoint,{method:"POST",headers:{"content-type":"application/json","x-access-code":AI_CFG.code},body:JSON.stringify({prompt:typeof input==="string"?input:input.map(m=>m.content).join("\n\n"),images:imgs})})}catch(e){throw{code:"network"}}
+    if(r.status===429)throw{code:"rate_limited"};if(!r.ok)throw{code:"error"};const j=await r.json();if(opts.onText)opts.onText({text:j.text,delta:j.text});return{text:j.text,truncated:false}};
+  call.json=async(input,opts)=>{const {text}=await call(input+"\n\nReturn only the JSON object, no other text.",opts);const m=text.match(/\{[\s\S]*\}/);return JSON.parse(m?m[0]:text)};
+  call.limits=async()=>({images:{maxCount:4}});return sampleFn=call}
+function aiCard(){const card=el("div",{class:"card ai",style:"margin-top:12px"},el("h3",{text:t("aiTitle")}),el("p",{class:"small",style:"margin:0"},t("aiLede")));
+  const btn=el("button",{class:"btn rose",type:"button",onclick:aiConsult},t("aiFull"));const q=el("textarea",{id:"aiQ",placeholder:t("aiPlaceholder")});const ask=el("button",{class:"btn ghost sm",type:"button",onclick:()=>aiAsk(q.value)},t("aiAsk"));
+  card.append(el("div",{class:"row"},btn),q,el("div",{class:"row"},ask));
+  const out=el("div",{id:"aiOut",class:"ai-out"});card.append(out);paintAI(out);
+  if(!photos.front){btn.disabled=true}
+  getSample().then(s=>{if(!s){btn.disabled=true;ask.disabled=true;q.disabled=true;out.textContent=t("aiUnavailable")}});return card}
+function aiErr(e){return e&&e.code==="not_granted"?t("aiDeclined"):e&&e.code==="rate_limited"?t("aiBusy"):t("aiError")}
+async function photoBlobs(){const out=[];for(const k of ["front","left","right"]){const P=photos[k];if(!P)continue;const sc=Math.min(1,900/Math.max(P.canvas.width,P.canvas.height));const c=document.createElement("canvas");c.width=Math.round(P.canvas.width*sc);c.height=Math.round(P.canvas.height*sc);c.getContext("2d").drawImage(P.canvas,0,0,c.width,c.height);out.push(await canvasToBlob(c,.85))}return out}
+function context(){const a=analysis||{};return `Local estimate from the photo: face shape ${get("shape")||"unknown"}, skin depth ${get("depth")||"unknown"}, undertone ${get("tone")||"unknown"}, eye colour ${get("eye")||"unknown"}${a.hairName?", natural hair close to "+a.hairName.n.en:""}.\nHer own products: ${products.length?products.map(p=>`${p.brand||""} ${p.name||""} (${PCATS[p.cat]?PCATS[p.cat][1].en:""}${p.hex?", shade "+p.hex:""}${p.rec?", she recommends it":""})`).join("; "):"none added yet"}.`}
+const langName=()=>LANG==="lt"?"Lithuanian":"English";
+async function aiConsult(){const s=await getSample();const out=$("aiOut");if(!s||aiState.busy)return;aiState={busy:true,out:t("thinking"),json:null,err:null};paintAI(out);
+  try{const imgs=await photoBlobs();const prompt=`You are a senior professional make-up artist and hair stylist giving a private consultation to Bonnie. She is 63, looks wonderful for her age and has her own style; favour techniques that flatter mature skin (satin and cream textures, lifted placement, soft definition) without ever calling anything anti-ageing. Look carefully at the attached photo(s) of her (front first, then sides if present). Be warm, specific and honest, like a top salon stylist. Write every text value in ${langName()}.\n${context()}\nCheck the local estimate against what you see and correct it where needed.\nReturn ONLY JSON with this shape:\n{"summary":"2-3 sentences on her best features and overall direction","faceShape":"oval|round|square|heart|long|diamond","undertone":"warm|cool|neutral","haircuts":[{"name":"","why":""}],"avoid":[""],"hairColours":[{"name":"","hex":"#RRGGBB","why":""}],"day":{"lip":"#RRGGBB","blush":"#RRGGBB","shadow":"#RRGGBB","liner":"#RRGGBB","brow":"#RRGGBB","how":"short how-to"},"evening":{"lip":"#RRGGBB","blush":"#RRGGBB","shadow":"#RRGGBB","liner":"#RRGGBB","brow":"#RRGGBB","how":"short how-to"},"fromKit":[{"product":"","use":""}],"tips":[""]}\nGive 4 haircuts, 2-3 things to avoid, 4 hair colours, and 3-5 tips. fromKit only lists products from her list above; empty if none fit.`;
+    const lim=s.limits?await s.limits():null;const useImgs=lim&&lim.images?imgs.slice(0,lim.images.maxCount||3):[];
+    const j=await s.json(prompt,{images:useImgs.length?useImgs:undefined,modelTier:"default"});aiState={busy:false,json:j}}catch(e){aiState={busy:false,err:aiErr(e)}}paintAI($("aiOut"))}
+async function aiAsk(q){q=(q||"").trim();const s=await getSample();if(!s||!q||aiState.busy)return;aiState={busy:true,out:t("thinking")};paintAI($("aiOut"));
+  try{const imgs=photos.front?await photoBlobs():[];const lim=s.limits?await s.limits():null;const useImgs=lim&&lim.images?imgs.slice(0,1):[];
+    const prompt=`You are Bonnie's personal senior make-up artist and hair stylist. Bonnie is 63, looks wonderful for her age and has her own style. Answer her question warmly and precisely, in ${langName()}, in under 180 words, with concrete shades and steps. ${useImgs.length?"Her photo is attached.":""}\n${context()}\nHer question: ${q}`;
+    await s(prompt,{images:useImgs.length?useImgs:undefined,cache:false,onText:({text})=>{aiState={busy:true,out:text};paintAI($("aiOut"))}});aiState.busy=false}catch(e){aiState={busy:false,out:e&&e.text||"",err:aiErr(e)}}paintAI($("aiOut"))}
+function lookFrom(o){const n=emptyLook();n.hair=look.hair;n.nails=look.nails;const ok=h=>typeof h==="string"&&/^#[0-9a-f]{6}$/i.test(h);if(ok(o.lip))n.lip={c:o.lip,a:.65,finish:"satin"};if(ok(o.blush))n.blush={c:o.blush,a:.45};if(ok(o.shadow))n.shadow={c:o.shadow,a:.6};if(ok(o.liner))n.liner={c:o.liner,a:.7,wing:true};if(ok(o.brow))n.brow={c:o.brow,a:.45};n.mascara={c:"#0E0C0C",a:.85};return n}
+function paintAI(out){if(!out)return;out.replaceChildren();const s=aiState;if(s.err){out.append(el("p",{style:"margin:0",text:(s.out?s.out+"\n\n":"")+s.err}));return}
+  if(s.json){const j=s.json;const sec=(title,...k)=>el("div",{style:"display:grid;gap:6px;margin-top:12px"},el("div",{class:"eyebrow",text:title}),...k);
+    out.append(el("p",{style:"margin:0;white-space:normal",text:j.summary||""}));
+    if(Array.isArray(j.haircuts))out.append(sec(t("haircuts"),el("ul",{class:"clean"},j.haircuts.map(h=>el("li",{},el("b",{text:h.name||""}),el("span",{class:"small",text:h.why||""}))))));
+    if(Array.isArray(j.avoid)&&j.avoid.length)out.append(sec(t("avoid"),el("ul",{class:"clean"},j.avoid.map(a=>el("li",{class:"small",text:a})))));
+    if(Array.isArray(j.hairColours))out.append(sec(t("hairColours"),el("ul",{class:"clean"},j.hairColours.map(h=>el("li",{},el("span",{class:"shade"},el("i",{style:"background:"+(h.hex||"#999")}),el("b",{style:"color:var(--fg)",text:h.name||""})),el("span",{class:"small",text:h.why||""}),/^#[0-9a-f]{6}$/i.test(h.hex||"")?el("div",{},el("button",{class:"btn ghost sm",type:"button",onclick:()=>{look.hair={c:h.hex,a:DEFAULT_A.hair};buildCats();buildPanel();goView("studio");render()}},t("tryColour"))):null)))));
+    for(const [k,lbl,btn] of [["day",t("day"),t("wearDay")],["evening",t("evening"),t("wearEvening")]]){const o=j[k];if(!o)continue;out.append(sec(lbl,el("div",{class:"palette"},["lip","blush","shadow","liner","brow"].map(x=>o[x]?el("i",{style:"background:"+o[x]}):null)),el("p",{class:"small",style:"margin:0",text:o.how||""}),el("div",{},el("button",{class:"btn sm",type:"button",onclick:()=>{look=lookFrom(o);buildCats();buildPanel();goView("studio");render()}},btn))))}
+    if(Array.isArray(j.fromKit)&&j.fromKit.length)out.append(sec(t("useFromKit"),el("ul",{class:"clean"},j.fromKit.map(f=>el("li",{},el("b",{text:f.product||""}),el("span",{class:"small",text:f.use||""}))))));
+    if(Array.isArray(j.tips))out.append(sec(t("tips"),el("ul",{class:"clean"},j.tips.map(x=>el("li",{class:"small",text:x})))));return}
+  if(s.out)out.append(el("p",{style:"margin:0",text:s.out}))}
+
+/* ============ Hair library UI ============ */
+let hairFilter="all";
+function renderHair(){const shape=get("shape"),tone=get("tone");const fit=h=>h.hex?(tone?(h.tone===tone||h.tone==="neutral"):true):(shape?h.suits.includes(shape):true);
+  $("hfAll").setAttribute("aria-pressed",hairFilter==="all");$("hfFit").setAttribute("aria-pressed",hairFilter==="fit");
+  $("hfNote").textContent=hairFilter==="fit"&&!shape?t("noPhotoAdvice"):shape?t("f_"+shape)+" · "+(tone?t(tone):""):"";
+  const groups=["length","cut","fringe","texture","updo","colour","tech"];
+  $("lib").replaceChildren(...groups.map(g=>{let items=HAIR.filter(h=>h.g===g);if(hairFilter==="fit"&&(shape||tone))items=items.filter(fit);if(!items.length)return null;
+    return el("div",{class:"lib-group"},el("h3",{text:t("g_"+g)}),el("div",{class:"lib-grid"},items.map(h=>el("article",{class:"style"},
+      h.hex?el("i",{class:"hairsw",style:`background:linear-gradient(90deg,${h.hex},${shadeHex(h.hex,-.25)})`}):null,
+      el("header",{},el("h4",{text:L(h.n)}),el("span",{class:"row",style:"gap:4px"},h.trend?el("span",{class:"tag",text:t("trend")}):null,(shape||tone)&&fit(h)&&(h.hex||h.suits.length<6)?el("span",{class:"tag fit",text:t("fits")}):null)),
+      el("p",{text:L(h.d)}),
+      h.hex?el("div",{},el("button",{class:"btn ghost sm",type:"button",onclick:()=>{look.hair={c:h.hex,a:DEFAULT_A.hair};curCat="hair";buildCats();buildPanel();goView("studio");render();if(!photos.front)toast(t("needPhoto"))}},t("tryColour"))):
+      (["cut","length","fringe"].includes(g)?el("p",{class:"small",style:"font-style:italic",text:t("aiSoon")}):null)))))}))}
+function shadeHex(h,f){const [r,g,b]=hexToRgb(h);return rgbToHex(r*(1+f),g*(1+f),b*(1+f))}
+
+/* ============ Kit UI ============ */
+let kitSub="prod",editing=null,pendingDel=null;
+function renderKit(){$("stProd").setAttribute("aria-pressed",kitSub==="prod");$("stLooks").setAttribute("aria-pressed",kitSub==="looks");$("kitProd").hidden=kitSub!=="prod";$("kitLooks").hidden=kitSub!=="looks";
+  if(kitSub==="prod")renderProducts();else renderLooks()}
+function renderProducts(){const box=$("kitProd");if(editing){box.replaceChildren(productForm());return}
+  const add=el("button",{class:"btn rose",type:"button",onclick:()=>{editing={id:uid(),cat:10,finish:"satin"};renderKit()}},"+ "+t("addProduct"));
+  if(!products.length){box.replaceChildren(el("div",{class:"empty-note"},el("p",{style:"margin:0;max-width:44ch"},t("prodEmpty")),add));return}
+  box.replaceChildren(el("div",{class:"row",style:"margin-bottom:12px"},add),el("div",{class:"grid-prod"},products.slice().sort((a,b)=>(b.fav|0)-(a.fav|0)||b.ts-a.ts).map(p=>el("article",{class:"prod"},
+    el("div",{class:"ph"},p.photo?el("img",{src:p.photo,alt:""}):el("i",{style:`width:60%;aspect-ratio:1;border-radius:50%;background:${p.hex||"var(--line)"};display:block`})),
+    el("div",{class:"meta"},el("b",{text:p.name||"…"}),el("span",{class:"small",text:[p.brand,pcatName(p.cat)].filter(Boolean).join(" · ")}),p.hex?el("span",{class:"shade"},el("i",{style:"background:"+p.hex}),p.hex):null,
+      el("span",{class:"row",style:"gap:4px"},p.fav?el("span",{class:"tag",text:t("favourite")}):null,p.rec?el("span",{class:"tag fit",text:t("recommended")}):null),p.notes?el("span",{class:"small",text:p.notes}):null),
+    el("div",{class:"acts"},p.feature&&p.hex?el("button",{class:"btn sm",type:"button",onclick:()=>{const f=p.feature;look[f].c=p.hex;if(!look[f].a)look[f].a=DEFAULT_A[f];curCat=f;buildCats();buildPanel();goView("studio");render();if(!photos.front)toast(t("needPhoto"))}},t("tryOn")):null,
+      el("button",{class:"btn ghost sm",type:"button",onclick:()=>{editing=Object.assign({},p);renderKit()}},"✎"),
+      el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(pendingDel!==p.id){pendingDel=p.id;e.currentTarget.textContent=t("sure");return}products=products.filter(x=>x.id!==p.id);await DB.del("products",p.id);pendingDel=null;renderKit()}},t("del")))))))}
+function productForm(){const p=editing;const pc=el("canvas",{});const pick=el("div",{class:"picker"},pc);let img=null;
+  const drawPick=()=>{if(!img){pc.width=600;pc.height=300;const x=pc.getContext("2d");x.fillStyle=getComputedStyle(document.body).getPropertyValue("--sunk");x.fillRect(0,0,600,300);return}pc.width=img.width;pc.height=img.height;const x=pc.getContext("2d");x.drawImage(img,0,0);if(p.px){x.strokeStyle="#fff";x.lineWidth=Math.max(2,img.width/150);x.beginPath();x.arc(p.px[0],p.px[1],img.width/30,0,Math.PI*2);x.stroke();x.strokeStyle="#000";x.lineWidth/=2;x.stroke()}};
+  if(p.photo){const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext("2d").drawImage(im,0,0);img=c;drawPick()};im.src=p.photo}
+  drawPick();
+  const sw=el("span",{class:"shade"},el("i",{style:"background:"+(p.hex||"transparent")}),p.hex||"");
+  const setHex=h=>{p.hex=h;sw.replaceChildren(el("i",{style:"background:"+h}),h)};
+  pc.addEventListener("pointerdown",e=>{if(!img)return;const r=pc.getBoundingClientRect();const x=(e.clientX-r.left)/r.width*img.width,y=(e.clientY-r.top)/r.height*img.height;const R=Math.max(2,Math.round(img.width/80));const d=img.getContext("2d",{willReadFrequently:true}).getImageData(Math.max(0,Math.round(x-R)),Math.max(0,Math.round(y-R)),2*R,2*R).data;let rr=0,g=0,b=0,n=0;for(let i=0;i<d.length;i+=4){rr+=d[i];g+=d[i+1];b+=d[i+2];n++}p.px=[x,y];setHex(rgbToHex(rr/n,g/n,b/n));drawPick()});
+  const takeBtn=el("button",{class:"btn sm",type:"button",onclick:()=>{prodPhotoCb=async c=>{img=c;p.photo=c.toDataURL("image/jpeg",.82);drawPick()};$("inProd").click()}},t("takeProdPhoto"));
+  const f=(id,lab,input)=>el("div",{class:"field"},el("label",{for:id,text:lab}),input);
+  const name=el("input",{id:"pName",value:p.name||"",autocomplete:"off"}),brand=el("input",{id:"pBrand",value:p.brand||"",autocomplete:"off"});
+  const cat=el("select",{id:"pCat"},PCATS.map((c,i)=>el("option",{value:String(i),selected:i===p.cat},L(c[1]))));
+  const fin=el("select",{id:"pFin"},["matte","satin","gloss"].map(x=>el("option",{value:x,selected:p.finish===x},t(x))));
+  const notes=el("input",{id:"pNotes",value:p.notes||"",autocomplete:"off"});
+  const colour=el("input",{type:"color",id:"pColor",value:p.hex||"#B97A78",oninput:e=>setHex(e.target.value.toUpperCase()),style:"width:44px;height:34px;padding:0;border:0;background:none"});
+  const fav=el("input",{type:"checkbox",id:"pFav",checked:!!p.fav}),rec=el("input",{type:"checkbox",id:"pRec",checked:!!p.rec});
+  return el("form",{class:"addp panel",onsubmit:async e=>{e.preventDefault();Object.assign(p,{name:name.value.trim(),brand:brand.value.trim(),cat:+cat.value,finish:fin.value,notes:notes.value.trim(),fav:fav.checked,rec:rec.checked,feature:PCATS[+cat.value][0],ts:p.ts||Date.now()});
+      const i=products.findIndex(x=>x.id===p.id);if(i>=0)products[i]=p;else products.push(p);await DB.put("products",p.id,p);editing=null;renderKit();buildPanel()}},
+    el("h3",{text:t("addProduct")}),
+    el("div",{class:"field"},el("label",{text:t("pPhoto")}),pick,el("div",{class:"row"},takeBtn,el("span",{class:"small",text:t("pickHint")}))),
+    el("div",{class:"row"},el("span",{class:"small",text:t("shade")}),sw,colour),
+    el("div",{class:"two"},f("pName",t("pName"),name),f("pBrand",t("pBrand"),brand),f("pCat",t("pCat"),cat),f("pFin",t("pFinish"),fin)),
+    f("pNotes",t("pNotes"),notes),
+    el("div",{class:"row"},el("label",{class:"row",style:"gap:6px"},fav,t("pFav")),el("label",{class:"row",style:"gap:6px"},rec,t("pRec"))),
+    el("div",{class:"row"},el("button",{class:"btn rose",type:"submit"},t("save")),el("button",{class:"btn ghost",type:"button",onclick:()=>{editing=null;renderKit()}},t("cancel"))))}
+let prodPhotoCb=null;
+function renderLooks(){const box=$("kitLooks");if(!looks.length){box.replaceChildren(el("div",{class:"empty-note"},el("p",{style:"margin:0"},t("looksEmpty"))));return}
+  box.replaceChildren(el("div",{class:"looks"},looks.slice().sort((a,b)=>b.ts-a.ts).map(l=>el("article",{class:"look"},el("img",{src:l.thumb,alt:""}),el("div",{class:"meta"},el("b",{style:"font-weight:500",text:l.name}),el("span",{class:"small",text:new Date(l.ts).toLocaleDateString(LANG==="lt"?"lt-LT":"en-GB",{day:"numeric",month:"short",year:"numeric"})}),
+    el("div",{class:"row",style:"gap:6px"},el("button",{class:"btn sm",type:"button",onclick:()=>{look=JSON.parse(JSON.stringify(l.look));buildCats();buildPanel();goView("studio");render()}},t("wear")),
+      el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(pendingDel!==l.id){pendingDel=l.id;e.currentTarget.textContent=t("sure");return}looks=looks.filter(x=>x.id!==l.id);await DB.del("looks",l.id);pendingDel=null;renderKit()}},t("del"))))))))}
+
+/* ============ Backup ============ */
+async function backup(){const dl={save:async({filename,data})=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=filename;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}};
+  const data=JSON.stringify({app:"bonnies-stylist",v:2,products,looks,overrides,garments,outfits});try{await dl.save({filename:"bonnies-stylist-backup.json",data});toast(t("backupDone"))}catch(e){}}
+async function restore(file){try{const j=JSON.parse(await file.text());if(j.app!=="bonnies-stylist")throw 0;for(const p of j.products||[]){await DB.put("products",p.id,p)}for(const l of j.looks||[]){await DB.put("looks",l.id,l)}for(const g of j.garments||[]){await DB.put("garments",g.id,g)}for(const o of j.outfits||[]){await DB.put("outfits",o.id,o)}garments=await DB.all("garments");outfits=await DB.all("outfits");overrides=j.overrides||overrides;saveOver();products=await DB.all("products");looks=await DB.all("looks");renderKit();toast(t("restoreDone"))}catch(e){toast(t("restoreFail"))}}
+
+/* ============ Wardrobe ============ */
+Object.assign(T.en,{tWard:"Wardrobe",wardEyebrow:"Your wardrobe",wardTitle:"What shall I wear?",wardLede:"Photograph your clothes once. Then choose the occasion, and your stylist puts outfits together from what you already own.",
+w_outfits:"Outfits",w_clothes:"Clothes",w_saved:"Saved",w_trends:"Trends",
+bodyPhoto:"Full-length photo",bodyHint:"Stand straight in good light, head to shoes. It is used on your outfit boards and by the AI stylist.",takeBody:"Take full-length photo",replaceBody:"Replace",
+occasion:"Occasion",weather:"Weather",wWarm:"Warm",wMild:"Mild",wCool:"Cool",where:"Where it hangs",allWardrobes:"All wardrobes",
+occ_errands:"Errands and shopping",occ_lunch:"Lunch with friends",occ_dinner:"Dinner out",occ_business:"Business or bank meeting",occ_official:"Official event",occ_wedding:"Wedding guest",occ_travel:"Travel day",occ_beach:"Beach and pool",occ_home:"Relaxed at home",
+makeOutfits:"Suggest outfits",showOthers:"Show others",saveOutfit:"Save outfit",outfitSaved:"Outfit saved",keepHint:"Tap a piece to keep it in every suggestion.",kept:"Kept",
+noOutfit:"Add at least a top and a bottom, or a dress, that suit this occasion and weather to get outfits.",
+addGarment:"Add clothes",gEmpty:"Start with what hangs in the wardrobe: tops, trousers, dresses, jackets, shoes and bags. One photo each, laid flat or on a hanger.",
+gColour:"Colour",gPattern:"Patterned",gOcc:"Good for",gWeather:"Weather",gPhotoHint:"Tap the fabric to pick its colour.",
+aiWardTitle:"Ask your AI stylist",aiWardLede:"She sees your full-length photo and your whole wardrobe, knows this year's trends and dresses you in your own style.",
+wishPh:"How do you want to look? For example: relaxed but elegant, like lunch on the Riviera.",inspo:"Add an inspiration photo",inspoAdded:"Inspiration photo added",remove:"Remove",
+aiOutfits:"Style me",missing:"Worth adding to the wardrobe",styleProfile:"Your style",savedEmpty:"Outfits you save appear here.",
+trendsTitle:"2026 trends, edited for you",trendsNote:"Take what suits your style and leave the rest.",needClothes:"Add a few clothes first.",
+wh_pt:"Portugal",wh_mc:"Mallorca",wh_se:"Sweden",wh_other:"Other"});
+Object.assign(T.lt,{tWard:"Drabužinė",wardEyebrow:"Jūsų drabužinė",wardTitle:"Ką šiandien vilkėti?",wardLede:"Vieną kartą nufotografuokite drabužius. Tada pasirinkite progą, o stilistė sudės derinius iš to, ką jau turite.",
+w_outfits:"Deriniai",w_clothes:"Drabužiai",w_saved:"Išsaugoti",w_trends:"Tendencijos",
+bodyPhoto:"Nuotrauka visu ūgiu",bodyHint:"Stovėkite tiesiai, gerai apšviestai, nuo galvos iki batų. Ji naudojama derinių lentose ir AI stilistės.",takeBody:"Fotografuoti visu ūgiu",replaceBody:"Pakeisti",
+occasion:"Proga",weather:"Oras",wWarm:"Šilta",wMild:"Švelnu",wCool:"Vėsu",where:"Kur kabo",allWardrobes:"Visos drabužinės",
+occ_errands:"Reikalai ir apsipirkimas",occ_lunch:"Pietūs su draugėmis",occ_dinner:"Vakarienė",occ_business:"Verslo susitikimas ar bankas",occ_official:"Oficialus renginys",occ_wedding:"Vestuvių viešnia",occ_travel:"Kelionės diena",occ_beach:"Paplūdimys ir baseinas",occ_home:"Laisvai namuose",
+makeOutfits:"Pasiūlyti derinius",showOthers:"Rodyti kitus",saveOutfit:"Išsaugoti derinį",outfitSaved:"Derinys išsaugotas",keepHint:"Bakstelėkite drabužį, kad jis liktų visuose pasiūlymuose.",kept:"Paliktas",
+noOutfit:"Kad gautumėte derinių, pridėkite bent viršutinį ir apatinį drabužį arba suknelę, tinkančią šiai progai ir orui.",
+addGarment:"Pridėti drabužį",gEmpty:"Pradėkite nuo to, kas kabo drabužinėje: palaidinės, kelnės, suknelės, švarkeliai, batai ir rankinės. Po vieną nuotrauką, išdėliotą ant lovos ar ant pakabos.",
+gColour:"Spalva",gPattern:"Raštuotas",gOcc:"Tinka",gWeather:"Oras",gPhotoHint:"Bakstelėkite audinį, kad parinktumėte spalvą.",
+aiWardTitle:"Paklauskite AI stilistės",aiWardLede:"Ji mato jūsų nuotrauką visu ūgiu ir visą drabužinę, žino šių metų tendencijas ir rengia jus jūsų pačios stiliumi.",
+wishPh:"Kaip norite atrodyti? Pavyzdžiui: laisvai, bet elegantiškai, kaip pietums Rivjeroje.",inspo:"Pridėti įkvėpimo nuotrauką",inspoAdded:"Įkvėpimo nuotrauka pridėta",remove:"Pašalinti",
+aiOutfits:"Sukurkite man įvaizdį",missing:"Verta papildyti drabužinę",styleProfile:"Jūsų stilius",savedEmpty:"Išsaugoti deriniai atsiras čia.",
+trendsTitle:"2026 m. tendencijos, atrinktos jums",trendsNote:"Pasiimkite tai, kas tinka jūsų stiliui, o kita palikite.",needClothes:"Pirmiausia pridėkite kelis drabužius.",
+wh_pt:"Portugalija",wh_mc:"Maljorka",wh_se:"Švedija",wh_other:"Kita"});
+
+const OCCS=[["errands",1],["lunch",2],["dinner",3],["business",3.5],["official",4],["wedding",4],["travel",1.5],["beach",.5],["home",1]];
+const WHERES=["pt","mc","se","other"];
+// key, group, formality, en, lt, weather
+const GCATS=[
+["tshirt","top",1,"T-shirt","Marškinėliai"],["top","top",2,"Top","Palaidinė"],["shirt","top",2.5,"Shirt","Marškiniai"],["blouse","top",3,"Blouse","Bliuzė"],["knit","top",2,"Knit or jumper","Megztinis"],
+["cardigan","layer",2,"Cardigan","Kardiganas"],["jacket","layer",2,"Jacket","Striukė"],["blazer","layer",3.5,"Blazer","Švarkelis"],["coat","layer",3,"Coat","Paltas"],
+["trousers","bottom",3,"Trousers","Kelnės"],["jeans","bottom",1.5,"Jeans","Džinsai"],["shorts","bottom",1,"Shorts","Šortai"],["skirt","bottom",2.5,"Skirt","Sijonas"],
+["dress","one",3,"Dress","Suknelė"],["jumpsuit","one",3,"Jumpsuit","Kombinezonas"],["swim","swim",.5,"Swimwear","Maudymosi kostiumėlis"],
+["sneakers","shoes",1,"Trainers","Sportbačiai"],["sandals","shoes",1.5,"Sandals","Basutės"],["flats","shoes",2.5,"Flats or loafers","Bateliai be pakulnės"],["heels","shoes",4,"Heels","Aukštakulniai"],["boots","shoes",2.5,"Boots","Aulinukai"],
+["bag","bag",3,"Handbag","Rankinė"],["scarf","acc",2.5,"Scarf","Šalikas"],["belt","acc",2.5,"Belt","Diržas"],["jewellery","acc",3,"Jewellery","Papuošalai"],["hat","acc",1.5,"Hat","Skrybėlė"],["sunglasses","acc",2,"Sunglasses","Akiniai nuo saulės"]];
+const GC=Object.fromEntries(GCATS.map(c=>[c[0],{g:c[1],f:c[2],n:{en:c[3],lt:c[4]}}]));
+const CLOTH_COLOURS=[["#111111","Black","Juoda"],["#F5F5F2","White","Balta"],["#EFE6D2","Ivory","Dramblio kaulo"],["#D8C3A0","Beige","Smėlio"],["#B08657","Camel","Kupranugario"],["#6B4A33","Brown","Ruda"],["#8E8E8E","Grey","Pilka"],["#1F2A44","Navy","Tamsiai mėlyna"],["#3E6FB0","Blue","Mėlyna"],["#9CC3E6","Light blue","Šviesiai mėlyna"],["#2F6B4F","Green","Žalia"],["#7A7A4A","Khaki","Chaki"],["#E8C547","Yellow","Geltona"],["#E07B39","Orange","Oranžinė"],["#C0282D","Red","Raudona"],["#6B1F2E","Burgundy","Bordo"],["#E7A3B6","Pink","Rožinė"],["#6E3D8E","Purple","Violetinė"],["#C8B3DD","Lilac","Alyvinė"],["#C9A84C","Gold","Auksinė"],["#C0C0C6","Silver","Sidabrinė"],["#0F7D74","Teal","Žalsvai mėlyna"]];
+function clothColourName(hex){const lab=rgb2lab(...hexToRgb(hex));let b=CLOTH_COLOURS[0],bd=1e9;for(const c of CLOTH_COLOURS){const d=labDist(lab,rgb2lab(...hexToRgb(c[0])));if(d<bd){bd=d;b=c}}return{en:b[1],lt:b[2]}}
+const TRENDS=[
+{en:"Unexpected colour pairings, like lilac with red or blue with emerald. One bold pair, everything else calm.",lt:"Netikėti spalvų deriniai, pvz., alyvinė su raudona ar mėlyna su smaragdine. Viena drąsi pora, visa kita rami."},
+{en:"Statement jewellery worn every day: a bold necklace, cuff or earrings with simple clothes.",lt:"Ryškūs papuošalai kasdien: didelis vėrinys, apyrankė ar auskarai prie paprastų drabužių."},
+{en:"Midi and maxi skirts with movement: pleats, ruffles, stripes or satin.",lt:"Midi ir maxi sijonai su judesiu: klostės, raukiniai, juostelės ar satinas."},
+{en:"Khaki as the new neutral, in trousers, shirts, bags and shoes.",lt:"Chaki kaip nauja neutrali spalva: kelnės, marškiniai, rankinės ir batai."},
+{en:"Tailoring meets comfort: a sharp blazer or trousers with clean trainers or loafers.",lt:"Klasika ir patogumas: aiškus švarkelis ar kelnės su švariais sportbačiais ar loaferiais."},
+{en:"An oversized crisp shirt over slim trousers or a fitted skirt.",lt:"Erdvūs standūs marškiniai prie siaurų kelnių ar prigludusio sijono."},
+{en:"Linen sets in natural tones, perfect for summer in the Algarve and Mallorca.",lt:"Lininiai komplektai natūraliais tonais, puikiai tinka vasarai Algarvėje ir Maljorkoje."},
+{en:"Bermuda shorts and slim cropped trousers as smart summer choices.",lt:"Bermudai ir siauros sutrumpintos kelnės kaip elegantiškas vasaros pasirinkimas."},
+{en:"Jewel tones: sapphire, amethyst, emerald and copper.",lt:"Brangakmenių tonai: safyras, ametistas, smaragdas ir varis."},
+{en:"A patterned or colourful handbag as the one playful accent.",lt:"Raštuota ar spalvinga rankinė kaip vienintelis žaismingas akcentas."}];
+
+let garments=[],outfits=[],wardSub="outfits",gEditing=null,occ="lunch",wx="mild",whereF="all",kept=new Set(),suggestions=[],seed=1,inspoBlob=null,wAI={busy:false};
+try{const s=JSON.parse(localStorage.getItem("bs-ward")||"{}");if(s.occ)occ=s.occ;if(s.wx)wx=s.wx;if(s.where)whereF=s.where}catch(e){}
+const saveWardPrefs=()=>{try{localStorage.setItem("bs-ward",JSON.stringify({occ,wx,where:whereF}))}catch(e){}};
+const occTarget=k=>(OCCS.find(o=>o[0]===k)||[0,2])[1];
+const isNeutral=hex=>{const l=rgb2lab(...hexToRgb(hex));const ch=Math.hypot(l[1],l[2]);return ch<16||l[0]<24||(ch<34&&l[2]>8&&l[0]>45&&l[0]<85&&l[1]<14)};
+const hueOf=hex=>{const l=rgb2lab(...hexToRgb(hex));return(Math.atan2(l[2],l[1])*180/Math.PI+360)%360};
+function harmony(items){const cols=items.filter(g=>g&&g.hex&&!["acc"].includes(GC[g.cat].g)).map(g=>g.hex);const bold=cols.filter(h=>!isNeutral(h));let s=0;
+  if(bold.length>2)s-=1.5*(bold.length-2);
+  for(let i=0;i<bold.length;i++)for(let j=i+1;j<bold.length;j++){const d=Math.abs(hueOf(bold[i])-hueOf(bold[j]));const dd=Math.min(d,360-d);s+=dd<30?.6:(dd>150?.5:(dd<60?0:-.9))}
+  const pats=items.filter(g=>g&&g.pattern&&GC[g.cat].g!=="acc").length;if(pats>1)s-=1.2*(pats-1);return s}
+function fits(g,o){const c=GC[g.cat];if(!c)return false;if(g.weather&&g.weather.length&&!g.weather.includes(wx))return false;if(whereF!=="all"&&g.where&&g.where!==whereF)return false;
+  if(g.occ&&g.occ.length)return g.occ.includes(o);if(c.g==="swim")return o==="beach";return Math.abs(c.f-occTarget(o))<=(c.g==="bag"||c.g==="acc"?2.6:1.25)}
+const fscore=(g,o)=>{const c=GC[g.cat];let s=-Math.abs(c.f-occTarget(o))*.6;if(g.occ&&g.occ.includes(o))s+=1;if(g.fav)s+=.4;return s};
+let rnd=1;const rand=()=>{rnd=(rnd*16807)%2147483647;return rnd/2147483647};
+function generate(){rnd=seed*7919+13;const pool=garments.filter(g=>fits(g,occ)||kept.has(g.id));const by=gp=>pool.filter(g=>GC[g.cat].g===gp);
+  const keptIn=gp=>pool.filter(g=>kept.has(g.id)&&GC[g.cat].g===gp);
+  const tops=keptIn("top").length?keptIn("top"):by("top"),bottoms=keptIn("bottom").length?keptIn("bottom"):by("bottom"),ones=keptIn("one").length?keptIn("one"):by("one");
+  let bases=[];if(!(keptIn("top").length||keptIn("bottom").length))ones.forEach(d=>bases.push([d]));if(!keptIn("one").length)for(const a of tops)for(const b of bottoms)bases.push([a,b]);
+  if(occ==="beach"){const sw=keptIn("swim").length?keptIn("swim"):by("swim");if(sw.length&&!bases.length)bases=sw.map(s=>[s])}
+  const pick=(gp,cur,need)=>{const k=keptIn(gp);if(k.length)return k[0];const cands=by(gp);if(!cands.length)return null;let best=null,bs=-1e9;for(const c of cands){const s=fscore(c,occ)+harmony(cur.concat([c]))+rand()*1.4;if(s>bs){bs=s;best=c}}return(need||bs>-.6)?best:null};
+  const out=[];for(const b of bases){let items=b.slice();let s=items.reduce((a,g)=>a+fscore(g,occ),0)+harmony(items);
+    const wantLayer=wx==="cool"||occTarget(occ)>=3.5||(wx==="mild"&&rand()<.5);if(wantLayer){const l=pick("layer",items,wx==="cool");if(l){items.push(l);s+=.3}}
+    const sh=pick("shoes",items,true);if(sh)items.push(sh);const bg=occ!=="home"?pick("bag",items,true):null;if(bg)items.push(bg);
+    const ac=pick("acc",items,false);if(ac)items.push(ac);
+    s+=harmony(items)*.5+rand()*1.8;if(!sh)s-=1;out.push({items,s})}
+  out.sort((a,b)=>b.s-a.s);const seen=new Set(),res=[];for(const o of out){const k=o.items.slice(0,2).map(g=>g.id).join();if(seen.has(k))continue;seen.add(k);res.push(o.items);if(res.length>=6)break}return res}
+
+function board(items,{onKeep=true,extra}={}){const body=photos.body?el("div",{class:"ob-body"},el("img",{src:photos.body.thumb,alt:""})):null;
+  return el("div",{class:"ob"},body,el("div",{class:"ob-items"},items.map(g=>el("button",{type:"button",class:"ob-it"+(kept.has(g.id)?" kept":""),title:L(GC[g.cat].n),onclick:onKeep?()=>{kept.has(g.id)?kept.delete(g.id):kept.add(g.id);renderWard()}:null},
+    g.photo?el("img",{src:g.photo,alt:""}):el("i",{style:"background:"+(g.hex||"var(--line)")}),el("span",{text:L(GC[g.cat].n)+(kept.has(g.id)?" · "+t("kept"):"")})))),extra||null)}
+function chipRow(opts,cur,label,set){return el("div",{class:"cats"},opts.map(o=>el("button",{class:"chip",type:"button","aria-pressed":String(cur===o),onclick:()=>set(o)},label(o))))}
+function renderWard(){const box=$("wardBody");if(!box)return;["outfits","clothes","saved","trends"].forEach(k=>$("ws-"+k).setAttribute("aria-pressed",wardSub===k));
+  if(wardSub==="clothes")return box.replaceChildren(gEditing?garmentForm():clothesList());
+  if(wardSub==="saved")return box.replaceChildren(savedOutfits());
+  if(wardSub==="trends")return box.replaceChildren(el("div",{class:"card"},el("h3",{text:t("trendsTitle")}),el("p",{class:"small",style:"margin:0"},t("trendsNote")),el("ul",{class:"clean"},TRENDS.map(x=>el("li",{class:"small",style:"color:var(--fg)"},"· "+L(x))))));
+  // outfits
+  const bodyCard=el("div",{class:"card"},el("div",{class:"row",style:"justify-content:space-between"},el("div",{class:"eyebrow",text:t("bodyPhoto")}),photos.body?el("button",{class:"btn ghost sm",type:"button",onclick:()=>$("inBody").click()},t("replaceBody")):null),
+    photos.body?el("img",{src:photos.body.thumb,alt:"",style:"max-height:220px;width:auto;border-radius:10px;justify-self:start"}):el("div",{style:"display:grid;gap:8px"},el("p",{class:"small",style:"margin:0"},t("bodyHint")),el("div",{},el("button",{class:"btn sm",type:"button",onclick:()=>$("inBody").click()},t("takeBody")))));
+  const ctrl=el("div",{class:"card"},el("div",{class:"eyebrow",text:t("occasion")}),chipRow(OCCS.map(o=>o[0]),occ,o=>t("occ_"+o),o=>{occ=o;saveWardPrefs();suggestions=generate();renderWard()}),
+    el("div",{class:"eyebrow",text:t("weather")}),chipRow(["warm","mild","cool"],wx,o=>t("w"+o[0].toUpperCase()+o.slice(1)),o=>{wx=o;saveWardPrefs();suggestions=generate();renderWard()}),
+    el("div",{class:"eyebrow",text:t("where")}),chipRow(["all"].concat(WHERES),whereF,o=>o==="all"?t("allWardrobes"):t("wh_"+o),o=>{whereF=o;saveWardPrefs();suggestions=generate();renderWard()}),
+    el("div",{class:"row"},el("button",{class:"btn rose",type:"button",onclick:()=>{seed++;suggestions=generate();renderWard()}},suggestions.length?t("showOthers"):t("makeOutfits"))));
+  const list=!garments.length?el("div",{class:"empty-note"},el("p",{style:"margin:0;max-width:44ch"},t("gEmpty")),el("button",{class:"btn rose",type:"button",onclick:()=>{wardSub="clothes";gEditing=newGarment();renderWard()}},"+ "+t("addGarment"))):
+    !suggestions.length?el("p",{class:"small"},t("noOutfit")):el("div",{style:"display:grid;gap:12px"},el("p",{class:"small",style:"margin:0"},t("keepHint")),suggestions.map(items=>el("div",{class:"card"},board(items),el("div",{class:"row"},el("button",{class:"btn sm",type:"button",onclick:()=>saveOutfit(items,"")},t("saveOutfit"))))));
+  box.replaceChildren(el("div",{class:"cards"},bodyCard,ctrl),el("div",{style:"margin-top:12px"},list),wardAICard())}
+async function saveOutfit(items,note,name){const o={id:uid(),ts:Date.now(),occ,items:items.map(g=>g.id),note:note||"",name:name||t("occ_"+occ)};outfits.push(o);await DB.put("outfits",o.id,o);toast(t("outfitSaved"))}
+function savedOutfits(){if(!outfits.length)return el("div",{class:"empty-note"},el("p",{style:"margin:0"},t("savedEmpty")));
+  return el("div",{style:"display:grid;gap:12px"},outfits.slice().sort((a,b)=>b.ts-a.ts).map(o=>{const items=o.items.map(id=>garments.find(g=>g.id===id)).filter(Boolean);
+    return el("div",{class:"card"},el("div",{class:"row",style:"justify-content:space-between"},el("b",{style:"font-weight:500",text:o.name}),el("span",{class:"small",text:new Date(o.ts).toLocaleDateString(LANG==="lt"?"lt-LT":"en-GB",{day:"numeric",month:"short"})})),
+      board(items,{onKeep:false}),o.note?el("p",{class:"small",style:"margin:0"},o.note):null,
+      el("div",{},el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(pendingDel!==o.id){pendingDel=o.id;e.currentTarget.textContent=t("sure");return}outfits=outfits.filter(x=>x.id!==o.id);await DB.del("outfits",o.id);pendingDel=null;renderWard()}},t("del"))))}))}
+function newGarment(){return{id:uid(),cat:"top",occ:[],weather:[],where:whereF==="all"?"pt":whereF,pattern:false}}
+function clothesList(){const add=el("button",{class:"btn rose",type:"button",onclick:()=>{gEditing=newGarment();renderWard()}},"+ "+t("addGarment"));
+  if(!garments.length)return el("div",{class:"empty-note"},el("p",{style:"margin:0;max-width:44ch"},t("gEmpty")),add);
+  const order=GCATS.map(c=>c[0]);const list=garments.filter(g=>whereF==="all"||g.where===whereF).sort((a,b)=>order.indexOf(a.cat)-order.indexOf(b.cat));
+  return el("div",{},el("div",{class:"row",style:"margin-bottom:12px"},add,chipRow(["all"].concat(WHERES),whereF,o=>o==="all"?t("allWardrobes"):t("wh_"+o),o=>{whereF=o;saveWardPrefs();renderWard()})),
+    el("div",{class:"grid-prod"},list.map(g=>el("article",{class:"prod"},el("div",{class:"ph"},g.photo?el("img",{src:g.photo,alt:""}):el("i",{style:`width:60%;aspect-ratio:1;border-radius:50%;background:${g.hex||"var(--line)"};display:block`})),
+      el("div",{class:"meta"},el("b",{text:L(GC[g.cat].n)}),g.hex?el("span",{class:"shade"},el("i",{style:"background:"+g.hex}),L(clothColourName(g.hex))+(g.pattern?" · "+t("gPattern"):"")):null,
+        el("span",{class:"small",text:(g.occ&&g.occ.length?g.occ.map(o=>t("occ_"+o)).join(", "):"")}),g.notes?el("span",{class:"small",text:g.notes}):null),
+      el("div",{class:"acts"},el("button",{class:"btn ghost sm",type:"button",onclick:()=>{gEditing=JSON.parse(JSON.stringify(g));renderWard()}},"✎"),
+        el("button",{class:"btn ghost sm",type:"button",onclick:async e=>{if(pendingDel!==g.id){pendingDel=g.id;e.currentTarget.textContent=t("sure");return}garments=garments.filter(x=>x.id!==g.id);kept.delete(g.id);await DB.del("garments",g.id);pendingDel=null;suggestions=[];renderWard()}},t("del")))))))}
+let gPhotoCb=null;
+function garmentForm(){const g=gEditing;const pc=el("canvas",{});let img=null;
+  const draw=()=>{const x=pc.getContext("2d");if(!img){pc.width=600;pc.height=300;x.fillStyle=getComputedStyle(document.body).getPropertyValue("--sunk");x.fillRect(0,0,600,300);return}pc.width=img.width;pc.height=img.height;x.drawImage(img,0,0);if(g.px){x.strokeStyle="#fff";x.lineWidth=Math.max(2,img.width/150);x.beginPath();x.arc(g.px[0],g.px[1],img.width/30,0,Math.PI*2);x.stroke()}};
+  const sw=el("span",{class:"shade"});const setHex=h=>{g.hex=h;sw.replaceChildren(el("i",{style:"background:"+h}),h?L(clothColourName(h)):"")};if(g.hex)setHex(g.hex);
+  const sampleAt=(x,y)=>{const R=Math.max(3,Math.round(img.width/40));const d=img.getContext("2d",{willReadFrequently:true}).getImageData(Math.max(0,Math.round(x-R)),Math.max(0,Math.round(y-R)),2*R,2*R).data;let r=0,gg=0,b=0,n=0;for(let i=0;i<d.length;i+=4){r+=d[i];gg+=d[i+1];b+=d[i+2];n++}g.px=[x,y];setHex(rgbToHex(r/n,gg/n,b/n));draw()};
+  if(g.photo){const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext("2d").drawImage(im,0,0);img=c;draw()};im.src=g.photo}draw();
+  pc.addEventListener("pointerdown",e=>{if(!img)return;const r=pc.getBoundingClientRect();sampleAt((e.clientX-r.left)/r.width*img.width,(e.clientY-r.top)/r.height*img.height)});
+  const take=el("button",{class:"btn sm",type:"button",onclick:()=>{gPhotoCb=c=>{img=c;g.photo=c.toDataURL("image/jpeg",.8);draw();if(!g.hex)sampleAt(c.width/2,c.height/2)};$("inGarment").click()}},t("takeProdPhoto"));
+  const cat=el("select",{id:"gCat",onchange:e=>{g.cat=e.target.value;renderOccChips()}},GCATS.map(c=>el("option",{value:c[0],selected:g.cat===c[0]},L(GC[c[0]].n))));
+  const where=el("select",{id:"gWhere"},WHERES.map(w=>el("option",{value:w,selected:g.where===w},t("wh_"+w))));
+  const notes=el("input",{id:"gNotes",value:g.notes||"",autocomplete:"off"});const pat=el("input",{type:"checkbox",id:"gPat",checked:!!g.pattern});const fav=el("input",{type:"checkbox",id:"gFav",checked:!!g.fav});
+  const colour=el("input",{type:"color",id:"gColor",value:g.hex||"#D8C3A0",oninput:e=>setHex(e.target.value.toUpperCase()),style:"width:44px;height:34px;padding:0;border:0;background:none"});
+  const occBox=el("div",{class:"pick"});const renderOccChips=()=>{const def=OCCS.filter(o=>Math.abs(GC[g.cat].f-o[1])<=1.25).map(o=>o[0]);occBox.replaceChildren(...OCCS.map(([o])=>{const on=g.occ.length?g.occ.includes(o):def.includes(o);return el("button",{type:"button","aria-pressed":String(on),onclick:()=>{if(!g.occ.length)g.occ=def.slice();g.occ=g.occ.includes(o)?g.occ.filter(x=>x!==o):g.occ.concat([o]);renderOccChips()}},t("occ_"+o))}))};renderOccChips();
+  const wxBox=el("div",{class:"pick"});const renderWx=()=>wxBox.replaceChildren(...["warm","mild","cool"].map(w=>el("button",{type:"button","aria-pressed":String(!g.weather.length||g.weather.includes(w)),onclick:()=>{if(!g.weather.length)g.weather=["warm","mild","cool"];g.weather=g.weather.includes(w)?g.weather.filter(x=>x!==w):g.weather.concat([w]);if(g.weather.length===3)g.weather=[];renderWx()}},t("w"+w[0].toUpperCase()+w.slice(1)))));renderWx();
+  const f=(id,lab,input)=>el("div",{class:"field"},el("label",{for:id,text:lab}),input);
+  return el("form",{class:"addp panel",onsubmit:async e=>{e.preventDefault();Object.assign(g,{cat:cat.value,where:where.value,notes:notes.value.trim(),pattern:pat.checked,fav:fav.checked,ts:g.ts||Date.now()});
+      const i=garments.findIndex(x=>x.id===g.id);if(i>=0)garments[i]=g;else garments.push(g);await DB.put("garments",g.id,g);gEditing=null;suggestions=[];renderWard()}},
+    el("h3",{text:t("addGarment")}),el("div",{class:"field"},el("label",{text:t("pPhoto")}),el("div",{class:"picker"},pc),el("div",{class:"row"},take,el("span",{class:"small",text:t("gPhotoHint")}))),
+    el("div",{class:"row"},el("span",{class:"small",text:t("gColour")}),sw,colour,el("label",{class:"row",style:"gap:6px"},pat,t("gPattern"))),
+    el("div",{class:"two"},f("gCat",t("pCat"),cat),f("gWhere",t("where"),where)),
+    el("div",{class:"field"},el("label",{text:t("gOcc")}),occBox),el("div",{class:"field"},el("label",{text:t("gWeather")}),wxBox),
+    f("gNotes",t("pNotes"),notes),el("label",{class:"row",style:"gap:6px"},fav,t("pFav")),
+    el("div",{class:"row"},el("button",{class:"btn rose",type:"submit"},t("save")),el("button",{class:"btn ghost",type:"button",onclick:()=>{gEditing=null;renderWard()}},t("cancel"))))}
+
+/* AI stylist for outfits */
+function wardAICard(){const card=el("div",{class:"card ai",style:"margin-top:12px"},el("h3",{text:t("aiWardTitle")}),el("p",{class:"small",style:"margin:0"},t("aiWardLede")));
+  const q=el("textarea",{id:"wardQ",placeholder:t("wishPh")});const ib=el("button",{class:"btn ghost sm",type:"button",onclick:()=>$("inInspo").click()},inspoBlob?t("inspoAdded"):t("inspo"));
+  const go=el("button",{class:"btn rose",type:"button",onclick:()=>aiStyle(q.value)},t("aiOutfits"));const out=el("div",{id:"wardOut"});
+  card.append(q,el("div",{class:"row"},go,ib,inspoBlob?el("button",{class:"btn ghost sm",type:"button",onclick:()=>{inspoBlob=null;renderWard()}},t("remove")):null),out);paintWardAI(out);
+  getSample().then(s=>{if(!s){go.disabled=true;q.disabled=true;ib.disabled=true;out.replaceChildren(el("p",{class:"small",style:"margin:0"},t("aiUnavailable")))}});return card}
+async function contactSheet(list){const cols=4,cell=220,rows=Math.ceil(list.length/cols);const c=document.createElement("canvas");c.width=cols*cell;c.height=rows*cell;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);
+  for(let i=0;i<list.length;i++){const g=list[i],cx=(i%cols)*cell,cy=Math.floor(i/cols)*cell;if(g.photo){const im=new Image();im.src=g.photo;try{await im.decode()}catch(e){}const s=Math.min((cell-12)/im.naturalWidth,(cell-12)/im.naturalHeight);const w=im.naturalWidth*s,h=im.naturalHeight*s;x.drawImage(im,cx+(cell-w)/2,cy+(cell-h)/2,w,h)}else{x.fillStyle=g.hex||"#ccc";x.fillRect(cx+20,cy+20,cell-40,cell-40)}
+    x.fillStyle="#111";x.fillRect(cx+4,cy+4,44,30);x.fillStyle="#fff";x.font="bold 22px sans-serif";x.fillText(String(i+1),cx+10,cy+27)}return canvasToBlob(c,.82)}
+async function aiStyle(wish){const s=await getSample();if(!s||wAI.busy)return;if(!garments.length){toast(t("needClothes"));return}
+  let list=garments.filter(g=>fits(g,occ));if(list.length<6)list=garments.filter(g=>whereF==="all"||g.where===whereF);list=list.slice(0,40);
+  wAI={busy:true};paintWardAI($("wardOut"));
+  try{const lim=s.limits?await s.limits():null;const max=lim&&lim.images?lim.images.maxCount:0;const imgs=[];
+    if(max){imgs.push(await contactSheet(list));if(photos.body&&imgs.length<max)imgs.push(await canvasToBlob(photos.body.canvas,.82));if(inspoBlob&&imgs.length<max)imgs.push(inspoBlob)}
+    const inv=list.map((g,i)=>`#${i+1} ${GC[g.cat].n.en}, ${g.hex?clothColourName(g.hex).en:"colour unknown"}${g.pattern?", patterned":""}${g.notes?", "+g.notes:""}`).join("\n");
+    const prompt=`You are a senior personal stylist dressing Bonnie. She is 63, looks wonderful for her age, has her own style and is not a fashion slave: suggest what flatters her and fits her style, and use trends only where they suit her. Write all text in ${langName()}.
+Occasion: ${t("occ_"+occ)} (${T.en["occ_"+occ]}). Weather: ${wx}. ${wish?"How she wants to look: "+wish:""}
+Images: first a numbered sheet of her clothes${photos.body?", then a full-length photo of her":""}${inspoBlob?", then an inspiration photo of the look she wants":""}.
+Her clothes (numbers match the sheet):
+${inv}
+Trends for 2026 to draw on where they suit her: ${TRENDS.map(x=>x.en).join(" ")}
+Build outfits ONLY from her numbered clothes. Return ONLY JSON:
+{"styleProfile":"2 sentences on her figure and personal style and what flatters her","outfits":[{"name":"","items":[numbers],"why":"","how":"styling touches: tuck, roll, layer, accessories, make-up colour"}],"missing":[{"item":"","why":""}],"tips":[""]}
+Give 3 to 5 outfits, 2 to 4 missing pieces that would multiply her options, 2 to 3 tips.`;
+    const j=await s.json(prompt,{images:imgs.length?imgs:undefined,modelTier:"default"});wAI={busy:false,json:j,list}}catch(e){wAI={busy:false,err:aiErr(e)}}paintWardAI($("wardOut"))}
+function paintWardAI(out){if(!out)return;out.replaceChildren();if(wAI.busy){out.append(el("p",{class:"small",style:"margin:0",text:t("thinking")}));return}if(wAI.err){out.append(el("p",{style:"margin:0",text:wAI.err}));return}
+  const j=wAI.json;if(!j)return;const list=wAI.list||[];const sec=(title,...k)=>el("div",{style:"display:grid;gap:8px;margin-top:12px"},el("div",{class:"eyebrow",text:title}),...k);
+  if(j.styleProfile)out.append(sec(t("styleProfile"),el("p",{style:"margin:0",text:j.styleProfile})));
+  (Array.isArray(j.outfits)?j.outfits:[]).forEach(o=>{const items=(o.items||[]).map(n=>list[(+n)-1]).filter(Boolean);if(!items.length)return;
+    out.append(el("div",{class:"card",style:"margin-top:12px"},el("h3",{text:o.name||""}),board(items,{onKeep:false}),el("p",{class:"small",style:"margin:0",text:o.why||""}),el("p",{style:"margin:0;font-size:14px",text:o.how||""}),
+      el("div",{},el("button",{class:"btn sm",type:"button",onclick:()=>saveOutfit(items,(o.why||"")+(o.how?" "+o.how:""),o.name)},t("saveOutfit")))))});
+  if(Array.isArray(j.missing)&&j.missing.length)out.append(sec(t("missing"),el("ul",{class:"clean"},j.missing.map(m=>el("li",{},el("b",{text:m.item||""}),el("span",{class:"small",text:m.why||""}))))));
+  if(Array.isArray(j.tips)&&j.tips.length)out.append(sec(t("tips"),el("ul",{class:"clean"},j.tips.map(x=>el("li",{class:"small",text:x})))))}
+async function setBodyPhoto(file){const c=await fileToCanvas(file,1400);photos.body={canvas:c,thumb:thumbURL(c,700)};await DB.put("photos","body",await canvasToBlob(c));renderWard()}
+
+/* ============ Navigation & language ============ */
+let curView="studio";
+function goView(v){curView=v;document.querySelectorAll("section.view").forEach(s=>s.hidden=s.id!=="v-"+v);document.querySelectorAll("#tabs button").forEach(b=>{if(b.dataset.v===v)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+  turnOpen=v==="turn";if(turnOpen){buildSlots();renderTurnCache()}else{cancelAnimationFrame(spinT);spinT=0;$("btnSpin").textContent=t("autoTurn")}
+  if(v==="advice")renderAdvice();if(v==="hair")renderHair();if(v==="kit")renderKit();if(v==="ward"){if(!suggestions.length&&garments.length)suggestions=generate();renderWard()}window.scrollTo(0,0)}
+function applyLang(){document.documentElement.lang=LANG;$("langEn").setAttribute("aria-pressed",LANG==="en");$("langLt").setAttribute("aria-pressed",LANG==="lt");document.querySelectorAll("[data-t]").forEach(n=>n.textContent=t(n.dataset.t));buildPresets();buildCats();buildPanel();if(curView==="advice")renderAdvice();if(curView==="hair")renderHair();if(curView==="kit")renderKit();if(curView==="ward")renderWard();if(turnOpen)buildSlots()}
+function setLang(l){LANG=l;try{localStorage.setItem("bs-lang",l)}catch(e){}applyLang()}
+
+/* ============ Wiring ============ */
+$("langEn").onclick=()=>setLang("en");$("langLt").onclick=()=>setLang("lt");
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>goView(b.dataset.v));
+$("btnSelfie").onclick=()=>$("inSelfie").click();$("btnGallery").onclick=()=>$("inGallery").click();$("btnHand").onclick=()=>$("inHand").click();
+$("btnNew").onclick=()=>{if(studioMode==="hand")$("inHand").click();else $("inSelfie").click()};
+const onFile=(id,fn)=>$(id).addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];e.target.value="";if(f)fn(f)});
+onFile("inSelfie",newFrontPhoto);onFile("inGallery",newFrontPhoto);onFile("inHand",newHandPhoto);
+onFile("inSlot",f=>{if(slotTarget)newSlotPhoto(slotTarget,f)});onFile("inProd",async f=>{const c=await fileToCanvas(f,900);if(prodPhotoCb)prodPhotoCb(c)});onFile("inRestore",restore);
+$("modeFace").onclick=()=>{if(photos.front)setMode("face");else $("inSelfie").click()};$("modeHand").onclick=()=>{if(photos.hand)setMode("hand");else $("inHand").click()};
+$("btnClear").onclick=()=>{const h=look.hair,n=look.nails;look=emptyLook();if(studioMode==="hand")look.hair=h;document.querySelectorAll(".preset").forEach(b=>b.setAttribute("aria-pressed","false"));buildCats();buildPanel();render()};
+const cmp=$("btnCompare");const startC=e=>{e.preventDefault();comparing=true;render()},endC=()=>{if(comparing){comparing=false;render()}};
+cmp.addEventListener("pointerdown",startC);cmp.addEventListener("pointerup",endC);cmp.addEventListener("pointerleave",endC);cmp.addEventListener("pointercancel",endC);cmp.addEventListener("contextmenu",e=>e.preventDefault());
+$("btnSave").onclick=async()=>{const P=curPhoto();if(!P)return;const c=document.createElement("canvas");renderInto(c,P,look);const l={id:uid(),ts:Date.now(),name:t("lookName")+" "+(looks.length+1),look:JSON.parse(JSON.stringify(look)),thumb:thumbURL(c,600)};looks.push(l);await DB.put("looks",l.id,l);toast(t("saved"))};
+$("stProd").onclick=()=>{kitSub="prod";renderKit()};$("stLooks").onclick=()=>{kitSub="looks";renderKit()};
+$("hfAll").onclick=()=>{hairFilter="all";renderHair()};$("hfFit").onclick=()=>{hairFilter="fit";renderHair()};
+$("btnBackup").onclick=backup;
+["outfits","clothes","saved","trends"].forEach(k=>$("ws-"+k).onclick=()=>{wardSub=k;gEditing=null;renderWard()});
+onFile("inBody",setBodyPhoto);onFile("inGarment",async f=>{const c=await fileToCanvas(f,900);if(gPhotoCb)gPhotoCb(c)});onFile("inInspo",async f=>{const c=await fileToCanvas(f,1000);inspoBlob=await canvasToBlob(c,.82);renderWard()});$("btnRestore").onclick=()=>$("inRestore").click();
+$("turnRange").addEventListener("input",e=>{turnAngle=+e.target.value;drawTurn()});
+$("btnSpin").onclick=()=>{if(spinT){cancelAnimationFrame(spinT);spinT=0;$("btnSpin").textContent=t("autoTurn")}else{spinT=requestAnimationFrame(spin);$("btnSpin").textContent=t("stopTurn")}};
+(()=>{const cv=$("turnCanvas");let sx=null,sa=0;cv.addEventListener("pointerdown",e=>{sx=e.clientX;sa=turnAngle;cv.setPointerCapture(e.pointerId)});cv.addEventListener("pointermove",e=>{if(sx==null)return;turnAngle=((sa-(e.clientX-sx)*.9)%360+360)%360;$("turnRange").value=Math.round(turnAngle);drawTurn()});const up=()=>sx=null;cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up)})();
+window.addEventListener("resize",()=>{if(turnOpen)drawTurn()});
+
+/* ============ Boot ============ */
+(async()=>{applyLang();syncStudioChrome();await DB.open();products=await DB.all("products");looks=await DB.all("looks");garments=await DB.all("garments");outfits=await DB.all("outfits");buildPanel();
+  {const b=await DB.get("photos","body");if(b){try{const c=await blobToCanvas(b);photos.body={canvas:c,thumb:thumbURL(c,700)}}catch(e){}}}
+  // restore photos kept on this phone
+  for(const k of ["front","left","right","back","hand"]){const b=await DB.get("photos",k);if(!b)continue;try{const c=await blobToCanvas(b);photos[k]={canvas:c,lm:null}}catch(e){}}
+  syncStudioChrome();render();
+  if(photos.front){const P=await preparePhoto(photos.front.canvas,{face:true});photos.front=P;await ensureHair(P,"status");render()}
+  for(const k of ["left","right","back"])if(photos[k]){const P=await preparePhoto(photos[k].canvas,{face:k!=="back",statusId:"turnStatus"});photos[k]=P;await ensureHair(P,"turnStatus");if(!P.hairMask&&P.person&&photos.front&&photos.front.hairLab)computeHairMask(P,photos.front.hairLab);setStatus("turnStatus","")}
+  if(photos.hand){const P=await preparePhoto(photos.hand.canvas,{face:false,hand:true});photos.hand=P;setStatus("status","")}
+  render();if(curView==="advice")renderAdvice()})();
+</script>
+
+<script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+</body></html>
