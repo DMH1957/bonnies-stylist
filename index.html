@@ -152,6 +152,11 @@ ul.clean{list-style:none;padding:0;margin:0;display:grid;gap:8px}
 ul.clean li{display:grid;gap:1px}
 ul.clean li b{font-weight:500}
 ul.clean li.row{display:flex}
+.stylegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px}
+.stb{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:4px;display:grid;gap:3px;font-size:11px;color:var(--muted);text-align:center;min-width:0;line-height:1.2}
+.stb .art{width:100%}
+.stb .art.off{display:block;background:repeating-linear-gradient(135deg,var(--sunk) 0 6px,var(--surface) 6px 12px);aspect-ratio:120/140}
+.stb[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);color:var(--accent)}
 .palette{display:flex;flex-wrap:wrap;gap:6px}
 .palette i{width:26px;height:26px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
 .ai{border-color:color-mix(in oklab,var(--accent) 40%,var(--line))}
@@ -424,7 +429,7 @@ tStudio:"Studio",tAdvice:"Stylist",tHair:"Hair",tKit:"My kit",
 intensity:"Intensity",off:"Off",finish:"Finish",matte:"Matte",satin:"Satin",gloss:"Gloss",wing:"Winged",yourKit:"from your kit",
 reading:"Reading your face…",noFace:"No face found. Try a brighter photo taken straight on.",findingHair:"Finding your hair…",loadingModels:"Preparing the mirror. The first time takes a few seconds…",noHand:"No hand found. Lay the back of your hand flat, fingers apart.",modelFail:"The face reader could not start on this device. You can still browse the library and your kit.",
 saved:"Look saved",needPhoto:"Take a photo in the Studio first.",
-cat_lip:"Lips",cat_liner:"Eyeliner",cat_shadow:"Eyeshadow",cat_mascara:"Mascara",cat_brow:"Brows",cat_blush:"Blush",cat_found:"Foundation",cat_contour:"Contour",cat_hl:"Highlighter",cat_hair:"Hair colour",cat_nails:"Nails",
+cat_lip:"Lips",cat_liner:"Eyeliner",cat_shadow:"Eyeshadow",cat_mascara:"Mascara",cat_brow:"Brows",cat_blush:"Blush",cat_found:"Foundation",cat_contour:"Contour",cat_hl:"Highlighter",cat_hair:"Hair colour",cat_style:"Hairstyle",tryStyle:"Try on my photo",styleHint:"Tap a style. It is fitted to your face automatically. Works best with your own hair tied back.",cat_nails:"Nails",
 analysis:"Your features",faceShape:"Face shape",skinDepth:"Skin tone",undertone:"Undertone",eyeColour:"Eye colour",naturalHair:"Natural hair",estimated:"Estimated from your photo. Tap to correct.",
 warm:"Warm",cool:"Cool",neutral:"Neutral",
 undertoneTip:"Quick check: veins on the wrist look green → warm, blue or purple → cool, both → neutral. Gold jewellery flatters warm, silver flatters cool.",
@@ -451,7 +456,7 @@ tStudio:"Studija",tAdvice:"Stilistė",tHair:"Plaukai",tKit:"Rinkinys",
 intensity:"Intensyvumas",off:"Išjungta",finish:"Apdaila",matte:"Matinė",satin:"Satininė",gloss:"Blizgi",wing:"Su uodegyte",yourKit:"iš jūsų rinkinio",
 reading:"Atpažįstamas veidas…",noFace:"Veido nerasta. Pabandykite šviesesnę nuotrauką, darytą tiesiai iš priekio.",findingHair:"Ieškoma plaukų…",loadingModels:"Ruošiamas veidrodis. Pirmą kartą tai užtrunka kelias sekundes…",noHand:"Rankos nerasta. Padėkite plaštaką delnu žemyn, pirštus praskėskite.",modelFail:"Šiame įrenginyje nepavyko paleisti veido atpažinimo. Biblioteką ir rinkinį galite naudoti toliau.",
 saved:"Įvaizdis išsaugotas",needPhoto:"Pirmiausia nusifotografuokite Studijoje.",
-cat_lip:"Lūpos",cat_liner:"Akių kontūras",cat_shadow:"Akių šešėliai",cat_mascara:"Blakstienų tušas",cat_brow:"Antakiai",cat_blush:"Skaistalai",cat_found:"Makiažo pagrindas",cat_contour:"Kontūravimas",cat_hl:"Švytėjimas",cat_hair:"Plaukų spalva",cat_nails:"Nagai",
+cat_lip:"Lūpos",cat_liner:"Akių kontūras",cat_shadow:"Akių šešėliai",cat_mascara:"Blakstienų tušas",cat_brow:"Antakiai",cat_blush:"Skaistalai",cat_found:"Makiažo pagrindas",cat_contour:"Kontūravimas",cat_hl:"Švytėjimas",cat_hair:"Plaukų spalva",cat_style:"Šukuosena",tryStyle:"Išbandyti savo nuotraukoje",styleHint:"Bakstelėkite stilių. Jis automatiškai pritaikomas prie jūsų veido. Geriausiai atrodo, kai savo plaukus susirišate.",cat_nails:"Nagai",
 analysis:"Jūsų bruožai",faceShape:"Veido forma",skinDepth:"Odos atspalvis",undertone:"Poatspalvis",eyeColour:"Akių spalva",naturalHair:"Natūrali plaukų spalva",estimated:"Įvertinta pagal nuotrauką. Bakstelėkite, jei norite pataisyti.",
 warm:"Šiltas",cool:"Šaltas",neutral:"Neutralus",
 undertoneTip:"Greitas patikrinimas: venos ant riešo žalsvos → šiltas, mėlynos ar violetinės → šaltas, abiejų spalvų → neutralus. Šiltam poatspalviui labiau tinka auksas, šaltam sidabras.",
@@ -490,8 +495,8 @@ hl:[S("#F7EDE6","Pearl","Perlinis","cool"),S("#F2D9B8","Champagne","Šampano","n
 hair:[S("#E8E0CF","Platinum","Platininė","cool"),S("#CBBFA6","Ash blonde","Pelenų blondinė","cool"),S("#E6CF9C","Buttercream blonde","Sviestinė blondinė","warm"),S("#C99A55","Honey blonde","Medaus blondinė","warm"),S("#D08A5E","Strawberry blonde","Braškinė blondinė","warm"),S("#A9713E","Caramel","Karamelinė","warm"),S("#D19A8E","Rose gold","Rožinio aukso","cool"),S("#7C6A5C","Mushroom brown","Grybų ruda","cool"),S("#6F6358","Ash brown","Pelenų ruda","cool"),S("#6E3A22","Warm chestnut","Šilta kaštoninė","warm"),S("#B5552A","Copper","Varinė","warm"),S("#7E2E1C","Auburn","Rusvai raudona","warm"),S("#4A2C1E","Chocolate","Šokoladinė","neutral"),S("#5C1A2B","Burgundy","Bordo","cool"),S("#2C1C16","Espresso","Espreso","neutral"),S("#1C1716","Soft black","Švelniai juoda","cool"),S("#C9C9CC","Silver","Sidabrinė","cool")],
 nails:[S("#F2C9CC","Ballet pink","Baleto rožinė","cool"),S("#D9B3A0","Nude","Nude","neutral"),S("#F3EEE8","Milky white","Pieno balta","neutral"),S("#E3CFAE","Champagne","Šampano","warm"),S("#E46A57","Coral","Koralinė","warm"),S("#B3122E","Classic red","Klasikinė raudona","neutral"),S("#5E1328","Burgundy","Bordo","cool"),S("#A5728A","Mauve","Alyvinė","cool"),S("#C6B0D8","Lilac","Alyvų","cool"),S("#0F5A45","Emerald","Smaragdinė","warm"),S("#1F2B4D","Navy","Tamsiai mėlyna","cool"),S("#141214","Black","Juoda","neutral")]
 };
-const CATS=["lip","shadow","liner","mascara","brow","blush","found","contour","hl","hair","nails"];
-const DEFAULT_A={lip:.7,shadow:.6,liner:.8,mascara:.8,brow:.5,blush:.5,found:.4,contour:.45,hl:.5,hair:.65,nails:.9};
+const CATS=["style","lip","shadow","liner","mascara","brow","blush","found","contour","hl","hair","nails"];
+const DEFAULT_A={style:1,lip:.7,shadow:.6,liner:.8,mascara:.8,brow:.5,blush:.5,found:.4,contour:.45,hl:.5,hair:.65,nails:.9};
 const emptyLook=()=>{const o={};CATS.forEach(c=>o[c]={c:null,a:0});o.lip.finish="satin";o.liner.wing=true;return o};
 let look=emptyLook();
 
@@ -817,7 +822,45 @@ function renderInto(canvas,P,L,{makeup=true}={}){
   const ctx=canvas.getContext("2d",{willReadFrequently:true});ctx.globalCompositeOperation="source-over";ctx.globalAlpha=1;ctx.drawImage(P.canvas,0,0);
   if(!makeup)return;
   if(L.hair.c&&L.hair.a>0&&P.hairMask)recolorHair(P,ctx,W,Hh,L.hair.c,L.hair.a);
-  drawMakeup(ctx,P,L);if(P.hand)drawNails(ctx,P,L)}
+  const sty=L.style&&L.style.c&&P.lm&&P===photos.front?styleImgs(L.style.c,styleColour(P,L)):null;
+  if(sty&&sty.ready)drawStyle(ctx,P,sty.back,true);
+  drawMakeup(ctx,P,L);
+  if(sty&&sty.ready)drawStyle(ctx,P,sty.front,false);
+  if(P.hand)drawNails(ctx,P,L)}
+
+/* ============ Hairstyle try-on (drawn style fitted to the face) ============ */
+function lab2rgb(L,a,b){let y=(L+16)/116,x=a/500+y,z=y-b/200;const f=v=>v**3>.008856?v**3:(v-16/116)/7.787;x=f(x)*.95047;y=f(y);z=f(z)*1.08883;
+  let r=x*3.2406+y*-1.5372+z*-.4986,g=x*-.9689+y*1.8758+z*.0415,bb=x*.0557+y*-.204+z*1.057;const c=v=>255*(v>.0031308?1.055*Math.pow(v,1/2.4)-.055:12.92*v);return[c(r),c(g),c(bb)]}
+function styleColour(P,L){if(L.hair&&L.hair.c&&L.hair.a>0)return L.hair.c;if(P.hairLab)return rgbToHex(...lab2rgb(...P.hairLab));return"#6B4A35"}
+function hairLayers(id,H){const s=HSPEC[id]||{len:104};const D=shadeHex(H,-.35),Lt=shadeHex(H,.18);
+  const op=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" width="600" height="700"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${Lt}"/><stop offset=".45" stop-color="${H}"/><stop offset="1" stop-color="${D}"/></linearGradient></defs>`;
+  const F='url(#hg)';const recol=x=>x.split(HT.hair).join(F).split(HT.hairDk).join(D);
+  const upd=recol(updo(s.up));const behind=["lowbun","chignon"].includes(s.up);
+  const g0='<g transform="translate(0,55) scale(1,.9) translate(0,-55)">',g1="</g>";const back=op+g0+(s.up&&s.up!=="halfup"?"":s.len?`<path d="${hairOutline(s)}" fill="${F}" stroke="${D}" stroke-width=".5"/>`:"")+`<path d="${strands(s)}" stroke="${D}" stroke-width=".6" fill="none" opacity=".5"/>`+(behind?upd:"")+g1+"</svg>";
+  const pix=`<path d="M35,56 Q30,22 60,18 Q90,22 85,56 L82,48 Q80,38 72,34 Q66,40 56,36 Q50,42 40,44 L38,56Z" fill="${F}" stroke="${D}" stroke-width=".5"/><path d="M44,32 l4,4 M52,28 l3,5 M62,27 l2,5 M72,30 l1,5" stroke="${D}" stroke-width=".7"/>`;
+  const fr=s.fringe?`<path d="${fringePath(s.fringe,s)}" fill="${F}" stroke="${D}" stroke-width=".5"/>`:`<path d="${capPath(s)}" fill="${F}" stroke="${D}" stroke-width=".5"/>`;
+  const frame=s.frame?`<path d="M41,48 Q34,66 40,84 M79,48 Q86,66 80,84" stroke="${D}" stroke-width="1" fill="none"/>`:"";
+  const front=op+g0+(s.cap==="short"?pix:fr)+frame+(behind?"":upd)+g1+"</svg>";return{back,front}}
+const STY={};
+function styleImgs(id,col){const k=id+col;if(STY[k])return STY[k];const o=STY[k]={ready:false};const L2=hairLayers(id,col);
+  const load=src=>new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(src)});
+  Promise.all([load(L2.back),load(L2.front)]).then(([b,f])=>{o.back=b;o.front=f;o.ready=!!(b&&f);if(o.ready)render()});return o}
+function styleXform(P){const lm=P.lm,W=P.canvas.width,Hh=P.canvas.height;const p=i=>[lm[i].x*W,lm[i].y*Hh];const e1=p(33),e2=p(263),b=p(152),l=p(234),r=p(454);
+  const a=[(e1[0]+e2[0])/2,(e1[1]+e2[1])/2];const v=[b[0]-a[0],b[1]-a[1]];const len=Math.hypot(v[0],v[1]),wid=Math.hypot(r[0]-l[0],r[1]-l[1]);const sc=(len/23*.45+wid/38*.55)*1.04;
+  return{cx:a[0],cy:a[1],rot:Math.atan2(-v[0],v[1]),sc}}
+let strandPat=null;function strandTex(){if(strandPat)return strandPat;const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d");let seed=7;const r=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  for(let i=0;i<900;i++){const sx=r()*256,sy=r()*256-40,len=40+r()*90,bend=(r()-.5)*14;x.strokeStyle=r()<.55?`rgba(0,0,0,${.06+r()*.12})`:`rgba(255,255,255,${.05+r()*.1})`;x.lineWidth=.6+r()*1.1;x.beginPath();x.moveTo(sx,sy);x.quadraticCurveTo(sx+bend,sy+len/2,sx+bend*.3,sy+len);x.stroke()}
+  return strandPat=c}
+const styleCv=document.createElement("canvas");
+function drawStyle(ctx,P,img,cutFace){const W=ctx.canvas.width,Hh=ctx.canvas.height;const x=styleXform(P);
+  styleCv.width=W;styleCv.height=Hh;const c=styleCv.getContext("2d");c.clearRect(0,0,W,Hh);
+  c.save();c.filter="blur("+Math.max(.5,x.sc*.12)+"px)";c.translate(x.cx,x.cy);c.rotate(x.rot);c.scale(x.sc,x.sc);c.translate(-60,-55);c.drawImage(img,0,0,120,140);c.restore();
+  c.save();c.globalCompositeOperation="source-atop";const pat=c.createPattern(strandTex(),"repeat");const m=new DOMMatrix().translate(x.cx,x.cy).rotate(x.rot*180/Math.PI).scale(x.sc/3.2);pat.setTransform(m);c.fillStyle=pat;c.fillRect(0,0,W,Hh);c.restore();
+  if(cutFace){const lm=P.lm,pt=i=>[lm[i].x*W,lm[i].y*Hh];const cx=IDX.oval.reduce((s,i)=>s+lm[i].x*W,0)/IDX.oval.length,cy=IDX.oval.reduce((s,i)=>s+lm[i].y*Hh,0)/IDX.oval.length;
+    c.save();c.globalCompositeOperation="destination-out";c.filter="blur("+Math.max(1,x.sc*.8)+"px)";c.beginPath();IDX.oval.forEach((i,k)=>{const q=pt(i);const X=cx+(q[0]-cx)*.97,Y=cy+(q[1]-cy)*.99;k?c.lineTo(X,Y):c.moveTo(X,Y)});c.closePath();c.fill();
+    const j1=pt(172),j2=pt(397),ch=pt(152);const nw=Math.hypot(j2[0]-j1[0],j2[1]-j1[1])*.42;const ux=Math.sin(-x.rot),uy=Math.cos(x.rot);
+    c.beginPath();c.moveTo(j1[0],j1[1]);c.lineTo(j2[0],j2[1]);c.lineTo(ch[0]+nw+ux*Hh,ch[1]+uy*Hh);c.lineTo(ch[0]-nw+ux*Hh,ch[1]+uy*Hh);c.closePath();c.fill();c.restore()}
+  ctx.save();ctx.globalAlpha=.97;ctx.drawImage(styleCv,0,0);ctx.restore()}
 
 /* ============ Studio UI ============ */
 let curCat="lip",products=[],looks=[],comparing=false,rq=0;
@@ -829,12 +872,14 @@ function syncStudioChrome(){const has=!!(photos.front||photos.hand);$("studioEmp
 
 function buildPresets(){const box=$("presets");box.replaceChildren(...PRESETS.map(p=>{const dots=["lip","blush","shadow","liner"].map(k=>p.l[k]&&p.l[k][0]?el("i",{style:"background:"+p.l[k][0]}):null);
   return el("button",{class:"preset",type:"button","aria-pressed":"false","data-id":p.id,onclick:()=>applyPreset(p)},el("span",{class:"dots"},dots),el("b",{text:L(p.n)}))}))}
-function applyPreset(p){const keepHair=look.hair,keepNails=look.nails;look=emptyLook();look.hair=keepHair;look.nails=keepNails;for(const k in p.l){look[k].c=p.l[k][0]||(k==="found"?suggestFoundation():null);look[k].a=p.l[k][1]}
+function applyPreset(p){const keepHair=look.hair,keepNails=look.nails,keepStyle=look.style;look=emptyLook();look.hair=keepHair;look.nails=keepNails;look.style=keepStyle||look.style;for(const k in p.l){look[k].c=p.l[k][0]||(k==="found"?suggestFoundation():null);look[k].a=p.l[k][1]}
   document.querySelectorAll(".preset").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===p.id));buildCats();buildPanel();render()}
 function suggestFoundation(){const sk=photos.front&&photos.front.skinLab;let best=SHADES.found[2].hex,bd=1e9;if(sk)for(const s of SHADES.found){const d=labDist(rgb2lab(...hexToRgb(s.hex)),sk);if(d<bd){bd=d;best=s.hex}}return best}
 function buildCats(){const box=$("cats");box.replaceChildren(...CATS.map(c=>el("button",{class:"chip",type:"button",role:"tab","aria-pressed":String(c===curCat),onclick:()=>{curCat=c;if(c==="nails"&&photos.hand&&studioMode!=="hand")setMode("hand");if(c!=="nails"&&studioMode==="hand"&&photos.front)setMode("face");buildCats();buildPanel()}},look[c].c&&look[c].a>0?el("span",{class:"on"}):null,t("cat_"+c))))}
 function kitShadesFor(cat){return products.filter(p=>p.feature===cat&&p.hex).map(p=>({hex:p.hex,n:{en:p.name||p.brand||"",lt:p.name||p.brand||""},mine:true}))}
 function buildPanel(){const c=curCat,st=look[c];const box=$("catPanel");const kids=[];
+  if(c==="style"){const ids=Object.keys(HSPEC);box.replaceChildren(el("p",{class:"small",style:"margin:0"},t("styleHint")),el("div",{class:"stylegrid"},el("button",{type:"button",class:"stb","aria-pressed":String(!st.c),onclick:()=>{st.c=null;buildCats();buildPanel();render()}},el("i",{class:"art off"}),t("off")),
+    ids.map(id=>{const h=HAIR.find(x=>x.id===id);const b=el("button",{type:"button",class:"stb","aria-pressed":String(st.c===id),onclick:()=>{st.c=id;st.a=1;buildCats();buildPanel();render()}});const a=el("div",{class:"art"});a.innerHTML=hairSVG(id);b.append(a,h?L(h.n):id);return b})));return}
   if(c==="nails"&&!photos.hand){kids.push(el("p",{class:"small",style:"margin:0"},t("handPhoto")+": "),el("div",{class:"row"},el("button",{class:"btn sm",type:"button",onclick:()=>$("inHand").click()},t("handPhoto"))))}
   const list=kitShadesFor(c).concat(SHADES[c]);
   kids.push(el("div",{class:"swatches"},el("button",{class:"sw",type:"button","aria-pressed":String(!st.c||!st.a),onclick:()=>{st.a=0;buildCats();buildPanel();render()}},el("i",{style:"background:repeating-linear-gradient(135deg,var(--sunk) 0 5px,var(--surface) 5px 10px)"}),t("off")),
@@ -980,7 +1025,7 @@ function renderHair(){const shape=get("shape"),tone=get("tone");const fit=h=>h.h
       el("header",{},el("h4",{text:L(h.n)}),el("span",{class:"row",style:"gap:4px"},h.trend?el("span",{class:"tag",text:t("trend")}):null,(shape||tone)&&fit(h)&&(h.hex||h.suits.length<6)?el("span",{class:"tag fit",text:t("fits")}):null)),
       el("p",{text:L(h.d)}),
       h.hex?el("div",{},el("button",{class:"btn ghost sm",type:"button",onclick:()=>{look.hair={c:h.hex,a:DEFAULT_A.hair};curCat="hair";buildCats();buildPanel();goView("studio");render();if(!photos.front)toast(t("needPhoto"))}},t("tryColour"))):
-      (["cut","length","fringe"].includes(g)?el("p",{class:"small",style:"font-style:italic",text:t("aiSoon")}):null))))))}))}
+      (HSPEC[h.id]?el("div",{},el("button",{class:"btn sm",type:"button",onclick:()=>{look.style={c:h.id,a:1};curCat="style";buildCats();buildPanel();goView("studio");render();if(!photos.front)toast(t("needPhoto"))}},t("tryStyle"))):null))))))}))}
 function shadeHex(h,f){const [r,g,b]=hexToRgb(h);return rgbToHex(r*(1+f),g*(1+f),b*(1+f))}
 
 /* ============ Kit UI ============ */
@@ -1435,7 +1480,7 @@ const onFile=(id,fn)=>$(id).addEventListener("change",e=>{const f=e.target.files
 onFile("inSelfie",newFrontPhoto);onFile("inGallery",newFrontPhoto);onFile("inHand",newHandPhoto);
 onFile("inSlot",f=>{if(slotTarget)newSlotPhoto(slotTarget,f)});onFile("inProd",async f=>{const c=await fileToCanvas(f,900);if(prodPhotoCb)prodPhotoCb(c)});onFile("inRestore",restore);
 $("modeFace").onclick=()=>{if(photos.front)setMode("face");else $("inSelfie").click()};$("modeHand").onclick=()=>{if(photos.hand)setMode("hand");else $("inHand").click()};
-$("btnClear").onclick=()=>{const h=look.hair,n=look.nails;look=emptyLook();if(studioMode==="hand")look.hair=h;document.querySelectorAll(".preset").forEach(b=>b.setAttribute("aria-pressed","false"));buildCats();buildPanel();render()};
+$("btnClear").onclick=()=>{const h=look.hair,n=look.nails,st=look.style;look=emptyLook();look.style=st||look.style;if(studioMode==="hand")look.hair=h;document.querySelectorAll(".preset").forEach(b=>b.setAttribute("aria-pressed","false"));buildCats();buildPanel();render()};
 const cmp=$("btnCompare");const startC=e=>{e.preventDefault();comparing=true;render()},endC=()=>{if(comparing){comparing=false;render()}};
 cmp.addEventListener("pointerdown",startC);cmp.addEventListener("pointerup",endC);cmp.addEventListener("pointerleave",endC);cmp.addEventListener("pointercancel",endC);cmp.addEventListener("contextmenu",e=>e.preventDefault());
 $("btnSave").onclick=async()=>{const P=curPhoto();if(!P)return;const c=document.createElement("canvas");renderInto(c,P,look);const l={id:uid(),ts:Date.now(),name:t("lookName")+" "+(looks.length+1),look:JSON.parse(JSON.stringify(look)),thumb:thumbURL(c,600)};looks.push(l);await DB.put("looks",l.id,l);toast(t("saved"))};
