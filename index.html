@@ -151,6 +151,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 ul.clean{list-style:none;padding:0;margin:0;display:grid;gap:8px}
 ul.clean li{display:grid;gap:1px}
 ul.clean li b{font-weight:500}
+ul.clean li.row{display:flex}
 .palette{display:flex;flex-wrap:wrap;gap:6px}
 .palette i{width:26px;height:26px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
 .ai{border-color:color-mix(in oklab,var(--accent) 40%,var(--line))}
@@ -163,7 +164,10 @@ textarea{width:100%;min-height:72px;border:1px solid var(--line);border-radius:1
 .lib{display:grid;gap:18px}
 .lib-group{display:grid;gap:10px}
 .lib-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))}
-.style{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;align-content:start;min-width:0}
+.style{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;align-items:start;min-width:0}
+.style-txt{display:grid;gap:6px;min-width:0}
+.art{width:84px;aspect-ratio:120/140;border-radius:10px;background:var(--sunk);overflow:hidden;max-width:100%}
+.art svg{width:100%;height:100%;display:block}
 .style header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
 .style h4{margin:0;font-family:var(--display);font-weight:500;font-size:17px}
 .style p{margin:0;font-size:13.5px;color:var(--muted)}
@@ -202,6 +206,27 @@ form.addp{display:grid;gap:12px}
 .ob-it{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:4px;display:grid;gap:4px;font-size:11px;color:var(--muted);text-align:center;min-width:0}
 .ob-it img,.ob-it i{width:100%;aspect-ratio:1;object-fit:cover;border-radius:7px;display:block;max-width:100%}
 .ob-it.kept{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);color:var(--accent)}
+.rings{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.rings-sm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;flex:1;min-width:0}
+.ring{display:grid;justify-items:center;gap:2px;text-align:center}
+.ring svg{display:block;max-width:100%}
+.scale{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px}
+.scale i{grid-column:1/-1;height:6px;border-radius:999px;background:linear-gradient(90deg,hsl(0,62%,42%),hsl(30,62%,42%),hsl(60,62%,38%),hsl(90,62%,40%),hsl(120,62%,42%))}
+.scale span:nth-of-type(2){text-align:center}.scale span:nth-of-type(3){text-align:right}
+.flag{margin:0;padding:8px 10px;border-radius:10px;font-size:14px;border-left:4px solid var(--warn);background:var(--sunk)}
+.flag.crisis{border-left-color:hsl(0,70%,45%);font-weight:500}
+.meals{display:grid;gap:10px}
+.meal{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px}
+.meal:not(:has(img)){grid-template-columns:1fr}
+.meal img{width:76px;height:76px;object-fit:cover;border-radius:8px;max-width:100%}
+.glasses{display:flex;flex-wrap:wrap;gap:6px}
+.gl{width:22px;height:30px;border:1.5px solid var(--accent);border-top:0;border-radius:0 0 6px 6px;background:transparent;padding:0}
+.gl.full{background:linear-gradient(to top,color-mix(in oklab,var(--accent) 55%,transparent) 80%,transparent 80%)}
+.three{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+input.num{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg);width:100%}
+.trend{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:3px;align-items:end;height:110px}
+.bar{display:grid;grid-template-rows:1fr auto;height:100%;gap:2px;text-align:center;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar i{align-self:end;display:block;border-radius:4px 4px 0 0;width:100%}
 hr.soft{border:0;border-top:1px solid var(--line);margin:4px 0}
 @media (prefers-reduced-motion:no-preference){.fade{animation:fade .35s ease both}@keyframes fade{from{opacity:.4}to{opacity:1}}}
 </style>
@@ -246,6 +271,7 @@ hr.soft{border:0;border-top:1px solid var(--line);margin:4px 0}
             <button class="btn sm" type="button" id="btnSave" data-t="saveLook">Save look</button>
             <button class="btn ghost sm" type="button" id="btnNew" data-t="newPhoto">New photo</button>
             <button class="btn ghost sm" type="button" id="btnClear" data-t="clearAll">Clear make-up</button>
+            <button class="btn ghost sm" type="button" id="btn360">360°</button>
           </div>
         </div>
 
@@ -332,6 +358,16 @@ hr.soft{border:0;border-top:1px solid var(--line);margin:4px 0}
       <div id="wardBody"></div>
     </section>
 
+    <!-- HEALTH -->
+    <section class="view" id="v-health" hidden>
+      <div style="display:grid;gap:4px;margin-bottom:12px">
+        <div class="eyebrow" data-t="hEyebrow">Your daily health check</div>
+        <h2 data-t="hTitle">How am I doing today?</h2>
+        <p class="lede" data-t="hLede">Log steps, food, water and sleep.</p>
+      </div>
+      <div id="healthBody"></div>
+    </section>
+
     <!-- KIT -->
     <section class="view" id="v-kit" hidden>
       <div style="display:grid;gap:4px;margin-bottom:12px">
@@ -355,10 +391,10 @@ hr.soft{border:0;border-top:1px solid var(--line);margin:4px 0}
 
   <nav class="tabs" id="tabs">
     <button type="button" data-v="studio" aria-current="page"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="10" rx="6.5" ry="8"/><path d="M12 18v4M8 22h8"/></svg><span data-t="tStudio">Studio</span></button>
-    <button type="button" data-v="turn"><svg viewBox="0 0 24 24"><path d="M3 12a9 4 0 1 0 18 0a9 4 0 1 0-18 0"/><path d="M17 15.5l2 1.5-2 1.6"/><circle cx="12" cy="8" r="3"/></svg><span>360°</span></button>
     <button type="button" data-v="advice"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"/><path d="M18 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg><span data-t="tAdvice">Stylist</span></button>
     <button type="button" data-v="hair"><svg viewBox="0 0 24 24"><path d="M6 21c-2-6-1-15 6-17 7 2 8 11 6 17"/><path d="M9 21c-1-5 0-10 3-12 3 2 4 7 3 12"/></svg><span data-t="tHair">Hair</span></button>
     <button type="button" data-v="ward"><svg viewBox="0 0 24 24"><path d="M12 5a2 2 0 1 1 2 2c-1 0-2 .6-2 1.5V9l9 6.5c.8.6.4 1.5-.5 1.5h-17c-.9 0-1.3-.9-.5-1.5L12 9"/></svg><span data-t="tWard">Wardrobe</span></button>
+    <button type="button" data-v="health"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M5 12h3l2-3 3 6 2-3h4"/></svg><span data-t="tHealth">Health</span></button>
     <button type="button" data-v="kit"><svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="12" rx="2"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/></svg><span data-t="tKit">My kit</span></button>
   </nav>
 </div>
@@ -372,6 +408,7 @@ hr.soft{border:0;border-top:1px solid var(--line);margin:4px 0}
 <input type="file" id="inBody" accept="image/*" hidden>
 <input type="file" id="inGarment" accept="image/*" hidden>
 <input type="file" id="inInspo" accept="image/*" hidden>
+<input type="file" id="inMeal" accept="image/*" capture="environment" hidden>
 <input type="file" id="inRestore" accept="application/json,.json" hidden>
 
 <script>
@@ -561,7 +598,7 @@ const PCATS=[["found",{en:"Foundation",lt:"Makiažo pagrindas"}],["found",{en:"C
 
 /* ============ Storage (IndexedDB, this phone only) ============ */
 const DB={db:null,mem:{products:[],looks:[],photos:{}},
- async open(){try{this.db=await new Promise((res,rej)=>{const r=indexedDB.open("bonnie-stylist",2);r.onupgradeneeded=()=>{const d=r.result;["products","looks","photos","kv","garments","outfits"].forEach(s=>{if(!d.objectStoreNames.contains(s))d.createObjectStore(s)})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}catch(e){this.db=null}},
+ async open(){try{this.db=await new Promise((res,rej)=>{const r=indexedDB.open("bonnie-stylist",3);r.onupgradeneeded=()=>{const d=r.result;["products","looks","photos","kv","garments","outfits","days"].forEach(s=>{if(!d.objectStoreNames.contains(s))d.createObjectStore(s)})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}catch(e){this.db=null}},
  async all(store){if(!this.db)return Object.values(this.mem[store]||{});try{return await new Promise((res,rej)=>{const out=[];const c=this.db.transaction(store).objectStore(store).openCursor();c.onsuccess=()=>{const cur=c.result;if(cur){out.push(cur.value);cur.continue()}else res(out)};c.onerror=()=>rej(c.error)})}catch(e){return[]}},
  async get(store,key){if(!this.db)return (this.mem[store]||{})[key];try{return await new Promise((res,rej)=>{const r=this.db.transaction(store).objectStore(store).get(key);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}catch(e){return undefined}},
  async put(store,key,val){if(!this.db){(this.mem[store]=this.mem[store]||{})[key]=val;return}try{await new Promise((res,rej)=>{const tx=this.db.transaction(store,"readwrite");tx.objectStore(store).put(val,key);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}catch(e){}},
@@ -939,12 +976,11 @@ function renderHair(){const shape=get("shape"),tone=get("tone");const fit=h=>h.h
   $("hfNote").textContent=hairFilter==="fit"&&!shape?t("noPhotoAdvice"):shape?t("f_"+shape)+" · "+(tone?t(tone):""):"";
   const groups=["length","cut","fringe","texture","updo","colour","tech"];
   $("lib").replaceChildren(...groups.map(g=>{let items=HAIR.filter(h=>h.g===g);if(hairFilter==="fit"&&(shape||tone))items=items.filter(fit);if(!items.length)return null;
-    return el("div",{class:"lib-group"},el("h3",{text:t("g_"+g)}),el("div",{class:"lib-grid"},items.map(h=>el("article",{class:"style"},
-      h.hex?el("i",{class:"hairsw",style:`background:linear-gradient(90deg,${h.hex},${shadeHex(h.hex,-.25)})`}):null,
+    return el("div",{class:"lib-group"},el("h3",{text:t("g_"+g)}),el("div",{class:"lib-grid"},items.map(h=>el("article",{class:"style"},hairArt(h),el("div",{class:"style-txt"},
       el("header",{},el("h4",{text:L(h.n)}),el("span",{class:"row",style:"gap:4px"},h.trend?el("span",{class:"tag",text:t("trend")}):null,(shape||tone)&&fit(h)&&(h.hex||h.suits.length<6)?el("span",{class:"tag fit",text:t("fits")}):null)),
       el("p",{text:L(h.d)}),
       h.hex?el("div",{},el("button",{class:"btn ghost sm",type:"button",onclick:()=>{look.hair={c:h.hex,a:DEFAULT_A.hair};curCat="hair";buildCats();buildPanel();goView("studio");render();if(!photos.front)toast(t("needPhoto"))}},t("tryColour"))):
-      (["cut","length","fringe"].includes(g)?el("p",{class:"small",style:"font-style:italic",text:t("aiSoon")}):null)))))}))}
+      (["cut","length","fringe"].includes(g)?el("p",{class:"small",style:"font-style:italic",text:t("aiSoon")}):null))))))}))}
 function shadeHex(h,f){const [r,g,b]=hexToRgb(h);return rgbToHex(r*(1+f),g*(1+f),b*(1+f))}
 
 /* ============ Kit UI ============ */
@@ -993,8 +1029,8 @@ function renderLooks(){const box=$("kitLooks");if(!looks.length){box.replaceChil
 
 /* ============ Backup ============ */
 async function backup(){const dl={save:async({filename,data})=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=filename;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}};
-  const data=JSON.stringify({app:"bonnies-stylist",v:2,products,looks,overrides,garments,outfits});try{await dl.save({filename:"bonnies-stylist-backup.json",data});toast(t("backupDone"))}catch(e){}}
-async function restore(file){try{const j=JSON.parse(await file.text());if(j.app!=="bonnies-stylist")throw 0;for(const p of j.products||[]){await DB.put("products",p.id,p)}for(const l of j.looks||[]){await DB.put("looks",l.id,l)}for(const g of j.garments||[]){await DB.put("garments",g.id,g)}for(const o of j.outfits||[]){await DB.put("outfits",o.id,o)}garments=await DB.all("garments");outfits=await DB.all("outfits");overrides=j.overrides||overrides;saveOver();products=await DB.all("products");looks=await DB.all("looks");renderKit();toast(t("restoreDone"))}catch(e){toast(t("restoreFail"))}}
+  const data=JSON.stringify({app:"bonnies-stylist",v:3,products,looks,overrides,garments,outfits,days:await DB.all("days"),supps,hProfile});try{await dl.save({filename:"bonnies-stylist-backup.json",data});toast(t("backupDone"))}catch(e){}}
+async function restore(file){try{const j=JSON.parse(await file.text());if(j.app!=="bonnies-stylist")throw 0;for(const p of j.products||[]){await DB.put("products",p.id,p)}for(const l of j.looks||[]){await DB.put("looks",l.id,l)}for(const g of j.garments||[]){await DB.put("garments",g.id,g)}for(const o of j.outfits||[]){await DB.put("outfits",o.id,o)}for(const d of j.days||[]){await DB.put("days",d.date,d)}if(j.supps){supps=j.supps;await DB.put("kv","supps",supps)}if(j.hProfile){hProfile=j.hProfile;saveProf()}garments=await DB.all("garments");outfits=await DB.all("outfits");overrides=j.overrides||overrides;saveOver();products=await DB.all("products");looks=await DB.all("looks");renderKit();toast(t("restoreDone"))}catch(e){toast(t("restoreFail"))}}
 
 /* ============ Wardrobe ============ */
 Object.assign(T.en,{tWard:"Wardrobe",wardEyebrow:"Your wardrobe",wardTitle:"What shall I wear?",wardLede:"Photograph your clothes once. Then choose the occasion, and your stylist puts outfits together from what you already own.",
@@ -1171,12 +1207,223 @@ function paintWardAI(out){if(!out)return;out.replaceChildren();if(wAI.busy){out.
   if(Array.isArray(j.tips)&&j.tips.length)out.append(sec(t("tips"),el("ul",{class:"clean"},j.tips.map(x=>el("li",{class:"small",text:x})))))}
 async function setBodyPhoto(file){const c=await fileToCanvas(file,1400);photos.body={canvas:c,thumb:thumbURL(c,700)};await DB.put("photos","body",await canvasToBlob(c));renderWard()}
 
+/* ============ Hair illustrations (drawn, no photos) ============ */
+const HSPEC={
+ pixie:{len:0,cap:"short"},bixie:{len:66,fringe:"wispy",tex:"wave",amp:1.5},chin:{len:84,end:"blunt"},lob:{len:96,end:"blunt"},shoulder:{len:108,end:"soft"},midback:{len:128,end:"v"},long:{len:140,end:"v"},
+ frenchbob:{len:76,end:"in",fringe:"blunt"},italianbob:{len:86,vol:6,end:"in",part:"side"},blunt:{len:84,end:"blunt",vol:-1},contour:{len:86,end:"in",vol:2},aline:{len:90,end:"angle"},
+ shag:{len:100,tex:"wave",amp:1.5,end:"layer",fringe:"curtain",top:4},wolf:{len:112,end:"layer",fringe:"curtain",top:6,spread:2},butterfly:{len:122,vol:4,end:"v",frame:true},
+ longlayers:{len:125,end:"layer"},framing:{len:115,frame:true,end:"soft"},
+ curtain:{len:104,fringe:"curtain",end:"soft"},wispy:{len:104,fringe:"wispy",end:"soft"},bluntfringe:{len:100,fringe:"blunt",end:"blunt"},sidesweep:{len:104,fringe:"side",part:"side",end:"soft"},
+ sleek:{len:120,vol:-3,end:"blunt"},softwaves:{len:112,tex:"wave",amp:2.5,end:"soft"},beach:{len:116,tex:"wave",amp:3.5,part:"side",end:"layer"},hollywood:{len:108,tex:"wave",amp:3,part:"side",lop:true,end:"in"},
+ curls:{len:104,tex:"curl",vol:9,end:"soft"},blowout:{len:104,vol:8,end:"flick",top:5},
+ lowbun:{up:"lowbun"},ballerina:{up:"high"},chignon:{up:"chignon"},frenchtwist:{up:"twist"},ponytail:{up:"pony"},halfup:{len:112,up:"halfup",end:"soft"},crown:{up:"crown"},fishtail:{up:"fishtail"},dutch:{up:"dutch"}
+};
+const HT={face:"#EBCDB9",faceLine:"#C9A28A",hair:"#6B4A35",hairDk:"#4A3122",cloth:"#D9CBC6",clothLine:"#B9A7A1"};
+function smoothPath(pts){if(pts.length<3)return"";let d=`M${((pts[0][0]+pts[1][0])/2).toFixed(1)},${((pts[0][1]+pts[1][1])/2).toFixed(1)}`;for(let i=1;i<pts.length;i++){const p=pts[i],n=pts[(i+1)%pts.length];d+=` Q${p[0].toFixed(1)},${p[1].toFixed(1)} ${((p[0]+n[0])/2).toFixed(1)},${((p[1]+n[1])/2).toFixed(1)}`}return d+"Z"}
+function hairOutline(s){const cx=60,len=s.len,vol=s.vol||0,spread=s.spread!=null?s.spread:Math.min(10,(len-60)*.12),top=s.top||0;
+  const hw=y=>{let w=24+vol+spread*clamp((y-56)/Math.max(1,len-56),0,1);if(s.end==="in")w-=6*Math.pow(clamp((y-(len-14))/14,0,1),2);if(s.end==="flick")w+=7*Math.pow(clamp((y-(len-10))/10,0,1),2);
+    if(s.tex==="wave")w+=(s.amp||2)*Math.sin((y-50)/9*Math.PI);if(s.tex==="curl")w+=3*Math.sin((y-50)/4*Math.PI)+2;return w};
+  const L=[],R=[];for(let y=50;y<=len;y+=3){const lop=s.lop?(y-50)*.08:0;L.push([cx-hw(y)-lop,y]);R.push([cx+hw(y)-lop*.4,y])}
+  const bottom=[];const lx=L[L.length-1][0],rx=R[R.length-1][0];
+  for(let i=1;i<10;i++){const tt=i/10,x=lx+(rx-lx)*tt;let y=len;if(s.end==="v")y+=10*(1-Math.abs(tt-.5)*2);if(s.end==="layer")y+=(i%2?6:-2)+6*(1-Math.abs(tt-.5)*2);if(s.end==="angle")y=len-8+16*Math.abs(tt-.5);if(s.end==="soft")y+=4*(1-Math.abs(tt-.5)*2);if(s.end==="in")y-=3;bottom.push([x,y])}
+  const crown=[];for(let a=0;a<=180;a+=15){const r=a*Math.PI/180;crown.push([cx+Math.cos(r)*(25+vol*.5),44-Math.sin(r)*(23+top)])}
+  return smoothPath(L.concat(bottom,R.slice().reverse(),crown))}
+function capPath(s){const top=s.top||0;const side=s.part==="side";
+  // hair covering the top of the head down to the hairline
+  return `M35,54 Q33,${22-top} 60,${20-top} Q87,${22-top} 85,54 Q82,40 ${side?72:68},34 Q${side?52:60},${side?33:37} ${side?48:52},34 Q38,40 35,54Z`}
+function fringePath(f,s){if(f==="blunt")return"M38,46 Q38,28 60,27 Q82,28 82,46 L79,47 Q60,45 41,47Z";
+  if(f==="curtain")return"M38,52 Q36,30 60,28 Q84,30 82,52 Q78,40 66,36 Q62,40 60,38 Q58,40 54,36 Q42,40 38,52Z";
+  if(f==="wispy")return"M38,48 Q38,28 60,27 Q82,28 82,48 L78,43 L75,47 L71,42 L67,46 L63,41 L59,46 L55,41 L51,46 L47,42 L43,47Z";
+  if(f==="side")return"M37,52 Q34,28 62,26 Q86,28 83,48 Q72,38 58,40 Q46,42 37,52Z";return""}
+function strands(s){if(!s.len||s.up&&s.up!=="halfup")return"";let d="";const n=s.tex==="curl"?0:4;for(let i=0;i<n;i++){const x1=40+i*1.5,x2=80-i*1.5;d+=`M${x1},56 Q${x1-4-(s.tex==="wave"?3:0)},${(56+s.len)/2} ${x1-3+i},${s.len-6} M${x2},56 Q${x2+4+(s.tex==="wave"?3:0)},${(56+s.len)/2} ${x2+3-i},${s.len-6} `}return d}
+function curls(s){if(s.tex!=="curl")return"";let c="";for(let y=56;y<s.len;y+=8)for(const x of [36,84,30,90])c+=`<circle cx="${x+(y%16?2:-2)}" cy="${y}" r="3.2" fill="none" stroke="${HT.hairDk}" stroke-width=".9" opacity=".6"/>`;return c}
+function updo(u){const H=HT.hair,D=HT.hairDk;const braid=(x,y,n,dx,dy)=>{let o="";for(let i=0;i<n;i++)o+=`<ellipse cx="${x+dx*i}" cy="${y+dy*i}" rx="4.4" ry="3.2" fill="${H}" stroke="${D}" stroke-width=".8" transform="rotate(${i%2?25:-25} ${x+dx*i} ${y+dy*i})"/>`;return o};
+  switch(u){case"high":return`<circle cx="60" cy="14" r="11" fill="${H}" stroke="${D}" stroke-width="1"/><path d="M52,12 Q60,6 68,13" stroke="${D}" fill="none" stroke-width=".9"/>`;
+    case"lowbun":return`<ellipse cx="38" cy="72" rx="7" ry="9" fill="${H}" stroke="${D}" stroke-width=".9"/><ellipse cx="82" cy="72" rx="7" ry="9" fill="${H}" stroke="${D}" stroke-width=".9"/>`;
+    case"chignon":return`<path d="M34,60 Q28,78 40,84 Q46,74 40,62Z" fill="${H}" stroke="${D}" stroke-width=".9"/><path d="M86,60 Q92,78 80,84 Q74,74 80,62Z" fill="${H}" stroke="${D}" stroke-width=".9"/>`;
+    case"twist":return`<path d="M80,24 Q92,40 86,62 Q82,50 78,34Z" fill="${H}" stroke="${D}" stroke-width=".9"/><path d="M82,30 Q86,42 84,54" stroke="${D}" fill="none" stroke-width=".8"/>`;
+    case"pony":return`<path d="M64,16 Q84,10 88,30 Q92,58 80,84 Q84,56 76,34 Q72,24 64,20Z" fill="${H}" stroke="${D}" stroke-width=".9"/><circle cx="64" cy="17" r="3" fill="${D}"/>`;
+    case"crown":return braid(38,40,9,3,-2.2).replace(/\n/g,"")+braid(62,22,7,3,2.4);
+    case"fishtail":return braid(74,62,10,1.6,6.2);
+    case"dutch":return braid(40,34,9,-1.2,6.5)+braid(80,34,9,1.2,6.5);
+    case"halfup":return`<circle cx="60" cy="20" r="6.5" fill="${H}" stroke="${D}" stroke-width=".9"/>`;default:return""}}
+const chestW=s=>{const sp=s.spread!=null?s.spread:Math.min(10,(s.len-60)*.12);return clamp(24+(s.vol||0)+sp-9,13,30)};
+function hairSVG(id,fill){const s=HSPEC[id]||{len:104};const H=fill||HT.hair,D=fill?shadeHex(fill,-.35):HT.hairDk;
+  const grad=typeof fill==="object"?fill:null;
+  const back=s.up&&s.up!=="halfup"?"":s.len?`<path d="${hairOutline(s)}" fill="${H}" stroke="${D}" stroke-width="1"/>`:"";
+  const body=`<path d="M14,140 Q20,108 46,102 L74,102 Q100,108 106,140Z" fill="${HT.cloth}" stroke="${HT.clothLine}" stroke-width="1"/>`;
+  const chest=s.len>100&&!(s.up&&s.up!=="halfup")?`<path d="M47,100 L73,100 L${60+chestW(s)},140 L${60-chestW(s)},140Z" fill="${HT.cloth}"/><path d="M50,101 Q60,116 70,101" fill="none" stroke="${HT.clothLine}" stroke-width="1"/>`:"";
+  const neck=`<path d="M52,74 L52,98 Q60,104 68,98 L68,74Z" fill="${HT.face}" stroke="${HT.faceLine}" stroke-width=".8"/>`;
+  const face=`<ellipse cx="60" cy="54" rx="19" ry="24" fill="${HT.face}" stroke="${HT.faceLine}" stroke-width=".9"/><path d="M50,55 q3,2 6,0 M64,55 q3,2 6,0" stroke="#8C6656" fill="none" stroke-width="1.1" stroke-linecap="round"/><path d="M56,67 q4,2.6 8,0" stroke="#B5646C" fill="none" stroke-width="1.6" stroke-linecap="round"/>`;
+  const fr=s.fringe?`<path d="${fringePath(s.fringe,s)}" fill="${H}" stroke="${D}" stroke-width="1"/>`:`<path d="${capPath(s)}" fill="${H}" stroke="${D}" stroke-width="1"/>`;
+  const pixie=s.cap==="short"?`<path d="M35,56 Q30,22 60,18 Q90,22 85,56 L82,48 Q80,38 72,34 Q66,40 56,36 Q50,42 40,44 L38,56Z" fill="${H}" stroke="${D}" stroke-width="1"/><path d="M44,32 l4,4 M52,28 l3,5 M62,27 l2,5 M72,30 l1,5" stroke="${D}" stroke-width=".9"/>`:"";
+  const frame=s.frame?`<path d="M41,48 Q34,66 40,84 M79,48 Q86,66 80,84" stroke="${D}" stroke-width="1.2" fill="none"/>`:"";
+  const tail=s.up==="fishtail"?"":"";
+  return `<svg viewBox="0 0 120 140" role="img" aria-hidden="true">${grad||""}${back}<path d="${strands(s)}" stroke="${D}" stroke-width=".8" fill="none" opacity=".55"/>${body}${chest}${neck}${face}${s.cap==="short"?pixie:fr}${frame}${curls(s)}${updo(s.up)}${tail}</svg>`}
+const TECH={"t-balayage":[["0","#4A2C1E"],["55","#7A5236"],["100","#D6AE75"]],"t-melt":[["0","#3A2418"],["50","#8A5A3A"],["100","#C99A55"]],"t-baby":[["0","#5C3D2A"],["100","#9C7550"]],"t-high":[["0","#4A2C1E"],["100","#6B4A35"]],"t-ombre":[["0","#3A2418"],["45","#3A2418"],["100","#E3C79A"]],"t-money":[["0","#5C3D2A"],["100","#5C3D2A"]],"t-root":[["0","#3A2418"],["25","#6B4A35"],["100","#B98B57"]],"t-gloss":[["0","#5A3A28"],["100","#7A5236"]]};
+function techSVG(id){const g=TECH[id]||TECH["t-balayage"];const gid="g"+id.replace(/\W/g,"");
+  let svg=hairSVG("softwaves","url(#"+gid+")").replace('<svg viewBox="0 0 120 140" role="img" aria-hidden="true">',`<svg viewBox="0 0 120 140" role="img" aria-hidden="true"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">${g.map(([o,c])=>`<stop offset="${o}%" stop-color="${c}"/>`).join("")}</linearGradient></defs>`);
+  svg=svg.replace(/stroke="url\(#[^)]*\)"/g,'stroke="#3A2418"');
+  if(id==="t-baby"||id==="t-high"){const st=id==="t-baby"?`stroke="#E2C391" stroke-width=".9"`:`stroke="#D9B57E" stroke-width="2.2"`;let l="";for(let i=0;i<7;i++){const x=34+i*1.2;l+=`<path d="M${x},${60+i*2} Q${x-3},90 ${x+1},${108}" ${st} fill="none" opacity=".9"/><path d="M${86-i*1.2},${60+i*2} Q${89-i*1.2},90 ${85-i*1.2},${108}" ${st} fill="none" opacity=".9"/>`}svg=svg.replace("</svg>",l+"</svg>")}
+  if(id==="t-money")svg=svg.replace("</svg>",`<path d="M41,40 Q33,70 39,104 L44,104 Q40,72 45,44Z M79,40 Q87,70 81,104 L76,104 Q80,72 75,44Z" fill="#E8CC96"/></svg>`);
+  if(id==="t-gloss")svg=svg.replace("</svg>",`<path d="M36,62 Q34,80 38,96" stroke="#fff" stroke-width="3" opacity=".55" fill="none" stroke-linecap="round"/><path d="M84,62 Q86,80 82,96" stroke="#fff" stroke-width="3" opacity=".55" fill="none" stroke-linecap="round"/></svg>`);
+  return svg}
+function colourSVG(hex){return hairSVG("softwaves",hex)}
+
+function hairArt(h){const d=el("div",{class:"art"});d.innerHTML=h.hex?colourSVG(h.hex):h.g==="tech"?techSVG(h.id):hairSVG(h.id);return d}
+/* ============ Health coach ============ */
+Object.assign(T.en,{tHealth:"Health",hEyebrow:"Your daily health check",hTitle:"How am I doing today?",hLede:"Log steps, food, water, sleep and how your body feels. Each part gets a score from 0 to 10.",
+today:"Today",sAct:"Movement",sFood:"Food",sWater:"Water",sSleep:"Sleep",sDay:"Day score",noData:"Not logged",
+movement:"Movement",steps:"Steps",surface:"Where",sf_road:"Pavement or road",sf_grass:"Grass or trail",sf_sand:"Sand, barefoot",sf_hills:"Hills",addSteps:"Add steps",stepsHint:"Type the steps from your phone's step counter (for example Samsung Health).",
+activity:"Activity",minutes:"Minutes",addAct:"Add activity",eqSteps:"equal to about {n} steps on pavement",burned:"Energy burned by activity",
+a_walk:"Brisk walk",a_golfwalk:"Golf, walking",a_golfcart:"Golf, with cart",a_gym:"Gym, weights",a_run:"Running",a_swim:"Swimming",a_yoga:"Yoga",a_pilates:"Pilates",a_cycle:"Cycling",a_dance:"Dancing",a_padel:"Tennis or padel",a_stairs:"Stairs",a_garden:"Gardening",a_house:"Housework",a_aqua:"Aqua aerobics",a_car:"Driving",
+food:"Food",m_breakfast:"Breakfast",m_lunch:"Lunch",m_dinner:"Dinner",m_snack:"Snack",addMeal:"Add photo",portion:"Portion",p_small:"Small",p_normal:"Normal",p_large:"Large",
+f_veg:"Vegetables",f_fruit:"Fruit",f_protein:"Protein",f_grain:"Whole grains",f_sweet:"Sweets",f_fried:"Fried",f_processed:"Processed",f_alcohol:"Alcohol",
+mealKcal:"about {n} kcal",kcalToday:"Eaten today: about {a} kcal of about {b} kcal you need",aiMeal:"Let the AI read this meal",
+water:"Water",glass:"glass",glasses:"{n} of {m} glasses (250 ml)",sleep:"Sleep",hoursSlept:"Hours slept",sleepQ:"How did you sleep?",
+body:"Body",weightKg:"Weight (kg)",measures:"Measurements (cm)",waist:"Waist",hips:"Hips",bust:"Bust",arm:"Upper arm",thigh:"Thigh",save:"Save",
+heart:"Pulse and blood pressure",morning:"Morning",evening:"Evening",sys:"Upper",dia:"Lower",pulse:"Pulse",
+supps:"Supplements and vitamins",addSupp:"Add a supplement",suppName:"Name",suppDose:"Dose",suppTime:"When",noSupps:"Add the vitamins and supplements you take, then tick them off each day.",
+trends:"Last 14 days",weightTrend:"Weight",profile:"About you",age:"Age",heightCm:"Height (cm)",profileHint:"Used to estimate how much energy you need. Stays on this phone.",
+coach:"Your coach says",
+c_act_low:"Movement is low today. A 20-minute walk adds about 2,000 steps, and on sand it counts almost double.",c_act_mid:"Good start. One more short walk and you are in the green.",c_act_high:"Wonderful, you have moved beautifully today.",
+c_water_low:"Have a glass of water now, and keep a bottle where you can see it.",c_sleep_low:"Short night. Try to wind down 30 minutes earlier tonight, without screens.",
+c_food_veg:"Add a handful of vegetables or salad to your next meal.",c_food_protein:"Include some protein at the next meal: fish, eggs, yoghurt, beans or chicken.",c_food_low:"You have eaten quite little today. Your body needs fuel, so have a proper meal.",c_food_high:"Plenty eaten today. Make the next meal lighter, with vegetables and protein.",
+c_none:"Log a few things and your coach will follow up.",
+bp_crisis:"Very high blood pressure. If you also feel chest pain, shortness of breath, a severe headache or vision changes, call emergency services now. Otherwise rest, measure again in 5 minutes and contact your doctor today.",
+bp_high:"Blood pressure is high. If it stays this high on several days, book a time with your doctor.",bp_raised:"Blood pressure is slightly raised. Keep measuring, morning and evening.",bp_low:"Blood pressure is low. If you feel dizzy or faint, contact your doctor.",
+pulse_high:"Resting pulse is high. Rest and measure again. If it stays above 100, talk to your doctor.",pulse_low:"Resting pulse is low. If you are not very fit or you feel dizzy, talk to your doctor.",
+healthNote:"A daily guide, not medical advice. Speak to your doctor about any health concern.",prevDay:"Previous day",nextDay:"Next day",remove:"Remove"});
+Object.assign(T.lt,{tHealth:"Sveikata",hEyebrow:"Jūsų kasdienė sveikatos patikra",hTitle:"Kaip man šiandien sekasi?",hLede:"Įrašykite žingsnius, maistą, vandenį, miegą ir savijautą. Kiekviena dalis gauna balą nuo 0 iki 10.",
+today:"Šiandien",sAct:"Judėjimas",sFood:"Maistas",sWater:"Vanduo",sSleep:"Miegas",sDay:"Dienos balas",noData:"Neįrašyta",
+movement:"Judėjimas",steps:"Žingsniai",surface:"Kur",sf_road:"Šaligatvis ar kelias",sf_grass:"Žolė ar takas",sf_sand:"Smėlis, basomis",sf_hills:"Kalvos",addSteps:"Pridėti žingsnius",stepsHint:"Įrašykite žingsnius iš telefono žingsniamačio (pvz., Samsung Health).",
+activity:"Veikla",minutes:"Minutės",addAct:"Pridėti veiklą",eqSteps:"prilygsta maždaug {n} žingsnių šaligatviu",burned:"Veikla sudeginta energija",
+a_walk:"Greitas ėjimas",a_golfwalk:"Golfas pėsčiomis",a_golfcart:"Golfas su mašinėle",a_gym:"Sporto salė, svoriai",a_run:"Bėgimas",a_swim:"Plaukimas",a_yoga:"Joga",a_pilates:"Pilatesas",a_cycle:"Dviratis",a_dance:"Šokiai",a_padel:"Tenisas ar padelis",a_stairs:"Laiptai",a_garden:"Sodo darbai",a_house:"Namų ruoša",a_aqua:"Vandens aerobika",a_car:"Vairavimas",
+food:"Maistas",m_breakfast:"Pusryčiai",m_lunch:"Pietūs",m_dinner:"Vakarienė",m_snack:"Užkandis",addMeal:"Pridėti nuotrauką",portion:"Porcija",p_small:"Maža",p_normal:"Įprasta",p_large:"Didelė",
+f_veg:"Daržovės",f_fruit:"Vaisiai",f_protein:"Baltymai",f_grain:"Viso grūdo",f_sweet:"Saldumynai",f_fried:"Kepta",f_processed:"Perdirbta",f_alcohol:"Alkoholis",
+mealKcal:"apie {n} kcal",kcalToday:"Šiandien suvalgyta: apie {a} kcal iš maždaug {b} kcal, kurių jums reikia",aiMeal:"Tegul AI įvertina šį patiekalą",
+water:"Vanduo",glass:"stiklinė",glasses:"{n} iš {m} stiklinių (250 ml)",sleep:"Miegas",hoursSlept:"Miego valandos",sleepQ:"Kaip miegojote?",
+body:"Kūnas",weightKg:"Svoris (kg)",measures:"Apimtys (cm)",waist:"Liemuo",hips:"Klubai",bust:"Krūtinė",arm:"Žastas",thigh:"Šlaunis",save:"Išsaugoti",
+heart:"Pulsas ir kraujospūdis",morning:"Rytas",evening:"Vakaras",sys:"Viršutinis",dia:"Apatinis",pulse:"Pulsas",
+supps:"Maisto papildai ir vitaminai",addSupp:"Pridėti papildą",suppName:"Pavadinimas",suppDose:"Dozė",suppTime:"Kada",noSupps:"Pridėkite vartojamus vitaminus ir papildus, tada kasdien juos pažymėkite.",
+trends:"Paskutinės 14 dienų",weightTrend:"Svoris",profile:"Apie jus",age:"Amžius",heightCm:"Ūgis (cm)",profileHint:"Naudojama apskaičiuoti, kiek energijos jums reikia. Lieka šiame telefone.",
+coach:"Jūsų trenerė sako",
+c_act_low:"Šiandien judėjimo mažoka. 20 minučių pasivaikščiojimas prideda apie 2 000 žingsnių, o smėliu jie skaičiuojami beveik dvigubai.",c_act_mid:"Gera pradžia. Dar vienas trumpas pasivaikščiojimas, ir būsite žaliojoje zonoje.",c_act_high:"Nuostabu, šiandien judėjote puikiai.",
+c_water_low:"Išgerkite stiklinę vandens dabar ir laikykite butelį matomoje vietoje.",c_sleep_low:"Trumpa naktis. Šiandien pabandykite nusiraminti 30 minučių anksčiau, be ekranų.",
+c_food_veg:"Prie kito valgio pridėkite saują daržovių ar salotų.",c_food_protein:"Kitame valgyje turėkite baltymų: žuvies, kiaušinių, jogurto, pupelių ar vištienos.",c_food_low:"Šiandien suvalgėte gana mažai. Kūnui reikia energijos, todėl pavalgykite tinkamai.",c_food_high:"Šiandien suvalgyta nemažai. Kitą valgį rinkitės lengvesnį, su daržovėmis ir baltymais.",
+c_none:"Įrašykite kelis dalykus, ir trenerė patars.",
+bp_crisis:"Labai aukštas kraujospūdis. Jei kartu jaučiate krūtinės skausmą, dusulį, stiprų galvos skausmą ar regėjimo pokyčius, nedelsdami skambinkite skubiajai pagalbai. Kitu atveju pailsėkite, po 5 minučių pamatuokite dar kartą ir šiandien susisiekite su gydytoju.",
+bp_high:"Kraujospūdis aukštas. Jei kelias dienas jis išlieka toks, užsiregistruokite pas gydytoją.",bp_raised:"Kraujospūdis šiek tiek padidėjęs. Toliau matuokite ryte ir vakare.",bp_low:"Kraujospūdis žemas. Jei svaigsta galva ar silpna, kreipkitės į gydytoją.",
+pulse_high:"Ramybės pulsas didelis. Pailsėkite ir pamatuokite dar kartą. Jei lieka virš 100, pasitarkite su gydytoju.",pulse_low:"Ramybės pulsas mažas. Jei nesate labai treniruota ar svaigsta galva, pasitarkite su gydytoju.",
+healthNote:"Tai kasdienis vadovas, ne medicininė konsultacija. Dėl sveikatos klausimų kreipkitės į gydytoją.",prevDay:"Ankstesnė diena",nextDay:"Kita diena",remove:"Pašalinti"});
+
+const SURF={road:1,grass:1.2,sand:1.8,hills:1.5};
+const ACTS={walk:4.3,golfwalk:4.8,golfcart:3.5,gym:5,run:9,swim:6,yoga:2.5,pilates:3,cycle:6.8,dance:5,padel:7,stairs:8,garden:3.8,house:3.3,aqua:5.3,car:1.3};
+const FOODTAGS=[["veg",1],["fruit",.7],["protein",1],["grain",.5],["sweet",-1],["fried",-1],["processed",-.6],["alcohol",-1]];
+const PORTION={breakfast:[300,450,650],lunch:[400,600,850],dinner:[450,650,900],snack:[120,220,350]};
+let hDate=new Date().toISOString().slice(0,10),hDay=null,hProfile={age:63,height:165,weight:null},supps=[];
+try{const p=JSON.parse(localStorage.getItem("bs-hprof")||"null");if(p)hProfile=Object.assign(hProfile,p)}catch(e){}
+const saveProf=()=>{try{localStorage.setItem("bs-hprof",JSON.stringify(hProfile))}catch(e){}};
+const emptyDay=d=>({date:d,steps:[],acts:[],meals:[],water:0,sleep:{h:null,q:null},vitals:{morning:{},evening:{}},weight:null,measures:{},supps:{}});
+async function loadDay(d){hDate=d;hDay=(await DB.get("days",d))||emptyDay(d)}
+async function saveDay(){await DB.put("days",hDay.date,hDay)}
+const wKg=()=>hDay&&hDay.weight||hProfile.weight||65;
+const kcalPerStep=()=>.00057*wKg();
+function actStats(day){const w=day.weight||hProfile.weight||65;const ks=.00057*w;let eq=0,kc=0;for(const s of day.steps){eq+=s.n*(SURF[s.sf]||1);kc+=s.n*(SURF[s.sf]||1)*ks}for(const a of day.acts){const k=Math.max(0,(ACTS[a.t]||3)-1)*w*a.min/60;kc+=k;eq+=k/ks}return{eq:Math.round(eq),kcal:Math.round(kc)}}
+function needKcal(day){const w=day.weight||hProfile.weight||65,h=hProfile.height||165,a=hProfile.age||63;return Math.round((10*w+6.25*h-5*a-161)*1.25+actStats(day).kcal)}
+const mealKcal=m=>m.kcal||((PORTION[m.slot]||PORTION.lunch)[{small:0,normal:1,large:2}[m.size||"normal"]]);
+function scores(day){const sc={};const a=actStats(day);sc.act=day.steps.length||day.acts.length?clamp(a.eq/1000,0,10):null;
+  if(day.meals.length){let s=5;const slots=new Set(day.meals.map(m=>m.slot));s+=["breakfast","lunch","dinner"].filter(x=>slots.has(x)).length*.5;
+    const tags={};day.meals.forEach(m=>(m.tags||[]).forEach(tg=>tags[tg]=(tags[tg]||0)+1));for(const [k,v] of FOODTAGS)if(tags[k])s+=v*Math.min(2,tags[k]);
+    const eat=day.meals.reduce((x,m)=>x+mealKcal(m),0),need=needKcal(day),r=eat/need;if(slots.has("dinner")||day.date<new Date().toISOString().slice(0,10)){if(Math.abs(r-1)<=.15)s+=1;else if(Math.abs(r-1)>.3)s-=1.5}sc.food=clamp(s,0,10);sc.eat=eat;sc.need=need}else sc.food=null;
+  const target=Math.round(wKg()*30/250);sc.waterTarget=target;sc.water=day.water?clamp(10*day.water/target,0,10):null;
+  if(day.sleep&&day.sleep.h!=null&&day.sleep.h!==""){const h=+day.sleep.h;let s=h>=7&&h<=9?10:h>=6&&h<=9.5?7.5:h>=5?5:h>=4?3:1.5;if(day.sleep.q)s+=(day.sleep.q-3)*.6;sc.sleep=clamp(s,0,10)}else sc.sleep=null;
+  const parts=["act","food","water","sleep"].map(k=>sc[k]).filter(v=>v!=null);sc.day=parts.length?parts.reduce((a,b)=>a+b,0)/parts.length:null;sc.eq=a.eq;sc.kcal=a.kcal;return sc}
+const scoreCol=v=>v==null?"var(--muted)":`hsl(${Math.round(clamp(v,0,10)*12)},62%,${v>=4&&v<=6.5?38:42}%)`;
+function ring(v,label,big){const size=big?92:64,r=size/2-6,c=2*Math.PI*r,frac=v==null?0:clamp(v/10,0,1);
+  const svg=`<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--line)" stroke-width="6"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${scoreCol(v)}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${c*frac} ${c}" transform="rotate(-90 ${size/2} ${size/2})"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="var(--display)" font-size="${big?30:20}" fill="${scoreCol(v)}">${v==null?"–":(Math.round(v*10)/10).toString().replace(".0","")}</text></svg>`;
+  const d=el("div",{class:"ring"});d.innerHTML=svg;d.append(el("span",{class:"small",text:label}));return d}
+function bpFlag(v){const s=+v.sys,d=+v.dia;if(!s||!d)return null;if(s>=180||d>=120)return["crisis","bp_crisis"];if(s>=140||d>=90)return["high","bp_high"];if(s>=130||d>=80)return["raised","bp_raised"];if(s<90||d<60)return["low","bp_low"];return null}
+function pulseFlag(v){const p=+v.pulse;if(!p)return null;if(p>100)return["high","pulse_high"];if(p<50)return["low","pulse_low"];return null}
+function coachTips(sc){const tips=[];if(sc.act!=null)tips.push(sc.act<5?"c_act_low":sc.act<7?"c_act_mid":"c_act_high");else tips.push("c_act_low");
+  if(sc.water==null||sc.water<6)tips.push("c_water_low");if(sc.sleep!=null&&sc.sleep<6)tips.push("c_sleep_low");
+  if(hDay.meals.length){const tags=new Set(hDay.meals.flatMap(m=>m.tags||[]));if(!tags.has("veg"))tips.push("c_food_veg");if(!tags.has("protein"))tips.push("c_food_protein");
+    if(sc.need&&hDay.meals.some(m=>m.slot==="dinner")){if(sc.eat<sc.need*.7)tips.push("c_food_low");else if(sc.eat>sc.need*1.3)tips.push("c_food_high")}}
+  return tips.slice(0,4)}
+const fmt=(k,o)=>t(k).replace(/\{(\w+)\}/g,(_,x)=>o[x]);
+const numIn=(id,val,ph,on,step)=>el("input",{id,type:"number",inputmode:"decimal",step:step||"any",value:val==null?"":String(val),placeholder:ph||"",class:"num",onchange:e=>on(e.target.value===""?null:+e.target.value)});
+let mealPhotoCb=null;
+
+async function renderHealth(){if(!hDay)await loadDay(hDate);const box=$("healthBody");const sc=scores(hDay);const isToday=hDate===new Date().toISOString().slice(0,10);
+  const dnav=el("div",{class:"row",style:"justify-content:space-between;margin-bottom:12px"},
+    el("button",{class:"btn ghost sm",type:"button","aria-label":t("prevDay"),onclick:async()=>{const d=new Date(hDate);d.setDate(d.getDate()-1);await loadDay(d.toISOString().slice(0,10));renderHealth()}},"‹"),
+    el("b",{style:"font-weight:500",text:isToday?t("today"):new Date(hDate).toLocaleDateString(LANG==="lt"?"lt-LT":"en-GB",{weekday:"long",day:"numeric",month:"long"})}),
+    el("button",{class:"btn ghost sm",type:"button","aria-label":t("nextDay"),disabled:isToday,onclick:async()=>{const d=new Date(hDate);d.setDate(d.getDate()+1);await loadDay(d.toISOString().slice(0,10));renderHealth()}},"›"));
+  const rings=el("div",{class:"card"},el("div",{class:"rings"},ring(sc.day,t("sDay"),true),el("div",{class:"rings-sm"},ring(sc.act,t("sAct")),ring(sc.food,t("sFood")),ring(sc.water,t("sWater")),ring(sc.sleep,t("sSleep")))),
+    el("div",{class:"scale"},el("i",{}),el("span",{class:"small",text:"0"}),el("span",{class:"small",text:"5"}),el("span",{class:"small",text:"10"})));
+  const flags=[];for(const k of ["morning","evening"]){const v=hDay.vitals[k]||{};const b=bpFlag(v),p=pulseFlag(v);if(b)flags.push(b);if(p)flags.push(p)}
+  const coach=el("div",{class:"card"},el("div",{class:"eyebrow",text:t("coach")}),
+    flags.map(([lvl,key])=>el("p",{class:"flag "+lvl,text:t(key)})),
+    el("ul",{class:"clean"},coachTips(sc).map(k=>el("li",{text:t(k)}))));
+  box.replaceChildren(dnav,el("div",{class:"cards"},rings,coach),el("div",{class:"cards",style:"margin-top:12px"},moveCard(sc),foodCard(sc),waterCard(sc),sleepCard(),heartCard(),bodyCard(),suppCard(),trendCard(),profileCard()),el("p",{class:"small",style:"margin-top:14px"},t("healthNote")))}
+function moveCard(sc){const n=numIn("hSteps",null,"5500",()=>{});const sf=el("select",{id:"hSurf"},Object.keys(SURF).map(k=>el("option",{value:k},t("sf_"+k))));
+  const at=el("select",{id:"hAct"},Object.keys(ACTS).map(k=>el("option",{value:k},t("a_"+k))));const am=numIn("hMin",null,"45",()=>{});
+  return el("div",{class:"card"},el("h3",{text:t("movement")}),
+    el("p",{style:"margin:0"},el("b",{style:"font-family:var(--display);font-size:22px;font-weight:500",text:sc.eq.toLocaleString()}),el("span",{class:"small",text:"  "+fmt("eqSteps",{n:sc.eq.toLocaleString()})})),
+    el("span",{class:"small",text:t("burned")+": ~"+sc.kcal+" kcal"}),
+    hDay.steps.length||hDay.acts.length?el("ul",{class:"clean"},hDay.steps.map((s,i)=>el("li",{class:"row",style:"justify-content:space-between"},el("span",{text:s.n.toLocaleString()+" "+t("steps").toLowerCase()+" · "+t("sf_"+s.sf)}),el("button",{class:"btn ghost sm",type:"button",onclick:async()=>{hDay.steps.splice(i,1);await saveDay();renderHealth()}},"×"))),
+      hDay.acts.map((a,i)=>el("li",{class:"row",style:"justify-content:space-between"},el("span",{text:t("a_"+a.t)+" · "+a.min+" min"}),el("button",{class:"btn ghost sm",type:"button",onclick:async()=>{hDay.acts.splice(i,1);await saveDay();renderHealth()}},"×")))):null,
+    el("div",{class:"two"},el("div",{class:"field"},el("label",{for:"hSteps",text:t("steps")}),n),el("div",{class:"field"},el("label",{for:"hSurf",text:t("surface")}),sf)),
+    el("div",{},el("button",{class:"btn sm",type:"button",onclick:async()=>{const v=+n.value;if(!v)return;hDay.steps.push({n:Math.round(v),sf:sf.value});await saveDay();renderHealth()}},t("addSteps"))),
+    el("span",{class:"small",text:t("stepsHint")}),el("hr",{class:"soft"}),
+    el("div",{class:"two"},el("div",{class:"field"},el("label",{for:"hAct",text:t("activity")}),at),el("div",{class:"field"},el("label",{for:"hMin",text:t("minutes")}),am)),
+    el("div",{},el("button",{class:"btn sm",type:"button",onclick:async()=>{const m=+am.value;if(!m)return;hDay.acts.push({t:at.value,min:Math.round(m)});await saveDay();renderHealth()}},t("addAct"))))}
+function foodCard(sc){const slots=["breakfast","lunch","dinner","snack"];
+  const list=el("div",{class:"meals"},hDay.meals.map((m,i)=>el("div",{class:"meal"},m.photo?el("img",{src:m.photo,alt:""}):null,
+    el("div",{style:"display:grid;gap:6px;min-width:0"},el("div",{class:"row",style:"justify-content:space-between"},el("b",{style:"font-weight:500",text:t("m_"+m.slot)}),el("span",{class:"small",text:fmt("mealKcal",{n:mealKcal(m)})})),
+      el("div",{class:"seg"},["small","normal","large"].map(p=>el("button",{type:"button","aria-pressed":String((m.size||"normal")===p),onclick:async()=>{m.size=p;delete m.kcal;await saveDay();renderHealth()}},t("p_"+p)))),
+      el("div",{class:"pick"},FOODTAGS.map(([k])=>el("button",{type:"button","aria-pressed":String((m.tags||[]).includes(k)),onclick:async()=>{m.tags=m.tags||[];m.tags=m.tags.includes(k)?m.tags.filter(x=>x!==k):m.tags.concat([k]);await saveDay();renderHealth()}},t("f_"+k)))),
+      m.ai?el("p",{class:"small",style:"margin:0",text:m.ai}):null,
+      el("div",{class:"row"},m.photo?el("button",{class:"btn ghost sm",type:"button",onclick:()=>aiMeal(m)},t("aiMeal")):null,el("button",{class:"btn ghost sm",type:"button",onclick:async()=>{hDay.meals.splice(i,1);await saveDay();renderHealth()}},t("remove")))))));
+  return el("div",{class:"card"},el("h3",{text:t("food")}),sc.need?el("span",{class:"small",text:fmt("kcalToday",{a:sc.eat||0,b:sc.need})}):null,list,
+    el("div",{class:"row"},slots.map(s=>el("button",{class:"btn ghost sm",type:"button",onclick:()=>{mealPhotoCb=async c=>{hDay.meals.push({id:uid(),slot:s,size:"normal",tags:[],photo:c?thumbURL(c,640):null,ts:Date.now()});await saveDay();renderHealth()};$("inMeal").click()}},"+ "+t("m_"+s)))))}
+async function aiMeal(m){const s=await getSample();if(!s){toast(t("aiUnavailable"));return}m.ai=t("thinking");renderHealth();
+  try{const b=await (await fetch(m.photo)).blob();const j=await s.json(`You are a friendly nutrition coach. Estimate this ${m.slot} from the photo for a woman aged ${hProfile.age||63}. Write the comment in ${langName()}. Return ONLY JSON: {"kcal":number,"tags":[any of "veg","fruit","protein","grain","sweet","fried","processed","alcohol"],"comment":"one warm, practical sentence"}`,{images:[b]});
+    if(j.kcal)m.kcal=Math.round(j.kcal);if(Array.isArray(j.tags))m.tags=j.tags.filter(x=>FOODTAGS.some(f=>f[0]===x));m.ai=j.comment||""}catch(e){m.ai=aiErr(e)}await saveDay();renderHealth()}
+function waterCard(sc){const n=hDay.water||0,m=sc.waterTarget;return el("div",{class:"card"},el("h3",{text:t("water")}),
+  el("div",{class:"glasses"},Array.from({length:Math.max(m,n)},(_,i)=>el("button",{type:"button",class:"gl"+(i<n?" full":""),"aria-label":t("glass")+" "+(i+1),onclick:async()=>{hDay.water=i<n?i:i+1;await saveDay();renderHealth()}}))),
+  el("div",{class:"row"},el("span",{class:"small",text:fmt("glasses",{n,m})}),el("button",{class:"btn sm",type:"button",onclick:async()=>{hDay.water=n+1;await saveDay();renderHealth()}},"+ 1")))}
+function sleepCard(){const s=hDay.sleep||{};return el("div",{class:"card"},el("h3",{text:t("sleep")}),
+  el("div",{class:"field"},el("label",{for:"hSleep",text:t("hoursSlept")}),numIn("hSleep",s.h,"7.5",async v=>{hDay.sleep.h=v;await saveDay();renderHealth()},"0.5")),
+  el("span",{class:"small",text:t("sleepQ")}),el("div",{class:"pick"},[1,2,3,4,5].map(q=>el("button",{type:"button","aria-pressed":String(s.q===q),onclick:async()=>{hDay.sleep.q=q;await saveDay();renderHealth()}},["😣","😕","🙂","😊","😴"][q-1]))))}
+function heartCard(){const row=k=>{const v=hDay.vitals[k]=hDay.vitals[k]||{};const set=f=>async x=>{v[f]=x;await saveDay();renderHealth()};
+  return el("div",{style:"display:grid;gap:6px"},el("b",{style:"font-weight:500",text:t(k)}),el("div",{class:"three"},
+    el("div",{class:"field"},el("label",{for:"bpS"+k,text:t("sys")}),numIn("bpS"+k,v.sys,"120",set("sys"),"1")),el("div",{class:"field"},el("label",{for:"bpD"+k,text:t("dia")}),numIn("bpD"+k,v.dia,"80",set("dia"),"1")),el("div",{class:"field"},el("label",{for:"pu"+k,text:t("pulse")}),numIn("pu"+k,v.pulse,"68",set("pulse"),"1"))))};
+  return el("div",{class:"card"},el("h3",{text:t("heart")}),row("morning"),row("evening"))}
+function bodyCard(){const m=hDay.measures=hDay.measures||{};return el("div",{class:"card"},el("h3",{text:t("body")}),
+  el("div",{class:"field"},el("label",{for:"hW",text:t("weightKg")}),numIn("hW",hDay.weight,"",async v=>{hDay.weight=v;if(v){hProfile.weight=v;saveProf()}await saveDay();renderHealth()},"0.1")),
+  el("span",{class:"small",text:t("measures")}),el("div",{class:"three"},["waist","hips","bust","arm","thigh"].map(k=>el("div",{class:"field"},el("label",{for:"ms"+k,text:t(k)}),numIn("ms"+k,m[k],"",async v=>{m[k]=v;await saveDay()},"0.5")))))}
+function suppCard(){const name=el("input",{id:"spN",autocomplete:"off"}),dose=el("input",{id:"spD",autocomplete:"off"}),when=el("select",{id:"spT"},["morning","evening"].map(x=>el("option",{value:x},t(x))));
+  return el("div",{class:"card"},el("h3",{text:t("supps")}),
+    supps.length?el("ul",{class:"clean"},supps.map(s=>el("li",{class:"row",style:"justify-content:space-between"},el("label",{class:"row",style:"gap:8px"},el("input",{type:"checkbox",checked:!!hDay.supps[s.id],onchange:async e=>{hDay.supps[s.id]=e.target.checked;await saveDay()}}),el("span",{text:s.name+(s.dose?" · "+s.dose:"")+" · "+t(s.time)})),
+      el("button",{class:"btn ghost sm",type:"button",onclick:async()=>{supps=supps.filter(x=>x.id!==s.id);await DB.put("kv","supps",supps);renderHealth()}},"×")))):el("p",{class:"small",style:"margin:0"},t("noSupps")),
+    el("div",{class:"three"},el("div",{class:"field"},el("label",{for:"spN",text:t("suppName")}),name),el("div",{class:"field"},el("label",{for:"spD",text:t("suppDose")}),dose),el("div",{class:"field"},el("label",{for:"spT",text:t("suppTime")}),when)),
+    el("div",{},el("button",{class:"btn sm",type:"button",onclick:async()=>{if(!name.value.trim())return;supps.push({id:uid(),name:name.value.trim(),dose:dose.value.trim(),time:when.value});await DB.put("kv","supps",supps);renderHealth()}},t("addSupp"))))}
+function trendCard(){const card=el("div",{class:"card"},el("h3",{text:t("trends")}));const chart=el("div",{class:"trend"});card.append(chart);
+  (async()=>{const days=[];for(let i=13;i>=0;i--){const d=new Date(hDate);d.setDate(d.getDate()-i);const k=d.toISOString().slice(0,10);const rec=k===hDay.date?hDay:await DB.get("days",k);days.push({k,rec,sc:rec?scores(rec).day:null})}
+    chart.replaceChildren(...days.map(d=>el("div",{class:"bar",title:d.k},el("i",{style:`height:${d.sc==null?2:Math.max(4,d.sc*10)}%;background:${scoreCol(d.sc)}`}),el("span",{text:String(+d.k.slice(8))}))));
+    const ws=days.filter(d=>d.rec&&d.rec.weight).map(d=>d.rec.weight);if(ws.length>1)card.append(el("p",{class:"small",style:"margin:0"},`${t("weightTrend")}: ${ws[0]} → ${ws[ws.length-1]} kg`))})();return card}
+function profileCard(){return el("div",{class:"card"},el("h3",{text:t("profile")}),el("div",{class:"three"},
+  el("div",{class:"field"},el("label",{for:"pfA",text:t("age")}),numIn("pfA",hProfile.age,"63",v=>{hProfile.age=v;saveProf();renderHealth()},"1")),
+  el("div",{class:"field"},el("label",{for:"pfH",text:t("heightCm")}),numIn("pfH",hProfile.height,"165",v=>{hProfile.height=v;saveProf();renderHealth()},"1")),
+  el("div",{class:"field"},el("label",{for:"pfW",text:t("weightKg")}),numIn("pfW",hProfile.weight,"",v=>{hProfile.weight=v;saveProf();renderHealth()},"0.1"))),el("span",{class:"small",text:t("profileHint")}))}
+
 /* ============ Navigation & language ============ */
 let curView="studio";
 function goView(v){curView=v;document.querySelectorAll("section.view").forEach(s=>s.hidden=s.id!=="v-"+v);document.querySelectorAll("#tabs button").forEach(b=>{if(b.dataset.v===v)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
   turnOpen=v==="turn";if(turnOpen){buildSlots();renderTurnCache()}else{cancelAnimationFrame(spinT);spinT=0;$("btnSpin").textContent=t("autoTurn")}
-  if(v==="advice")renderAdvice();if(v==="hair")renderHair();if(v==="kit")renderKit();if(v==="ward"){if(!suggestions.length&&garments.length)suggestions=generate();renderWard()}window.scrollTo(0,0)}
-function applyLang(){document.documentElement.lang=LANG;$("langEn").setAttribute("aria-pressed",LANG==="en");$("langLt").setAttribute("aria-pressed",LANG==="lt");document.querySelectorAll("[data-t]").forEach(n=>n.textContent=t(n.dataset.t));buildPresets();buildCats();buildPanel();if(curView==="advice")renderAdvice();if(curView==="hair")renderHair();if(curView==="kit")renderKit();if(curView==="ward")renderWard();if(turnOpen)buildSlots()}
+  if(v==="advice")renderAdvice();if(v==="hair")renderHair();if(v==="kit")renderKit();if(v==="health")renderHealth();if(v==="ward"){if(!suggestions.length&&garments.length)suggestions=generate();renderWard()}window.scrollTo(0,0)}
+function applyLang(){document.documentElement.lang=LANG;$("langEn").setAttribute("aria-pressed",LANG==="en");$("langLt").setAttribute("aria-pressed",LANG==="lt");document.querySelectorAll("[data-t]").forEach(n=>n.textContent=t(n.dataset.t));buildPresets();buildCats();buildPanel();if(curView==="advice")renderAdvice();if(curView==="hair")renderHair();if(curView==="kit")renderKit();if(curView==="ward")renderWard();if(curView==="health")renderHealth();if(turnOpen)buildSlots()}
 function setLang(l){LANG=l;try{localStorage.setItem("bs-lang",l)}catch(e){}applyLang()}
 
 /* ============ Wiring ============ */
@@ -1195,6 +1442,7 @@ $("btnSave").onclick=async()=>{const P=curPhoto();if(!P)return;const c=document.
 $("stProd").onclick=()=>{kitSub="prod";renderKit()};$("stLooks").onclick=()=>{kitSub="looks";renderKit()};
 $("hfAll").onclick=()=>{hairFilter="all";renderHair()};$("hfFit").onclick=()=>{hairFilter="fit";renderHair()};
 $("btnBackup").onclick=backup;
+$("btn360").onclick=()=>goView("turn");onFile("inMeal",async f=>{const c=await fileToCanvas(f,900);if(mealPhotoCb)mealPhotoCb(c)});
 ["outfits","clothes","saved","trends"].forEach(k=>$("ws-"+k).onclick=()=>{wardSub=k;gEditing=null;renderWard()});
 onFile("inBody",setBodyPhoto);onFile("inGarment",async f=>{const c=await fileToCanvas(f,900);if(gPhotoCb)gPhotoCb(c)});onFile("inInspo",async f=>{const c=await fileToCanvas(f,1000);inspoBlob=await canvasToBlob(c,.82);renderWard()});$("btnRestore").onclick=()=>$("inRestore").click();
 $("turnRange").addEventListener("input",e=>{turnAngle=+e.target.value;drawTurn()});
@@ -1203,7 +1451,7 @@ $("btnSpin").onclick=()=>{if(spinT){cancelAnimationFrame(spinT);spinT=0;$("btnSp
 window.addEventListener("resize",()=>{if(turnOpen)drawTurn()});
 
 /* ============ Boot ============ */
-(async()=>{applyLang();syncStudioChrome();await DB.open();products=await DB.all("products");looks=await DB.all("looks");garments=await DB.all("garments");outfits=await DB.all("outfits");buildPanel();
+(async()=>{applyLang();syncStudioChrome();await DB.open();products=await DB.all("products");looks=await DB.all("looks");garments=await DB.all("garments");outfits=await DB.all("outfits");supps=(await DB.get("kv","supps"))||[];buildPanel();
   {const b=await DB.get("photos","body");if(b){try{const c=await blobToCanvas(b);photos.body={canvas:c,thumb:thumbURL(c,700)}}catch(e){}}}
   // restore photos kept on this phone
   for(const k of ["front","left","right","back","hand"]){const b=await DB.get("photos",k);if(!b)continue;try{const c=await blobToCanvas(b);photos[k]={canvas:c,lm:null}}catch(e){}}
